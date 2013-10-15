@@ -1,0 +1,10 @@
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newsfeed"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#dddddddd"
+    android:padding="10dp"
+    android:scrollbarAlwaysDrawVerticalTrack="false" >
+
+</ListView>

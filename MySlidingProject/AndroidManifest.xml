@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ihateflyingbugs.kidsm"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+
+
+    <!-- GCM 관련 퍼미션 -->
+	<permission android:name="com.ihateflyingbugs.kidsm.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="com.ihateflyingbugs.kidsm.permission.C2D_MESSAGE" /> 
+	<!-- GCM 받기 -->
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+	<!-- GCM을 받으려면 구글 계정 필요 -->
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<!-- 메시지 받을 때 wake up 하기 위해 -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+
+	<uses-permission android:name="android.permission.INTERNET"/>   
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.READ_CALENDAR" />
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:largeHeap="true" >
+        
+        <!-- GCM 리시버 -->
+		<receiver
+		   android:name="com.google.android.gcm.GCMBroadcastReceiver"
+		   android:permission="com.google.android.c2dm.permission.SEND" >
+		   <intent-filter>
+		      <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+		      <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+		      <category android:name="com.ihateflyingbugs.kidsm" /> <!-- 젤리빈 부터는 category 빼도 된다 -->
+		   </intent-filter>
+		</receiver>
+		
+		<!-- GCM 리시버에서 돌리는 서비스 -->
+		<service android:name=".GCMIntentService" /><!-- 서비스명 변경하면 안됨 -->
+
+        <activity
+            android:name="com.ihateflyingbugs.kidsm.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.login.LoginActivity" android:label="@string/loginactivity" android:theme="@android:style/Theme.NoTitleBar"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.login.RegisterInfoTakerActivity" android:label="@string/registerinfotakeractivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.MainActivity" android:label="@string/default_string"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.point.PointActivity" android:label="@string/pointactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.notice.NoticeActivity" android:label="@string/noticeactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.photonotice.PhotoActivity" android:label="@string/photoactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.newsfeed.NewsfeedReplyActivity" android:label="@string/replyactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ShowImageActivity" android:label="@string/showimageactivity" android:theme="@android:style/Theme.NoTitleBar"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ShowUploadImageListActivity" android:label="@string/showimageactivity" android:theme="@android:style/Theme.NoTitleBar"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ModifyImageActivity" android:label="@string/modifyimageactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.gallery.AlbumActivity" android:label="@string/albumactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.UploadPhotoActivity" android:label="@string/uploadphotoactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.GetAlbumFromLocalActivity" android:label="@string/getalbumfromlocalactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.InputTagActivity" android:label="@string/inputtagactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.schedule.ShowConfirmedListActivity" android:label="@string/showconfirmedlistactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.schedule.AddScheduleActivity" android:label="@string/addscheduleactivity"></activity>
+        
+    </application>
+
+     
+	
+</manifest>

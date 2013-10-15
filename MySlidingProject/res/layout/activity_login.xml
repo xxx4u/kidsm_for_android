@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:focusable="true"
+	android:focusableInTouchMode="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <ViewFlipper
+        android:id="@+id/register_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+            
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+		
+		    <ImageView
+		        android:id="@+id/imageView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="40dp"
+		        android:src="@drawable/login_title" />
+		
+		    <EditText
+		        android:id="@+id/login_email"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="40dp"
+		        android:layout_marginRight="40dp"
+		        android:layout_marginTop="30dp"
+		        android:background="@drawable/login_input_short"
+		        android:ems="10"
+		        android:hint="@string/hint_email"
+		        android:inputType="textEmailAddress"
+		        android:textColorHint="#63c3b1"
+		        android:textSize="15sp" >
+		
+		        
+		    </EditText>
+		
+		    <EditText
+		        android:id="@+id/login_password"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="40dp"
+		        android:layout_marginRight="40dp"
+		        android:layout_marginTop="5dp"
+		        android:background="@drawable/login_input_short"
+		        android:ems="10"
+		        android:hint="@string/hint_password"
+		        android:inputType="textPassword"
+		        android:textColorHint="#63c3b1"
+		        android:textSize="15sp" />
+
+		    <CheckBox
+		        android:id="@+id/login_automatically"
+		        style="@style/KidsmCheckBox"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="40dp"
+		        android:layout_marginRight="40dp"
+		        android:layout_marginTop="5dp"
+		        android:checked="true"
+		        android:text="@string/login_automatically"
+		        android:textColor="#ffffff" />
+		
+		    <Button
+		        android:id="@+id/button1"
+		        android:layout_width="match_parent"
+		        android:layout_height="41dp"
+		        android:layout_marginLeft="43dp"
+		        android:layout_marginRight="43dp"
+		        android:layout_marginTop="5dp"
+		        android:background="@drawable/login_btnset"
+		        android:onClick="OnLoginClick"
+		        android:text="@string/login"
+		        android:textColor="#ffffff"
+		        android:textSize="15sp" />
+		
+		    <Button
+		        android:id="@+id/button2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="24dp"
+		        android:layout_marginTop="15dp"
+		        android:background="@null"
+		        android:onClick="OnForgotPasswordClick"
+		        android:text="@string/forgot_password"
+		        android:textColor="#ffffff"
+		        android:textSize="12sp" />
+		
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:layout_gravity="center"
+		        android:layout_marginTop="50dp"
+		        android:gravity="bottom"
+		        android:orientation="vertical" >
+		
+		        <Button
+		            android:id="@+id/button3"
+		            android:layout_width="match_parent"
+		            android:layout_height="41dp"
+		            android:layout_marginLeft="43dp"
+		            android:layout_marginRight="43dp"
+		            android:background="@drawable/login_btnset"
+		            android:onClick="OnMemberRegisterClick"
+		            android:text="@string/member_register"
+		            android:textColor="#ffffff"
+		            android:textSize="15sp" />
+		
+		    </LinearLayout>
+		
+		</LinearLayout>
+		</ScrollView>
+		
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+            
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/login_title" />
+
+            <TextView
+                android:id="@+id/confirm_teacher_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/select_registermode"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="41dp"
+                android:layout_marginLeft="43dp"
+                android:layout_marginRight="43dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/login_btnset"
+                android:onClick="OnSelectRegisterMode"
+                android:tag="1"
+                android:text="@string/register_parent"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+            
+            <Button
+                android:tag="2"
+                android:layout_width="match_parent"
+                android:layout_height="41dp"
+                android:layout_marginLeft="43dp"
+                android:layout_marginRight="43dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_btnset"
+                android:onClick="OnSelectRegisterMode"
+                android:text="@string/register_family"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+            
+            <Button
+                android:tag="3"
+                android:layout_width="match_parent"
+                android:layout_height="41dp"
+                android:layout_marginLeft="43dp"
+                android:layout_marginRight="43dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_btnset"
+                android:onClick="OnSelectRegisterMode"
+                android:text="@string/register_teacher"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+            
+            <Button
+                android:tag="4"
+                android:layout_width="match_parent"
+                android:layout_height="41dp"
+                android:layout_marginLeft="43dp"
+                android:layout_marginRight="43dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_btnset"
+                android:onClick="OnSelectRegisterMode"
+                android:text="@string/register_orgmaster"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/login_title" />
+
+            <EditText
+                android:id="@+id/register_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/login_input_short"
+                android:ems="10"
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                android:textColorHint="#63c3b1"
+                android:textSize="15sp" >
+			
+            <requestFocus />
+            </EditText>
+            
+            <EditText
+                android:id="@+id/register_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/login_input_short"
+                android:ems="10"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                android:textColorHint="#63c3b1"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/register_confirmpassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/login_input_short"
+                android:ems="10"
+                android:hint="@string/hint_confirmpassword"
+                android:inputType="textPassword"
+                android:textColorHint="#63c3b1"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="match_parent"
+                android:layout_height="41dp"
+                android:layout_marginLeft="43dp"
+                android:layout_marginRight="43dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/login_btnset"
+                android:onClick="OnDefaultInfoFormed"
+                android:text="@string/register_full"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+        </LinearLayout>
+		</ScrollView>
+    </ViewFlipper>
+
+</LinearLayout>

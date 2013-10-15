@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alpha="0.5"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+        <Button
+            android:id="@+id/image_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/general_photo_zoom_close_btnset"
+            android:onClick="OnClose" />
+        
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/image_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:bottom="@+id/profile_picture"
+        android:paddingBottom="5dp"
+        android:text="@string/news_text"
+        android:textSize="15sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" >
+
+	            <RelativeLayout
+	                android:id="@+id/image_likelayout"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:layout_centerVertical="true"
+	                android:layout_gravity="center"
+	                android:gravity="center" >
+	
+	                <ImageView
+	                    android:layout_width="36dp"
+	                    android:layout_height="36dp"
+	                    android:layout_centerHorizontal="true"
+	                    android:layout_centerVertical="true"
+	                    android:layout_marginLeft="10dp"
+	                    android:src="@drawable/general_count_like_bg" />
+	
+	                <TextView
+	                    android:id="@+id/image_numoflike"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerHorizontal="true"
+	                    android:layout_centerVertical="true"
+	                    android:layout_marginTop="1dp"
+	                    android:text="@string/news_numoflike"
+	                    android:textSize="9sp" />
+	
+	            </RelativeLayout>
+	
+	            <RelativeLayout
+	                android:id="@+id/image_replylayout"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_toRightOf="@+id/image_likelayout" >
+	
+	                <ImageView
+	                    android:layout_width="36dp"
+	                    android:layout_height="36dp"
+	                    android:layout_centerHorizontal="true"
+	                    android:layout_centerVertical="true"
+	                    android:src="@drawable/general_count_comment_bg" />
+	
+	                <TextView
+	                    android:id="@+id/image_numofreply"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerHorizontal="true"
+	                    android:layout_centerVertical="true"
+	                    android:text="@string/news_numofreply"
+	                    android:textSize="9sp" />
+	
+	            </RelativeLayout>
+	
+	            <RelativeLayout
+	                android:id="@+id/image_scraplayout"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_toRightOf="@+id/image_replylayout" >
+	
+	                <ImageView
+	                    android:layout_width="36dp"
+	                    android:layout_height="36dp"
+	                    android:layout_centerHorizontal="true"
+	                    android:layout_centerVertical="true"
+	                    android:src="@drawable/general_count_favorite_bg" />
+	
+	                <TextView
+	                    android:id="@+id/image_numofscrap"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerHorizontal="true"
+	                    android:layout_centerVertical="true"
+	                    android:text="@string/news_numofscrap"
+	                    android:textSize="9sp" />
+	
+	            </RelativeLayout>
+
+	            <Button
+	                android:id="@+id/image_modify"
+	                android:layout_width="48dp"
+	                android:layout_height="48dp"
+	                android:layout_alignParentRight="true"
+	                android:layout_centerVertical="true"
+	                android:layout_marginRight="10dp"
+	                android:background="@drawable/general_photo_zoom_edit_btnset"
+	                android:onClick="OnModify" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/darker_gray" >
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+<RelativeLayout
+	                android:id="@+id/image_like"
+	                android:layout_width="0dp"
+	                android:layout_height="match_parent"
+	                android:layout_weight="1"
+	                android:descendantFocusability="blocksDescendants"
+	                android:gravity="center"
+	                android:onClick="OnLikeClick" >
+	
+	                <CheckBox
+	                    android:id="@+id/like_animation"
+	                    style="@style/LikeChecker"
+	                    android:layout_width="21dp"
+	                    android:layout_height="21dp"
+	                    android:layout_centerVertical="true"
+	                    android:clickable="false"
+	                    android:focusable="false"
+	                    android:focusableInTouchMode="false"
+	                    android:gravity="center" />
+	
+	                <TextView
+	                    android:id="@+id/image_liketext"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerVertical="true"
+	                    android:layout_toRightOf="@+id/like_animation"
+	                    android:text="@string/news_like"
+	                	android:textSize="12sp"
+	                    android:textColor="#6d6e70" />
+	
+	            </RelativeLayout>
+	
+				<LinearLayout
+				    android:layout_width="1dp"
+				    android:layout_height="match_parent"
+				    android:layout_marginBottom="5dp"
+				    android:layout_marginTop="5dp"
+				    android:background="@android:color/darker_gray" >
+
+		        </LinearLayout>
+        
+	            <RelativeLayout
+	                android:id="@+id/image_reply"
+	                android:layout_width="0dp"
+	                android:layout_height="match_parent"
+	                android:layout_weight="1"
+	                android:descendantFocusability="blocksDescendants"
+	                android:gravity="center"
+	                android:onClick="OnReplyClick"
+	                android:paddingBottom="5dp"
+	                android:paddingTop="5dp" >
+	
+	                <ImageView
+	                    android:id="@+id/reply_image"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerVertical="true"
+	                    android:src="@drawable/general_cell_comment_btn_img" />
+	
+	                <TextView
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerVertical="true"
+	                    android:layout_toRightOf="@+id/reply_image"
+	                	android:text="@string/news_reply"
+	                	android:textSize="12sp"
+		                android:textColor="#6d6e70" />
+	
+	            </RelativeLayout>
+	            
+	            <LinearLayout
+	                android:layout_width="1dp"
+	                android:layout_height="match_parent"
+	                android:layout_marginBottom="5dp"
+	                android:layout_marginTop="5dp"
+	                android:background="@android:color/darker_gray" >
+
+		        </LinearLayout>
+		        
+	            <RelativeLayout
+	                android:id="@+id/image_scrap"
+	                android:layout_width="0dp"
+	                android:layout_height="match_parent"
+	                android:layout_weight="1"
+	                android:descendantFocusability="blocksDescendants"
+	                android:gravity="center"
+	                android:onClick="OnScrapClick" >
+	
+	                <CheckBox
+	                    android:id="@+id/scrap_animation"
+	                    style="@style/ScrapChecker"
+	                    android:layout_width="21dp"
+	                    android:layout_height="21dp"
+	                    android:layout_centerVertical="true"
+	                    android:clickable="false"
+	                    android:focusable="false"
+	                    android:focusableInTouchMode="false"
+	                    android:gravity="center" />
+	
+	                <TextView
+	                    android:id="@+id/image_scraptext"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerVertical="true"
+	                    android:layout_toRightOf="@+id/scrap_animation"
+	                	android:text="@string/news_scrap"
+	                	android:textSize="12sp"
+		                android:textColor="#6d6e70" />
+	
+	            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

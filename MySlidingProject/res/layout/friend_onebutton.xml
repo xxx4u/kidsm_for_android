@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#eeeeee" >
+    
+    <ImageButton
+        android:id="@+id/friend_profile_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/profile_default" />
+    
+    <Button
+        android:id="@+id/friend_button"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:onClick="OnButtonClick"
+        android:text="@string/friend_friendcall"
+        android:textColor="#000000"
+        android:textSize="12sp" />
+
+  	<Button
+  	    android:id="@+id/friend_friendname"
+  	    android:layout_width="wrap_content"
+  	    android:layout_height="wrap_content"
+  	    android:layout_alignBaseline="@+id/friend_button"
+  	    android:layout_alignBottom="@+id/friend_button"
+  	    android:layout_centerVertical="true"
+  	    android:layout_marginLeft="20dp"
+  	    android:layout_toRightOf="@+id/friend_profile_image"
+  	    android:background="@android:color/transparent"
+  	    android:onClick="OnNameClick"
+  	    android:text="@string/friend_friendname"
+  	    android:textColor="#000000"
+  	    android:textSize="14sp" />
+        
+</RelativeLayout>
+

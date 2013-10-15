@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="113dp"
+    android:layout_height="113dp"
+    android:orientation="vertical" >
+
+	<FrameLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+		android:onClick="OnNewAlbum" >
+
+		<ImageView
+		    android:id="@+id/gallery_albumimage"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:background="@drawable/photo_album_add_btnset"
+		    android:gravity="center_horizontal|bottom" />
+
+		<FrameLayout
+            android:id="@+id/gallery_albumnameframe"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_margin="4dp" >
+			
+            <TextView
+                android:id="@+id/gallery_albumname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxLines="1"
+                android:text="@string/make_new_album"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="10sp" />
+
+        </FrameLayout>
+	</FrameLayout>
+
+"
+</RelativeLayout>

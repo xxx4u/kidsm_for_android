@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="113dp"
+    android:layout_height="113dp" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+		android:onClick="OnSeeScrapAlbum" >
+
+        <ImageView
+            android:id="@+id/gallery_albumimage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/photo_album_default"
+            android:gravity="center_horizontal|bottom"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/gallery_settings"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|right"
+            android:layout_margin="5dp"
+            android:background="@drawable/photo_album_icon_favorite_on"
+            android:scaleX="1.5"
+            android:scaleY="1.5" />
+
+        <FrameLayout
+            android:id="@+id/gallery_albumnameframe"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_margin="4dp"
+            android:background="@drawable/photo_album_layer" >
+
+            <TextView
+            	android:id="@+id/gallery_albumname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxLines="1"
+                android:text="TextView"
+                android:textColor="@android:color/white"
+                android:textSize="10sp" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>

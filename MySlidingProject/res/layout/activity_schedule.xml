@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/general_bg" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cal_tabbar_bg"
+            android:orientation="vertical" >
+
+            <RadioGroup
+                android:id="@+id/schedule_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:gravity="bottom"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/schedule_monthmode"
+                    style="@style/CalendarTabbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:gravity="bottom" />
+
+                <RadioButton
+                    android:id="@+id/schedule_weekmode"
+                    style="@style/CalendarTabbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="bottom" />
+            </RadioGroup>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center" >
+
+                    <TextView
+                        android:id="@+id/schedule_modename_month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/month" />
+
+                    <TextView
+                        android:id="@+id/schedule_modename_week"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/week" />
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/schedule_month_controller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp" >
+
+            <Button
+                android:id="@+id/schedule_prev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:onClick="OnPrevMonth"
+                android:text="@string/prev"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/schedule_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:onClick="OnNextMonth"
+                android:text="@string/next"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/schedule_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/default_string"
+                android:textColor="#65beb0"
+                android:textSize="22sp" />
+        </RelativeLayout>
+
+        <ViewFlipper
+            android:id="@+id/schedule_flipper"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent" >
+
+            <LinearLayout
+                android:id="@+id/schedule_monthpage"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/schedule_weekpage"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="15dp" >
+            </ListView>
+        </ViewFlipper>
+
+    </LinearLayout>
+
+    <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:gravity="bottom"
+	    android:orientation="vertical" >
+	
+		<com.ihateflyingbugs.kidsm.WrappingSlidingDrawer
+			android:id="@+id/schedule_drawer"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:handle="@+id/handle"
+			android:content="@+id/schedule_upload" >
+	
+			<ImageView
+			    android:id="@+id/handle"
+			    android:layout_width="40sp"
+			    android:layout_height="40sp"
+			    android:background="@android:color/transparent" />
+	
+			<LinearLayout
+		        android:id="@+id/schedule_upload"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:orientation="vertical">
+	
+			    <Button
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center"
+			        android:onClick="OnUploadSchedule"
+			        android:background="@drawable/cal_upload_btnset" />
+	
+			</LinearLayout>
+		</com.ihateflyingbugs.kidsm.WrappingSlidingDrawer>
+	</LinearLayout>
+
+</RelativeLayout>

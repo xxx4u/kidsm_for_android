@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/album_flipper"
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content">
+<RelativeLayout
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+<ScrollView 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    	
+	<com.ihateflyingbugs.kidsm.ExpandableHeightGridView
+	    android:id="@+id/gallery_photolist"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="3dp"
+	    android:horizontalSpacing="3dp"
+	    android:numColumns="3"
+	    android:verticalSpacing="3dp" >
+
+	</com.ihateflyingbugs.kidsm.ExpandableHeightGridView>
+	
+</LinearLayout>
+</ScrollView>
+
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="bottom"
+    android:orientation="vertical" >
+	<com.ihateflyingbugs.kidsm.WrappingSlidingDrawer
+		android:id="@+id/album_drawer"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:handle="@+id/album_handle"
+		android:content="@+id/album_upload" >
+	
+		<ImageView
+		    android:id="@+id/album_handle"
+		    android:layout_width="40sp"
+		    android:layout_height="40sp"
+		    android:background="@android:color/transparent" />
+	
+		<LinearLayout
+	        android:id="@+id/album_upload"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="horizontal">
+	
+		    <Button
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:layout_weight="1"
+		        android:text="@string/move_photo"
+		        android:background="@android:color/white"
+		        android:onClick="OnMovePhoto" />
+	
+		    <Button
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:layout_weight="1"
+		        android:text="@string/delete_photo"
+		        android:background="@android:color/white"
+		        android:onClick="OnDeletePhoto"  />
+		</LinearLayout>
+	</com.ihateflyingbugs.kidsm.WrappingSlidingDrawer>
+</LinearLayout>
+</RelativeLayout>
+
+<ScrollView 
+    android:id="@+id/movephoto_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:baselineAligned="false" >
+    	
+	<com.ihateflyingbugs.kidsm.ExpandableHeightGridView 
+	    android:id="@+id/movephoto_albumlist"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+	    android:numColumns="3">
+	</com.ihateflyingbugs.kidsm.ExpandableHeightGridView>
+</LinearLayout>
+</ScrollView>
+</ViewFlipper>

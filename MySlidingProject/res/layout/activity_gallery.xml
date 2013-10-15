@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/general_bg"
+    android:orientation="vertical" >
+    
+<ScrollView 
+    android:id="@+id/gallery_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:baselineAligned="false" >
+    
+    <FrameLayout
+        android:id="@+id/gallery_seeallphoto_frame"
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp" >
+
+        <ImageView
+            android:id="@+id/gallery_seeallphoto_image"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/photo_in_album_default" />
+
+	    <ImageView
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:background="@drawable/photo_album_layer_total"
+	        android:onClick="OnSeeAllPhoto"
+	        android:padding="30dp" />
+
+	    <TextView
+	        android:id="@+id/gallery_seeallphoto_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:text="@string/gallery_seeallphoto"
+	        android:textColor="@android:color/white" />
+
+    </FrameLayout>
+	<com.ihateflyingbugs.kidsm.ExpandableHeightGridView
+	    android:id="@+id/gallery_albumlist"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="5dp"
+	    android:layout_marginRight="5dp"
+	    android:layout_marginTop="5dp"
+	    android:horizontalSpacing="5dp"
+	    android:numColumns="3"
+	    android:verticalSpacing="5dp" >
+
+	</com.ihateflyingbugs.kidsm.ExpandableHeightGridView>
+</LinearLayout>
+</ScrollView>
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="bottom"
+    android:orientation="vertical" >
+
+	<com.ihateflyingbugs.kidsm.WrappingSlidingDrawer
+		android:id="@+id/gallery_drawer"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:handle="@+id/handle"
+		android:content="@+id/gallery_upload" >
+
+		<ImageView
+		    android:id="@+id/handle"
+		    android:layout_width="40sp"
+		    android:layout_height="40sp"
+		    android:background="@android:color/transparent" />
+
+		<LinearLayout
+	        android:id="@+id/gallery_upload"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical">
+
+		    <Button
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:onClick="OnUploadPhoto"
+		        android:background="@drawable/general_upload_btnset" />
+
+		</LinearLayout>
+	</com.ihateflyingbugs.kidsm.WrappingSlidingDrawer>
+</LinearLayout>
+</RelativeLayout>

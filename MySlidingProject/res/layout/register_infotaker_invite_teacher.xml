@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/register_infotaker_invite_teacher_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_input_search"
+        android:ems="10"
+        android:hint="@string/hint_put_invite_teacher_name"
+        android:inputType="textPersonName"
+        android:paddingLeft="15dp"
+        android:textColorHint="#63c3b1" >
+
+        <requestFocus />
+    </EditText>
+
+    <ListView
+        android:id="@+id/register_infotaker_invite_teacher_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp" >
+
+    </ListView>
+
+</LinearLayout>

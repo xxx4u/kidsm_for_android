@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/notice"
+        android:showAsAction="always"
+        android:icon="@drawable/general_actionbar_notice_btn_toggle"/>
+    <item
+        android:id="@+id/photo"
+        android:showAsAction="always"
+        android:icon="@drawable/general_actionbar_photo_btn_toggle"/>
+
+</menu>

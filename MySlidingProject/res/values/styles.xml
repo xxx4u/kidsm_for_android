@@ -1,0 +1,76 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <style name="TransparentDialog" parent="android:Theme.Dialog">
+	    <item name="android:windowIsTranslucent">true</item>
+	    <item name="android:windowBackground">@android:color/transparent</item>
+	</style>
+
+    <style name="KidsmRadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+	    <item name="android:button">@drawable/photo_edit_radio_toggle</item>
+	</style>
+	
+    <style name="KidsmCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+	    <item name="android:button">@drawable/photo_edit_radio_toggle</item>
+	</style>
+	
+    <style name="PhotoInAlbumCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+	    <item name="android:button">@drawable/photo_in_album_select_toggle</item>
+	</style>
+	
+    <style name="CalendarTabbar" parent="@android:style/Widget.CompoundButton.RadioButton">
+	    <item name="android:button">@drawable/cal_tabbar_toggle</item>
+	</style>
+
+    <style name="CalendarChecker" parent="@android:style/Widget.CompoundButton.CheckBox">
+	    <item name="android:button">@drawable/cal_check_toggle</item>
+	</style>
+	
+    <style name="PhotoFavoriteChecker" parent="@android:style/Widget.CompoundButton.CheckBox">
+	    <item name="android:button">@drawable/photo_album_icon_favorite_toggle</item>
+	</style>
+	
+    <style name="LikeChecker" parent="@android:style/Widget.CompoundButton.CheckBox">
+	    <item name="android:button">@drawable/like_toggle</item>
+	</style>
+	
+    <style name="ScrapChecker" parent="@android:style/Widget.CompoundButton.CheckBox">
+	    <item name="android:button">@drawable/scrap_toggle</item>
+	</style>
+	
+    <style name="DrawerNoticeChecker" parent="@android:style/Widget.CompoundButton.CheckBox">
+	    <item name="android:button">@drawable/drawer_account_notice_toggle</item>
+	</style>
+	
+    <style name="PhotoEditTagListChecker" parent="@android:style/Widget.CompoundButton.CheckBox">
+	    <item name="android:button">@drawable/photo_edit_tag_list_toggle</item>
+	</style>
+	
+    <style name="MooTheme" parent="android:Theme">
+        <item name="android:spinnerItemStyle">@style/MooSpinnerItem</item>
+    </style>
+
+    <style name="MooSpinnerItem" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textAppearance">@style/MooTextAppearanceSpinnerItem</item>
+    </style>
+
+    <style name="MooTextAppearanceSpinnerItem" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#000000</item>
+    </style>
+</resources>

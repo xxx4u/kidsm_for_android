@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:clickable="true"
+	    android:gravity="center_vertical"
+	    android:padding="5dp" >
+	
+	    <ImageView
+	        android:contentDescription="@string/default_content_description"
+	        android:id="@+id/like_profileimage"
+	        android:layout_width="40dp"
+	        android:layout_height="40dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginRight="5dip"
+	        android:src="@drawable/ic_launcher" />
+
+	    <TextView
+	        android:id="@+id/like_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_toRightOf="@+id/like_profileimage"
+	        android:text="@string/profile_childname"
+	        android:textColor="@android:color/black"
+	        android:textStyle="bold" />
+	    
+	</RelativeLayout>

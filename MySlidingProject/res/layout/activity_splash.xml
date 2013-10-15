@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newsfeed"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/general_splash"
+    android:gravity="bottom|center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+	
+    <TextView
+        android:id="@+id/splash_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text=""
+        android:textColor="#000000" />
+
+    <ProgressBar
+        android:id="@+id/splash_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp" />
+    
+</LinearLayout>

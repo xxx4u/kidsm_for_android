@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_bg" >
+    
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/login_title" />
+
+    <TextView
+        android:id="@+id/confirm_teacher_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="담당하고 계신 반을 선택해 주세요.\n(반이 없을 경우 새로 반을 만들어주세요.)"
+        android:textColor="#ffffff" />
+
+    <Spinner
+        android:id="@+id/register_teacher_classlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:weightSum="10" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.5"
+                android:gravity="right"
+                android:paddingRight="10dp"
+                android:text="@string/register_newclass"
+                android:textColor="#ffffff" />
+
+            <EditText
+                android:id="@+id/register_teacher_newclass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:layout_weight="6.5"
+                android:background="@drawable/login_input_short"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textColorHint="#63c3b1"
+                android:textSize="15sp" >
+		
+		        <requestFocus />
+		    </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:weightSum="10" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.5"
+                android:gravity="right"
+                android:paddingRight="10dp"
+                android:text="@string/register_newclassage"
+                android:textColor="#ffffff" />
+
+            <Spinner
+		        android:id="@+id/register_teacher_classlevel"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_marginRight="40dp"
+                android:layout_weight="6.5" />
+            
+        </LinearLayout>
+        
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_marginLeft="43dp"
+            android:layout_marginRight="43dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/login_btnset"
+            android:onClick="OnFinishSelectClass"
+            android:text="@string/finish"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+
+</LinearLayout>
+
+</ScrollView>
+</LinearLayout>

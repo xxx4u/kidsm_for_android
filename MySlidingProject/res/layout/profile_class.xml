@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:onClick="OnChildClick">
+
+    <RelativeLayout
+        android:id="@+id/class_spacelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/class_mainpicture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/default_content_description"
+            android:src="@drawable/ic_launcher" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp" >
+
+            <CheckBox
+                android:id="@+id/class_noticechecker"
+                style="@style/DrawerNoticeChecker"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:checked="true"
+                android:clickable="false" />
+
+            <TextView
+                android:id="@+id/class_numofnotice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="5" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/class_mainpicture"
+            android:layout_alignTop="@+id/class_mainpicture"
+            android:layout_marginLeft="20dp"
+            android:layout_toLeftOf="@+id/relativeLayout1"
+            android:layout_toRightOf="@+id/class_mainpicture"
+            android:orientation="vertical"
+            android:weightSum="2" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:id="@+id/class_orgname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_parentname"
+                    android:textSize="12sp"
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/class_bar1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/class_orgname"
+                    android:text="/"
+                    android:textSize="12sp"
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/class_classname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/class_bar1"
+                    android:text="@string/default_string"
+                    android:textSize="12sp"
+                    android:textColor="#ffffff" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:id="@+id/class_teachertag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="담당선생님"
+                    android:textSize="12sp"
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/class_bar2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/class_teachertag"
+                    android:text=":"
+                    android:textSize="12sp"
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/class_teachername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/class_bar2"
+                    android:text="@string/default_string"
+                    android:textSize="12sp"
+                    android:textColor="#ffffff" />
+                
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

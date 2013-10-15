@@ -1,0 +1,185 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/drawer_bg"
+    android:orientation="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true" >
+
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:weightSum="1" >
+	
+	    <RelativeLayout
+	        android:id="@+id/layout1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.05"
+	        android:background="@drawable/drawer_cover_bg"
+	        android:clickable="true"
+	        android:gravity="center"
+	        tools:context=".MainActivity" >
+
+	        <ImageView
+	            android:id="@+id/mainpicture"
+	            android:layout_width="80dp"
+	            android:layout_height="80dp"
+	            android:layout_alignParentTop="true"
+	            android:layout_centerHorizontal="true"
+	            android:layout_marginTop="20dp"
+	            android:contentDescription="@string/default_content_description"
+	            android:src="@drawable/ic_launcher" />
+
+	        <RelativeLayout
+	            android:id="@+id/profile_layout1"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/mainpicture"
+	            android:gravity="center" >
+
+	            <TextView
+	                android:id="@+id/profile_teachername"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:text="김미정"
+	                android:textColor="@android:color/white"
+	                android:textSize="14sp" />
+	            
+	        </RelativeLayout>
+
+	        <RelativeLayout
+	            android:id="@+id/profile_layout2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentLeft="true"
+	            android:layout_below="@+id/profile_layout1"
+	            android:layout_weight="0.2"
+	            android:gravity="center" >
+
+	            <TextView
+	                android:id="@+id/profile_organization"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:text="@string/default_string"
+	                android:textColor="@android:color/white"
+	                android:textSize="14sp" />
+	            
+	            <TextView
+	                android:id="@+id/profile_bar2"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_toRightOf="@+id/profile_organization"
+	                android:text="/"
+	                android:textColor="@android:color/white"
+	                android:textSize="14sp" />
+	            
+	            
+
+	            <TextView
+	                android:id="@+id/profile_teacher"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_toRightOf="@+id/profile_bar2"
+	                android:text="@string/profile_teacher"
+	                android:textColor="@android:color/white"
+	                android:textSize="14sp" />
+
+	            
+	        </RelativeLayout>
+
+	        <Button
+	            android:id="@+id/profile_seefriend"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@+id/profile_layout2"
+	            android:layout_centerHorizontal="true"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginRight="30dp"
+	            android:layout_marginTop="15dp"
+	            android:alpha="0.7"
+	            android:background="@drawable/drawer_btnset"
+	            android:onClick="OnSeeFriend"
+	            android:text="@string/profile_seefriend"
+	            android:textColor="@android:color/white"
+	            android:textSize="15sp" />
+
+	        <TextView
+	            android:id="@+id/schedule_birthday_namelist"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignTop="@+id/mainpicture"
+	            android:layout_centerHorizontal="true"
+	            android:text="!"
+	            android:visibility="invisible" />
+
+	        <ImageView
+	            android:id="@+id/imageView1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="12dp"
+	            android:layout_marginTop="15dp"
+	            android:src="@drawable/drawer_point_bg" />
+
+	        <TextView
+	            android:id="@+id/confirm_teacher_name"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignBottom="@+id/imageView1"
+	            android:layout_alignRight="@+id/imageView1"
+	            android:layout_marginBottom="3dp"
+	            android:layout_marginRight="5dp"
+	            android:text="3,000"
+	            android:textColor="@android:color/white" />
+
+	    </RelativeLayout>
+
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="0.95" >
+
+	        <com.ihateflyingbugs.kidsm.WrappingSlidingDrawer
+				android:id="@+id/profile_drawer"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:handle="@+id/handle"
+				android:content="@+id/profile_childlist" >
+		
+				<ImageView
+				    android:id="@+id/handle"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:background="@android:color/transparent" />
+		
+				<ListView
+				    android:id="@+id/profile_childlist"
+				    android:layout_width="match_parent"
+				    android:layout_height="match_parent"
+				    android:background="#414042" >
+	
+				</ListView>
+			</com.ihateflyingbugs.kidsm.WrappingSlidingDrawer>
+		
+	        <LinearLayout
+	            android:id="@+id/profile_dolistlayout"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:orientation="vertical" >
+
+	            <ListView
+				    android:id="@+id/profile_dolist1"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content" >
+		
+				</ListView>
+
+	        </LinearLayout>
+	    </RelativeLayout>
+	</LinearLayout>
+</LinearLayout>

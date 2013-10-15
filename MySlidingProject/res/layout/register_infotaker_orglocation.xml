@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/register_infotaker_orglocation_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_input_search"
+                android:ems="10"
+                android:hint="@string/hint_put_dong"
+                android:imeOptions="actionSearch"
+                android:inputType="textPersonName"
+                android:paddingLeft="15dp"
+                android:textColorHint="#63c3b1" >
+
+                <requestFocus />
+            </EditText>
+
+            <ListView
+                android:id="@+id/register_infotaker_orglocation_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp" >
+            </ListView>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/register_infotaker_orglocation_not_found"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:text="@string/location_not_found"
+            android:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/register_infotaker_orglocation_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</LinearLayout>

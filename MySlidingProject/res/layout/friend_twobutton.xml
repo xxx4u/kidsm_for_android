@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+    
+    <ImageButton
+        android:id="@+id/friend_profile_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/profile_default" />
+    
+    <Button
+        android:id="@+id/friend_button2"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/friend_btn_bset"
+        android:onClick="OnButtonClick"
+        android:text="@string/friend_accept"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/friend_button1"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/friend_button2"
+        android:background="@drawable/friend_btn_aset"
+        android:onClick="OnButtonClick"
+        android:text="@string/friend_deny"
+        android:textColor="#808184"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/friend_friendname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/friend_profile_image"
+        android:background="@android:color/transparent"
+        android:text="@string/friend_friendname"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+        
+</RelativeLayout>
+

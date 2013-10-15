@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:layout_gravity="center"
+    android:background="@android:color/white" >
+    
+	<ImageView
+	    android:id="@+id/gallery_photo"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:onClick="OnSelectImage"
+	    android:scaleType="centerCrop"
+	    android:src="@drawable/ic_launcher" />
+	
+    <CheckBox
+        android:id="@+id/gallery_photo_scrap"
+        style="@style/PhotoFavoriteChecker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/gallery_photo"
+        android:layout_alignTop="@+id/gallery_photo" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true" >
+
+        <CheckBox
+            android:id="@+id/gallery_check"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:button="@drawable/photo_in_album_select_toggle"
+            android:checked="false"
+            android:gravity="center"
+            android:onClick="OnSelectImage"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+        
+</RelativeLayout>
