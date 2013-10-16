@@ -114,6 +114,14 @@
     <string name="gallery_seeprivate">나만 보기</string>
     <string name="gallery_tagmessage">태그하려면 사진을 탭하세요.</string>
     <string name="gallery_albumsetting">앨범 설정</string>
+    <string name="mentory_total">전체</string>
+    <string name="mentory_manage">운영</string>
+    <string name="mentory_edu">교육</string>
+    <string name="mentory_infant">육아</string>
+    <string name="mentory_healing">힐링</string>
+    <string name="mentory_kidsmnews">키즈엠소식</string>
+    <string name="mentory_scrap">스크랩</string>
+    <string name="mentory_recommend">선생님 추천멘토</string>
     <string name="menu_dobutton_text">기능</string>
 	<string name="hint_email">E-mail 아이디</string>
 	<string name="hint_password">비밀번호</string>

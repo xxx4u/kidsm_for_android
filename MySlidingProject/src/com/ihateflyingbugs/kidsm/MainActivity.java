@@ -197,15 +197,18 @@ public class MainActivity extends NetworkActivity {
 	}
 	
 	public void OnLikeClick(View v) {
-		newsfeed.OnLikeClick(v);
+		if( currentFragment == 0)
+			newsfeed.OnLikeClick(v);
 	}
 	
 	public void OnReplyClick(View v) {
-		newsfeed.OnReplyClick(v);
+		if( currentFragment == 0)
+			newsfeed.OnReplyClick(v);
 	}
 	
 	public void OnScrapClick(View v) {
-		newsfeed.OnScrapClick(v);
+		if( currentFragment == 0)
+			newsfeed.OnScrapClick(v);
 	}
 	
 	public void OnImageClick(View v) {
@@ -270,6 +273,14 @@ public class MainActivity extends NetworkActivity {
 	
 	public void OnNameClick(View v) {
 		friend.OnNameClick(v);
+	}
+	
+	public void OnBusClick(View v) {
+		businfo.OnBusClick(v);
+	}
+	
+	public void OnChangeBus(View v) {
+		businfo.OnChangeBus(v);
 	}
 	
 	@Override
