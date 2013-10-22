@@ -50,6 +50,8 @@ public class NetworkFragment extends Fragment {
     		if( i != params.size()-1 )
     			query += '&';
     	}
+		
+		query = query.replace(" ", "%20");
 		return query;
 	}
 	
@@ -95,6 +97,7 @@ public class NetworkFragment extends Fragment {
 					String result = "";
 					HttpClient client = new DefaultHttpClient();
 					HttpGet get = new HttpGet(url+uri+makeQuery(params));
+					
 					if(auth_key.isEmpty() == false)
 						get.addHeader("Authorization", auth_key);
 					HttpResponse response = client.execute(get);
@@ -872,6 +875,16 @@ public class NetworkFragment extends Fragment {
 		GET("ServiceInfo/checkServerStatus", params);
 	}
 	
+	public void request_Service_notify_sendNotify(String member_srl, String target_member_srl, String notify_title, String notify_message, String notify_type) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("target_member_srl", target_member_srl));
+		params.add(new BasicNameValuePair("notify_title", notify_title));
+		params.add(new BasicNameValuePair("notify_message", notify_message));
+		params.add(new BasicNameValuePair("notify_type", notify_type));
+		GET("Service/notify/sendNotify", params);
+	}
+	
 	public void request_Shuttlebus_getShuttlebus(String shuttle_srl, String org_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("shuttle_srl", shuttle_srl));
@@ -913,11 +926,13 @@ public class NetworkFragment extends Fragment {
 		GET("Timeline/getTimelineMessage", params);
 	}
 	
-	public void request_Timeline_setTimelineMessage(String member_srl, String timeline_type, String timeline_message, String timeline_target_member_srl) {
+	public void request_Timeline_setTimelineMessage(String member_srl, String timeline_type, String timeline_target_srl, String timeline_target_member_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("timeline_title", ""));
 		params.add(new BasicNameValuePair("timeline_type", timeline_type));
-		params.add(new BasicNameValuePair("timeline_message", timeline_message));
+		params.add(new BasicNameValuePair("timeline_message", ""));
+		params.add(new BasicNameValuePair("timeline_target_srl", timeline_target_srl));
 		params.add(new BasicNameValuePair("timeline_target_member_srl", timeline_target_member_srl));
 		POST("Timeline/setTimelineMessage", params);
 	}
@@ -937,12 +952,12 @@ public class NetworkFragment extends Fragment {
 		POST("Timeline/setTimelineComment", params);
 	}
 	
-	public void request_Timeline_getTimelineComment(String timeline_srl, int index, int count) {
+	public void request_Timeline_getTimelineComments(String timeline_srl, int index, int count) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("timeline_srl", timeline_srl));
 		params.add(new BasicNameValuePair("index", ""+index));
 		params.add(new BasicNameValuePair("count", ""+count));
-		GET("Timeline/getTimelineComment", params);
+		GET("Timeline/getTimelineComments", params);
 	}
 	
 	public void request_Timeline_delTimelineComment(String member_srl, String timeline_srl, String tcomment_srl) {

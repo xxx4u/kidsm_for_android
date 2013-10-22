@@ -7,6 +7,10 @@ import android.app.AlertDialog;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +25,11 @@ import com.ihateflyingbugs.kidsm.ImageMaker;
 import com.ihateflyingbugs.kidsm.MainActivity;
 import com.ihateflyingbugs.kidsm.R;
 import com.ihateflyingbugs.kidsm.WrappingSlidingDrawer;
+import com.ihateflyingbugs.kidsm.notice.NoticeFragment;
+import com.ihateflyingbugs.kidsm.photonotice.PhotoNoticeFragment;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
+
 
 public class SlidingMenuMaker {
 	private static Profile profile;
@@ -41,10 +49,13 @@ public class SlidingMenuMaker {
 		profile = _profile;
 	}
 	
+	
+
 	public void Initiate(MainActivity activity) {
 		this.activity = activity;
 		slidingMenu = new SlidingMenu(activity);
 		slidingMenu.attachToActivity(activity, SlidingMenu.SLIDING_WINDOW);
+		
 		
 		switch(profile.member_type.charAt(0)) {
 		case 'P':

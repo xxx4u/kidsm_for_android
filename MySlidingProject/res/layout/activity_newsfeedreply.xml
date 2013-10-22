@@ -1,77 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/replyflipper"
+     android:layout_width="match_parent"
+     android:layout_height="fill_parent" >
 
-    <ViewFlipper
-        android:id="@+id/replyflipper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:orientation="vertical" >
 
-	<LinearLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical">
-		<LinearLayout 
-		    android:id="@+id/replylayout"
-		    android:layout_width="match_parent"
-		    android:layout_height="0sp"
-	  	 	android:layout_weight="1"
-		    android:orientation="vertical"></LinearLayout>
+         <ListView
+             android:id="@+id/replylayout"
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+             android:layout_margin="5dp"
+             android:layout_weight="1" >
 
-			<RelativeLayout
-			    android:id="@+id/replytextlayout"
-			    android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:background="@drawable/general_comment_bg"
-			    android:gravity="center"
-			    android:padding="5dp" >
-	
-		    <EditText
-		        android:id="@+id/replytext"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_alignParentLeft="true"
-		        android:layout_centerVertical="false"
-		        android:layout_marginRight="5dp"
-		        android:layout_toLeftOf="@+id/replybutton"
-		        android:background="@drawable/general_comment_input_bg"
-		        android:hint="댓글을 입력하세요..."
-		        android:paddingLeft="10dp" />
-	
-		    <Button
-		        android:id="@+id/replybutton"
-		        android:layout_width="wrap_content"
-		        android:layout_height="35dp"
-		        android:layout_alignParentRight="true"
-		        android:layout_alignParentTop="true"
-		        android:background="@drawable/general_comment_btnset"
-		        android:onClick="OnPostClick" />
-			
-	</RelativeLayout>
-	</LinearLayout>
-	<LinearLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical" >
+         </ListView>
 
-	    <Button 
-	        android:id="@+id/newsreply_likelisttitle"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:padding="10dp"
-		    android:text="@string/reply_likelist"
-		    android:layout_gravity="center"
-		    android:background="@android:color/transparent"
-		    android:onClick="OnFlip"/>
-		
-		<LinearLayout 
-		    android:id="@+id/newsreply_likelist"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical" >
-		</LinearLayout>
-	</LinearLayout>
-	</ViewFlipper>
+         <RelativeLayout
+             android:id="@+id/replytextlayout"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@drawable/general_comment_bg"
+             android:gravity="center"
+             android:padding="5dp" >
 
-</ScrollView>
+             <EditText
+                 android:id="@+id/replytext"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentLeft="true"
+                 android:layout_centerVertical="false"
+                 android:layout_marginRight="5dp"
+                 android:layout_toLeftOf="@+id/replybutton"
+                 android:background="@drawable/general_comment_input_bg"
+                 android:hint="댓글을 입력하세요..."
+                 android:paddingLeft="10dp" />
+
+             <Button
+                 android:id="@+id/replybutton"
+                 android:layout_width="wrap_content"
+                 android:layout_height="35dp"
+                 android:layout_alignParentRight="true"
+                 android:layout_alignParentTop="true"
+                 android:background="@drawable/general_comment_btnset"
+                 android:onClick="OnPostClick" />
+         </RelativeLayout>
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical" >
+
+         <Button
+             android:id="@+id/newsreply_likelisttitle"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:background="@android:color/transparent"
+             android:onClick="OnFlip"
+             android:padding="10dp"
+             android:text="@string/reply_likelist" />
+
+         <LinearLayout
+             android:id="@+id/newsreply_likelist"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="vertical" >
+         </LinearLayout>
+     </LinearLayout>
+ </ViewFlipper>

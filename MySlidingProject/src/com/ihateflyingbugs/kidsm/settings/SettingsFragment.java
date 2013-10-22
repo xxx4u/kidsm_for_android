@@ -5,8 +5,6 @@ import com.ihateflyingbugs.kidsm.R;
 import com.ihateflyingbugs.kidsm.R.id;
 import com.ihateflyingbugs.kidsm.R.layout;
 import com.ihateflyingbugs.kidsm.R.menu;
-import com.ihateflyingbugs.kidsm.notice.NoticeActivity;
-import com.ihateflyingbugs.kidsm.photonotice.PhotoActivity;
 
 import android.app.Activity;
 import android.content.Intent;

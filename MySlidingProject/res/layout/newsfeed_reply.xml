@@ -3,6 +3,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/general_comment_bg"
     android:clickable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal"
@@ -55,14 +56,14 @@
             android:textColor="#6d6e70" />
 
         <TextView
-            android:id="@+id/confirm_teacher_name"
+            android:id="@+id/reply_timelog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/reply_secondtext"
             android:layout_below="@id/reply_secondtext"
             android:layout_marginTop="3dp"
             android:text="TextView"
-            android:textColor="#d0d2d3"
+            android:textColor="@android:color/darker_gray"
             android:textSize="12sp" />
 
     </RelativeLayout>

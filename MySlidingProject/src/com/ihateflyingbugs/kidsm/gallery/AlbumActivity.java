@@ -31,7 +31,6 @@ import com.ihateflyingbugs.kidsm.R;
 import com.ihateflyingbugs.kidsm.WrappingSlidingDrawer;
 import com.ihateflyingbugs.kidsm.gallery.Album.ALBUMTYPE;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
-import com.ihateflyingbugs.kidsm.notice.NoticeActivity;
 import com.ihateflyingbugs.kidsm.showimage.ShowImageActivity;
 import com.ihateflyingbugs.kidsm.uploadphoto.UploadPhotoActivity;
 

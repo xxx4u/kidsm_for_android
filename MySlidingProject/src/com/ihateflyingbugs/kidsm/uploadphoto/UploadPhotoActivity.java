@@ -474,15 +474,26 @@ public class UploadPhotoActivity extends NetworkActivity {
 				else {
 					bitmap = readBitmap(Uri.parse(photoList.get(i).filepath));
 				}
+				String member_srl = "";
+				switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+				case 'P':
+					member_srl = SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl;
+					break;
+				case 'T':
+				case 'M':
+					member_srl = SlidingMenuMaker.getProfile().member_srl;
+					break;
+				}
+				
 				switch(tagMode) {
 				case SEE_ALL_FRIEND:
-					this.request_Album_setPhoto(current_album_srl, SlidingMenuMaker.getProfile().member_srl, makeAllMemberIncludedTag(), "N", bitmap);
+					this.request_Album_setPhoto(current_album_srl, member_srl, "MESSAGE", makeAllMemberIncludedTag(), "N", bitmap);
 					break;
 				case SEE_TAGGED_FRIEND:
-					this.request_Album_setPhoto(current_album_srl, SlidingMenuMaker.getProfile().member_srl, photoList.get(i).tagValue, "N", bitmap);
+					this.request_Album_setPhoto(current_album_srl, member_srl, "MESSAGE", photoList.get(i).tagValue, "N", bitmap);
 					break;
 				case SEE_PRIVATE:
-					this.request_Album_setPhoto(current_album_srl, SlidingMenuMaker.getProfile().member_srl, "", "Y", bitmap);
+					this.request_Album_setPhoto(current_album_srl, member_srl, "MESSAGE", "", "Y", bitmap);
 					break;
 				}
 			}
@@ -661,7 +672,7 @@ public class UploadPhotoActivity extends NetworkActivity {
 					ArrayList<String> tagList = this.makeTagListForTimeline(photo_tag);
 					for(int i = 0; i < tagList.size(); i++)
 						targetList += tagList.get(i) + ",";
-					this.request_Timeline_setTimelineMessage(SlidingMenuMaker.getProfile().member_srl, "P", photo_srl, targetList);
+					this.request_Timeline_setTimelineMessage(photo_member_srl, "P", photo_srl, targetList);
 				}
 				else if(uri.equals("Timeline/setTimelineMessage")) {
 					String nativeData = jsonObj.getString("data");
@@ -672,15 +683,15 @@ public class UploadPhotoActivity extends NetworkActivity {
 						String timeline_srl = dataObj.getJSONObject("_id").getString("$oid");
 						String timeline_member_srl = dataObj.getString("timeline_member_srl");
 						String timeline_target_member_srl = dataObj.getString("timeline_target_member_srl");
-						String timeline_message = dataObj.getString("timeline_message");
+						String timeline_target_srl = dataObj.getString("timeline_target_srl");
 						String timeline_created = dataObj.getString("timeline_created");
 						for(int j = 0; j < uploadedPhotoList.size(); j++) {
-							if(uploadedPhotoList.get(j).photo_srl.equals(timeline_message)) {
+							if(uploadedPhotoList.get(j).photo_srl.equals(timeline_target_srl)) {
 								uploadedPhotoList.get(j).photo_timeline_srl = timeline_srl;
 								break;
 							}
 						}
-						this.request_Album_setPhotoTimeline(timeline_message, timeline_srl);
+						this.request_Album_setPhotoTimeline(timeline_target_srl, timeline_srl);
 						break;
 					}
 					//}

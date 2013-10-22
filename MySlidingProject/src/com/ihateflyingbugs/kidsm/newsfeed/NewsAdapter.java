@@ -3,17 +3,22 @@ package com.ihateflyingbugs.kidsm.newsfeed;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.os.Handler;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ihateflyingbugs.kidsm.ImageLoader;
 import com.ihateflyingbugs.kidsm.R;
 import com.ihateflyingbugs.kidsm.friend.FriendListItem;
+import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
 
 public class NewsAdapter extends BaseAdapter {
 	LayoutInflater mInflater;
@@ -52,6 +57,19 @@ public class NewsAdapter extends BaseAdapter {
 		return 4;
 	}
 
+	public String makeTimeLog(String created) {
+		long currentTime = System.currentTimeMillis()/1000;
+		long timeGap = currentTime - Long.parseLong(created);
+		
+		if( timeGap > 60*60*24 )
+			return ""+timeGap/(24*60*60)+"일 전";
+		if( timeGap > 60*60 )
+			return ""+timeGap/3600+"시간 전";
+		if( timeGap > 60 )
+			return ""+(timeGap/60)+"분 전";
+		return "" + timeGap+"초 전";
+	}
+	
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// 최초 호출이면 항목 뷰를 생성한다. 
 		// 타입별로 뷰를 다르게 디자인할 수 있으며 높이가 달라도 상관없다.
@@ -91,6 +109,48 @@ public class NewsAdapter extends BaseAdapter {
 			image = (ImageView)convertView.findViewById(R.id.news_photo_picture);
 			imageLoader.DisplayImage(context.getString(R.string.image_url)+photoNews.photo_path, image);
 			image.setTag(context.getString(R.string.image_url)+photoNews.photo_path);
+			txt = (TextView)convertView.findViewById(R.id.news_photo_timelog);
+			txt.setText(makeTimeLog(photoNews.photo_created));
+
+			txt = (TextView)convertView.findViewById(R.id.news_photo_numoflike);
+			txt.setText(""+photoNews.likeMemberList.size());
+			txt = (TextView)convertView.findViewById(R.id.news_photo_numofreply);
+			txt.setText(""+photoNews.commentList.size());
+			
+			convertView.findViewById(R.id.news_photo_like).setTag(position);
+			convertView.findViewById(R.id.news_photo_reply).setTag(position);
+			convertView.findViewById(R.id.news_photo_scrap).setTag(position);
+			
+			String member_srl = "";
+			switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+			case 'P':
+				member_srl = SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl;
+				break;
+			case 'T':
+			case 'M':
+				member_srl = SlidingMenuMaker.getProfile().member_srl;
+				break;
+			}
+			txt = (TextView)convertView.findViewById(R.id.news_photo_liketext);
+			final CheckBox cb = (CheckBox) convertView.findViewById(R.id.news_photo_like_animation);
+			if(arSrc.get(position).likeMemberList.contains(member_srl)) {
+				txt.setText(R.string.news_likecancel);
+				//AnimationDrawable frameAnimation = (AnimationDrawable) cb.getBackground();
+	            // Start the animation (looped playback by default).
+	            //frameAnimation.start();
+				new Handler().postDelayed(new Runnable() { 
+			        public void run() {
+						cb.setChecked(true);
+			        } 
+			    }, 100);
+			}
+			else {
+				txt.setText(R.string.news_like);
+				cb.setChecked(false);
+			}
+			//cb = (CheckBox) convertView.findViewById(R.id.news_photo_scrap_animation);
+			//cb.setChecked(arSrc.get(position).likeMemberList.contains(member_srl));
+			
 			break;
 		case SCHEDULE:
 			ScheduleNews scheduleNews = (ScheduleNews) arSrc.get(position);
@@ -98,6 +158,8 @@ public class NewsAdapter extends BaseAdapter {
 			txt.setText(scheduleNews.cal_month+"월 "+scheduleNews.cal_day+"일");
 			txt = (TextView)convertView.findViewById(R.id.news_schedule_message);
 			txt.setText(scheduleNews.cal_name);
+			txt = (TextView)convertView.findViewById(R.id.news_schedule_timelog);
+			txt.setText(makeTimeLog(scheduleNews.cal_created));
 			break;
 		case BUSINFO:
 //			txt = (TextView)convertView.findViewById(R.id.friend_friendname);

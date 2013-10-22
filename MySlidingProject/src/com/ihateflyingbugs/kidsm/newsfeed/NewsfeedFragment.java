@@ -47,10 +47,11 @@ public class NewsfeedFragment extends NetworkFragment {
 	NewsAdapter newsAdapter;
 	ListView newsListView;
 	
-	Map<Integer, News> newsMap;
+	Map<String, News> newsMap;
 	
 	int timelineIndex;
 	int Counter;
+	boolean currentlyRequestNews;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,7 +64,8 @@ public class NewsfeedFragment extends NetworkFragment {
 		
 		auth_key = MainActivity.auth_key;
 		
-		newsMap = new HashMap<Integer, News>();
+		currentlyRequestNews = false;
+		newsMap = new HashMap<String, News>();
 		//newsList = new HashMap<String, News>();
 		newsList = new ArrayList<News>();
 		newsAdapter = new NewsAdapter(getActivity(), newsList);
@@ -109,6 +111,8 @@ public class NewsfeedFragment extends NetworkFragment {
 		newsListView.setDividerHeight(20);
 		newsListView.setAdapter(newsAdapter);
 		
+		this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, SlidingMenuMaker.getProfile().member_srl, "뉴스피드 접근", "앞으로 알림을 받을 수 있습니다.", "T");
+		
 		return layout;
 	}
 	
@@ -129,13 +133,18 @@ public class NewsfeedFragment extends NetworkFragment {
 	}
 	
 	private void getTimeLineMessages() {
+		if( currentlyRequestNews )
+			return;
+		currentlyRequestNews = true;
+		
 		newsMap.clear();
-		newsMap.put(0, new BusinfoNews());
-		newsMap.put(1, new MentoryNews());
+		newsMap.put(makeIdentifier("B", "0"), new BusinfoNews("0", ""));
+		newsMap.put(makeIdentifier("M", "0"), new MentoryNews("1", ""));
+		
 		switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
 		case 'P':
 			if( SlidingMenuMaker.getProfile().childrenList.size() > 1 )
-				this.request_Timeline_getTimelineMessages(SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl, ++timelineIndex, 10);
+   				this.request_Timeline_getTimelineMessages(SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl, ++timelineIndex, 10);
 			else
 				Toast.makeText(getActivity(), "키즈엠 소속 유치원 소속회원만 소식을 받아볼 수 있습니다.", Toast.LENGTH_SHORT).show();
 			break;
@@ -185,27 +194,38 @@ public class NewsfeedFragment extends NetworkFragment {
 	}
 	
 	public void OnLikeClick(View v) {
-//		final String key = (String)v.getTag();
-//		final News news = newsList.get(key);
-//		if(news.isLikeAlreadyDone()) {
-//			news.setLikeAlreadyDone(false);
-//			for(int i = 0; i < news.getLikeList().size(); i++) {
-//				if( news.getLikeList().get(i).getName().equals(SlidingMenuMaker.getProfile().getMember_name()) )
-//					news.deleteLikeMember(i);
-//			}
-//		}
-//		else {
-//			news.setLikeAlreadyDone(true);
-//			news.addLikeMember(new LikeMember(SlidingMenuMaker.getProfile().getMember_name()));
-//		}
-//		news.updateLayout();
-//		newsList.put(key, news);
+		int position = Integer.parseInt(v.getTag().toString());
+		String member_srl = "";
+		switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+		case 'P':
+			member_srl = SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl;
+			break;
+		case 'T':
+		case 'M':
+			member_srl = SlidingMenuMaker.getProfile().member_srl;
+			break;
+		}
+		switch( newsList.get(position).type ) {
+		case PHOTO:
+			PhotoNews photoNews = (PhotoNews) newsList.get(position);
+			if( photoNews.likeMemberList.contains(member_srl) == false )
+				this.request_Album_setPhotoLike(photoNews.photo_srl, member_srl);
+			else
+				this.request_Album_delPhotoLike(photoNews.photo_srl, member_srl);
+			break;
+		}
 	}
 	
 	public void OnReplyClick(View v) {
-		Intent intent = new Intent(getActivity(), NewsfeedReplyActivity.class);
-		intent.putExtra("key", (String)v.getTag());
-		startActivity(intent);
+		int position = Integer.parseInt(v.getTag().toString());
+		switch( newsList.get(position).type ) {
+		case PHOTO:
+		case MENTORY:
+			Intent intent = new Intent(getActivity(), NewsfeedReplyActivity.class);
+			intent.putExtra("timeline_srl", newsList.get(position).timeline_srl);
+			startActivity(intent);
+			break;
+		}
 	}
 	
 	public void OnScrapClick(View v) {
@@ -241,24 +261,61 @@ public class NewsfeedFragment extends NetworkFragment {
 			        NewsfeedFragment.this.getActivity().runOnUiThread(new Runnable(){
 			            @Override
 			             public void run() {
-			            	Set<Integer> keySet = newsMap.keySet();
-							Iterator<Integer> iterator = keySet.iterator();
+			            	Set<String> keySet = newsMap.keySet();
+							Iterator<String> iterator = keySet.iterator();
+							Map<Integer, News> newsMapOrderedByTime = new HashMap<Integer, News>();
 							while(iterator.hasNext()) {
-								Integer key = iterator.next();
-//								Date date = null;
-//								date.setTime(Long.parseLong(key));
-//								Calendar c = Calendar.getInstance();
-//								c.setTime(date);
-								newsList.add(newsMap.get(key));
+								String key = iterator.next();
+								String created = "";
+								switch(key.charAt(0)) {
+								case 'S':
+									created = ((ScheduleNews)newsMap.get(key)).cal_created;
+									break;
+								case 'P':
+									created = ((PhotoNews)newsMap.get(key)).photo_created;
+									break;
+								case 'B':
+									created = "0";
+									break;
+								case 'M':
+									created = "1";
+									break;
+								}
+								newsMapOrderedByTime.put(Integer.parseInt(created), newsMap.get(key));
+							}
+							
+							Set<Integer> keySet2 = newsMapOrderedByTime.keySet();
+							Iterator<Integer> iterator2 = keySet2.iterator();
+							while(iterator2.hasNext()) {
+								Integer key = iterator2.next();
+								newsList.add(newsMapOrderedByTime.get(key));
 							}
 							
 			            	newsAdapter.notifyDataSetChanged();
-			            	
+			            	currentlyRequestNews = false;
 			            }
 			        });
 			    }
 			}).start();
 		}
+	}
+	
+	public void refreshList() {
+		new Thread(new Runnable() {
+		    @Override
+		    public void run() {    
+		        NewsfeedFragment.this.getActivity().runOnUiThread(new Runnable(){
+		            @Override
+		             public void run() {
+		            	newsAdapter.notifyDataSetChanged();
+		            }
+		        });
+		    }
+		}).start();
+	}
+	
+	private String makeIdentifier(String type, String srl) {
+		return type+srl;
 	}
 	
 	@Override
@@ -273,24 +330,35 @@ public class NewsfeedFragment extends NetworkFragment {
 				String nativeData = jsonObj.getString("data");
 				JSONArray dataArray = new JSONArray(nativeData);
 				Counter = dataArray.length();
+				if( Counter == 0 ) {
+					Counter++;
+					notifyDataSetChanged();
+				}
 				for(int i = 0; i < dataArray.length(); i++ ) {
 					JSONObject dataObj = dataArray.getJSONObject(i);
 					final String timeline_type = dataObj.getString("timeline_type");
 					final String timeline_srl = dataObj.getJSONObject("_id").getString("$oid");
 					final String timeline_member_srl = dataObj.getString("timeline_member_srl");
 					final String timeline_target_member_srl = dataObj.getString("timeline_target_member_srl");
-					final String timeline_message = dataObj.getString("timeline_message");
+					final String timeline_target_srl = dataObj.getString("timeline_target_srl");
+					final String timeline_like = dataObj.getString("timeline_like");
+					final String timeline_comment = dataObj.getString("timeline_comment");
 					final String timeline_created = dataObj.getString("timeline_created");
 					switch(timeline_type.charAt(0)) {
 					case 'S':
-						this.request_Calender_getCalender(timeline_message);
+						newsMap.put(makeIdentifier(timeline_type, timeline_target_srl), new ScheduleNews(timeline_srl, timeline_like));
+						this.request_Calender_getCalender(timeline_target_srl);
 						break;
 					case 'P':
-						this.request_Album_getPhoto(timeline_message);
+						newsMap.put(makeIdentifier(timeline_type, timeline_target_srl), new PhotoNews(timeline_srl, timeline_like));
+						this.request_Album_getPhoto(timeline_target_srl);
+						this.request_Timeline_getTimelineComments(timeline_srl, 1, 100000);
 						break;
 					case 'B':
+						newsMap.put(makeIdentifier(timeline_type, timeline_target_srl), new BusinfoNews(timeline_srl, timeline_like));
 						break;
 					case 'M':
+						newsMap.put(makeIdentifier(timeline_type, timeline_target_srl), new MentoryNews(timeline_srl, timeline_like));
 						break;
 					}
 				}
@@ -310,8 +378,7 @@ public class NewsfeedFragment extends NetworkFragment {
 				String cal_timestamp = jsonObj.getString("cal_timestamp");
 				String cal_name = jsonObj.getString("cal_name");
 				String cal_created = jsonObj.getString("cal_created");
-				//newsList.add(new ScheduleNews(cal_srl, cal_org_srl, cal_class_srl, cal_member_srl, cal_type, cal_year, cal_month, cal_day, cal_time, cal_timestamp, cal_name, cal_created));
-				newsMap.put(Integer.parseInt(cal_created), new ScheduleNews(cal_srl, cal_org_srl, cal_class_srl, cal_member_srl, cal_type, cal_year, cal_month, cal_day, cal_time, cal_timestamp, cal_name, cal_created));
+				((ScheduleNews)newsMap.get(makeIdentifier("S", cal_srl))).setScheduleNews(cal_srl, cal_org_srl, cal_class_srl, cal_member_srl, cal_type, cal_year, cal_month, cal_day, cal_time, cal_timestamp, cal_name, cal_created);
 				notifyDataSetChanged();
 			}
 			else if( uri.equals("Album/getPhoto")) {
@@ -328,7 +395,8 @@ public class NewsfeedFragment extends NetworkFragment {
 				String photo_created = jsonObj.getString("photo_created");
 				String photo_updated = jsonObj.getString("photo_updated");
 				//newsList.add(new PhotoNews(photo_srl, photo_member_srl, photo_album_srl, photo_tag, photo_path, photo_thumbnail, photo_like, photo_private, photo_created, photo_updated));
-				newsMap.put(Integer.parseInt(photo_created), new PhotoNews(photo_srl, photo_member_srl, photo_album_srl, photo_tag, photo_path, photo_thumbnail, photo_like, photo_private, photo_created, photo_updated));
+				//newsMap.put(Integer.parseInt(photo_created), new PhotoNews(photo_srl, photo_member_srl, photo_album_srl, photo_tag, photo_path, photo_thumbnail, photo_like, photo_private, photo_created, photo_updated));
+				((PhotoNews)newsMap.get(makeIdentifier("P", photo_srl))).setPhotoNews(photo_srl, photo_member_srl, photo_album_srl, photo_tag, photo_path, photo_thumbnail, photo_like, photo_private, photo_created, photo_updated);
 				this.request_Member_getMember(photo_member_srl);
 			}
 			else if( uri.equals("Member/getMember")) {
@@ -336,6 +404,8 @@ public class NewsfeedFragment extends NetworkFragment {
 				jsonObj = new JSONObject(nativeData);
 				String member_srl = jsonObj.getString("member_srl");
 				String member_name = jsonObj.getString("member_name");
+				String member_type = jsonObj.getString("member_type");
+				
 //				for(int i = 0; i < newsList.size(); i++) {
 //					if(newsList.get(i).type == NEWSTYPE.PHOTO) {
 //						PhotoNews photoNews = (PhotoNews) newsList.get(i);
@@ -343,18 +413,103 @@ public class NewsfeedFragment extends NetworkFragment {
 //							photoNews.photo_member_name = member_name;
 //					}
 //				}
-				Set<Integer> keySet = newsMap.keySet();
-				Iterator<Integer> iterator = keySet.iterator();
+				Set<String> keySet = newsMap.keySet();
+				Iterator<String> iterator = keySet.iterator();
 				while(iterator.hasNext()) {
-					Integer key = iterator.next();
+					String key = iterator.next();
 					if(newsMap.get(key).type == NEWSTYPE.PHOTO) {
 						PhotoNews photoNews = (PhotoNews) newsMap.get(key);
-						if(photoNews.photo_member_srl.equals(member_srl))
+						if(photoNews.photo_member_srl.equals(member_srl)) {
 							photoNews.photo_member_name = member_name;
+							if( member_type.charAt(0) == 'S' )
+								photoNews.photo_member_name += " 학부모";
+						}
 					}
 				}
-				
 				notifyDataSetChanged();
+			}
+			else if( uri.equals("Album/setPhotoLike") ) {
+				String nativeData = jsonObj.getString("data");
+				jsonObj = new JSONObject(nativeData);
+				String photo_srl = jsonObj.getString("photo_srl");
+				//String photo_like = jsonObj.getString("photo_like");
+				for(int i = 0; i < newsList.size(); i++) {
+					if(newsList.get(i).type == NEWSTYPE.PHOTO ) {
+						PhotoNews photo = (PhotoNews)newsList.get(i);
+						String member_srl = "";
+						switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+						case 'P':
+							member_srl = SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl;
+							break;
+						case 'T':
+						case 'M':
+							member_srl = SlidingMenuMaker.getProfile().member_srl;
+							break;
+						}
+						photo.likeMemberList.add(member_srl);
+						refreshList();
+					}
+				}
+//				\"photo_srl\":110,
+//				\"photo_member_srl\":83,
+//				\"photo_album_srl\":\"22,\",
+//				\"photo_timeline_srl\":\"5263448dbef941f610dcaf87\",
+//				\"photo_message\":\"MESSAGE\",
+//				\"photo_tag\":\"85,82,\",
+//				\"photo_path\":\"22/ZAlud9lGBNoch5D/WbWaOD6UFDCH6Xvc9nG1sWFxr.jpg\",
+//				\"photo_thumbnail\":\"22/ZAlud9lGBNoch5D/WbWaOD6UFDCH6Xvc9nG1sWFxr.jpg\",
+//				\"photo_like\":\",83,\",
+//				\"photo_private\":\"N\",
+//				\"photo_created\":1382237325,
+//				\"photo_updated\":1382237325}"}
+			}
+			else if( uri.equals("Album/delPhotoLike") ) {
+				String nativeData = jsonObj.getString("data");
+				jsonObj = new JSONObject(nativeData);
+				String photo_srl = jsonObj.getString("photo_srl");
+				for(int i = 0; i < newsList.size(); i++) {
+					if(newsList.get(i).type == NEWSTYPE.PHOTO ) {
+						PhotoNews photo = (PhotoNews)newsList.get(i);
+						String member_srl = "";
+						switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+						case 'P':
+							member_srl = SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl;
+							break;
+						case 'T':
+						case 'M':
+							member_srl = SlidingMenuMaker.getProfile().member_srl;
+							break;
+						}
+						photo.likeMemberList.remove(member_srl);
+						refreshList();
+					}
+				}
+			}
+			else if( uri.equals("Timeline/getTimelineComments") ) {
+				String nativeData = jsonObj.getString("data");
+				JSONArray dataArray = new JSONArray(nativeData);
+				String timeline_srl = "";
+				ArrayList<Reply> replyList = new ArrayList<Reply>();
+				for(int i = 0; i < dataArray.length(); i++ ) {
+					JSONObject dataObj = dataArray.getJSONObject(i);
+					String tcomment_srl = dataObj.getJSONObject("_id").getString("$oid");
+					String tcomment_member_srl = dataObj.getString("tcomment_member_srl");
+					String tcomment_timeline_srl = dataObj.getString("tcomment_timeline_srl");
+					String tcomment_message = dataObj.getString("tcomment_message");
+					String tcomment_created = dataObj.getString("tcomment_created");
+					
+					timeline_srl = tcomment_timeline_srl;
+					replyList.add(new Reply(tcomment_srl, tcomment_member_srl, tcomment_timeline_srl, tcomment_message, tcomment_created));
+				}
+				if( timeline_srl.isEmpty() == false ) {
+					for(int j = 0; j < newsList.size(); j++) {
+						if( newsList.get(j).timeline_srl.equals(timeline_srl) ) {
+							newsList.get(j).commentList.addAll(replyList);
+							refreshList();
+							break;
+						}
+					}
+				}
 			}
 		}
 		catch(Exception e) {

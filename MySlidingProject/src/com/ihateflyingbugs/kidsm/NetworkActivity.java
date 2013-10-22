@@ -343,7 +343,7 @@ public class NetworkActivity extends Activity {
 		DELETE("Album/delPhotoLike", params);
 	}
 	
-	public void request_Album_setPhoto(String album_srl, String member_srl, String photo_tag, String photo_private, Bitmap photo) {
+	public void request_Album_setPhoto(String album_srl, String member_srl, String photo_message, String photo_tag, String photo_private, Bitmap photo) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 		photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -356,6 +356,7 @@ public class NetworkActivity extends Activity {
         try {
 			reqEntity.addPart("album_srl", new StringBody(album_srl));
 	        reqEntity.addPart("member_srl", new StringBody(member_srl));
+	        reqEntity.addPart("photo_message", new StringBody(photo_message));
 	        reqEntity.addPart("photo_tag", new StringBody(photo_tag));
 	        reqEntity.addPart("photo_private", new StringBody(photo_private));
 	        reqEntity.addPart("photo", bab);
@@ -961,11 +962,13 @@ public class NetworkActivity extends Activity {
 		GET("Timeline/getTimelineMessage", params);
 	}
 	
-	public void request_Timeline_setTimelineMessage(String member_srl, String timeline_type, String timeline_message, String timeline_target_member_srl) {
+	public void request_Timeline_setTimelineMessage(String member_srl, String timeline_type, String timeline_target_srl, String timeline_target_member_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("timeline_title", ""));
 		params.add(new BasicNameValuePair("timeline_type", timeline_type));
-		params.add(new BasicNameValuePair("timeline_message", timeline_message));
+		params.add(new BasicNameValuePair("timeline_message", ""));
+		params.add(new BasicNameValuePair("timeline_target_srl", timeline_target_srl));
 		params.add(new BasicNameValuePair("timeline_target_member_srl", timeline_target_member_srl));
 		POST("Timeline/setTimelineMessage", params);
 	}
@@ -985,12 +988,12 @@ public class NetworkActivity extends Activity {
 		POST("Timeline/setTimelineComment", params);
 	}
 	
-	public void request_Timeline_getTimelineComment(String timeline_srl, int index, int count) {
+	public void request_Timeline_getTimelineComments(String timeline_srl, int index, int count) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("timeline_srl", timeline_srl));
 		params.add(new BasicNameValuePair("index", ""+index));
 		params.add(new BasicNameValuePair("count", ""+count));
-		GET("Timeline/getTimelineComment", params);
+		GET("Timeline/getTimelineComments", params);
 	}
 	
 	public void request_Timeline_delTimelineComment(String member_srl, String timeline_srl, String tcomment_srl) {

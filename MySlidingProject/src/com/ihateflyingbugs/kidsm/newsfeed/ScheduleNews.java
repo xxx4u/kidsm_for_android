@@ -15,7 +15,11 @@ public class ScheduleNews extends News {
 	String cal_name;
 	String cal_created;
 	
-	public ScheduleNews(String cal_srl, String cal_org_srl, String cal_class_srl, String cal_member_srl, String cal_type, String cal_year, String cal_month, String cal_day, String cal_time, String cal_timestamp, String cal_name, String cal_created) {
+	public ScheduleNews(String timeline_srl, String timeline_like) {
+		super(timeline_srl, timeline_like);
+	}
+	
+	public void setScheduleNews(String cal_srl, String cal_org_srl, String cal_class_srl, String cal_member_srl, String cal_type, String cal_year, String cal_month, String cal_day, String cal_time, String cal_timestamp, String cal_name, String cal_created) {
 		type = NEWSTYPE.SCHEDULE;
 		this.cal_srl = cal_srl;
 		this.cal_org_srl = cal_org_srl;

@@ -100,6 +100,7 @@ public class GalleryFragment extends NetworkFragment{
         gridView.setExpanded(true);
         gridView.setAdapter(adapter);
         drawer = (WrappingSlidingDrawer)layout.findViewById(R.id.gallery_drawer);
+        drawer.animateOpen();
         
         imageLoader = new ImageLoader(getActivity(), R.drawable.photo_in_album_default);
         
@@ -265,30 +266,30 @@ public class GalleryFragment extends NetworkFragment{
 	}
 	
 	public boolean dispatchTouchEvent(MotionEvent event) {
-		if( event.getAction() == MotionEvent.ACTION_DOWN ) {
-			prevTouchY = event.getY();
-		}
-		else if( event.getAction() == MotionEvent.ACTION_MOVE ) {
-			DisplayMetrics displaymetrics = new DisplayMetrics();
-			getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-			int height = displaymetrics.heightPixels;
-			float gap = Math.abs(event.getY() - prevTouchY);
-			if( gap > height/10 ) {
-				if( event.getY() - prevTouchY < 0 ) {
-					if( drawer.isOpened() == false ) {
-						drawer.animateOpen();
-					}
-				}
-				else {
-					if( drawer.isOpened() == true ) {
-						drawer.animateClose();
-					}
-				}
-				prevTouchY = event.getY();
-			}
-		}
-		else if( event.getAction() == MotionEvent.ACTION_UP ) {
-		}
+//		if( event.getAction() == MotionEvent.ACTION_DOWN ) {
+//			prevTouchY = event.getY();
+//		}
+//		else if( event.getAction() == MotionEvent.ACTION_MOVE ) {
+//			DisplayMetrics displaymetrics = new DisplayMetrics();
+//			getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//			int height = displaymetrics.heightPixels;
+//			float gap = Math.abs(event.getY() - prevTouchY);
+//			if( gap > height/10 ) {
+//				if( event.getY() - prevTouchY < 0 ) {
+//					if( drawer.isOpened() == false ) {
+//						drawer.animateOpen();
+//					}
+//				}
+//				else {
+//					if( drawer.isOpened() == true ) {
+//						drawer.animateClose();
+//					}
+//				}
+//				prevTouchY = event.getY();
+//			}
+//		}
+//		else if( event.getAction() == MotionEvent.ACTION_UP ) {
+//		}
 	    return false;
 	}
 	

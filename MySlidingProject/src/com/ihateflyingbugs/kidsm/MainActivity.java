@@ -20,8 +20,8 @@ import com.ihateflyingbugs.kidsm.menu.Children;
 import com.ihateflyingbugs.kidsm.menu.Profile;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
 import com.ihateflyingbugs.kidsm.newsfeed.NewsfeedFragment;
-import com.ihateflyingbugs.kidsm.notice.NoticeActivity;
-import com.ihateflyingbugs.kidsm.photonotice.PhotoActivity;
+import com.ihateflyingbugs.kidsm.notice.NoticeFragment;
+import com.ihateflyingbugs.kidsm.photonotice.PhotoNoticeFragment;
 import com.ihateflyingbugs.kidsm.schedule.AddScheduleActivity;
 import com.ihateflyingbugs.kidsm.schedule.ScheduleFragment;
 import com.ihateflyingbugs.kidsm.settings.SettingsFragment;
@@ -67,7 +67,7 @@ public class MainActivity extends NetworkActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		main = this;
-		setContentView(R.layout.activity_main);
+		//setContentView(R.layout.activity_main);
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.general_actionbar_bg));
 		getActionBar().setIcon(R.drawable.general_actionbar_drawer_btn_p);
@@ -125,11 +125,11 @@ public class MainActivity extends NetworkActivity {
 				maker.slidingMenu.showMenu();
 			return true;
 		case R.id.notice:
-			intent = new Intent(this, NoticeActivity.class);
+			intent = new Intent(this, NoticeFragment.class);
 			startActivity(intent);
 			return true;
 		case R.id.photo:
-			intent = new Intent(this, PhotoActivity.class);
+			intent = new Intent(this, PhotoNoticeFragment.class);
 			startActivity(intent);
 			return true;
 		}

@@ -26,4 +26,20 @@ public class News extends BaseItem {
 		MENTORY
 	}
 	NEWSTYPE type;
+	String timeline_srl;
+	ArrayList<String> likeMemberList;
+	ArrayList<Reply> commentList;
+	
+	News(String timeline_srl, String timeline_like) {
+		this.timeline_srl = timeline_srl;
+		likeMemberList = new ArrayList<String>();
+		if( timeline_like.isEmpty() == false ) {
+			String[] likeMemberData = timeline_like.split(",");
+			for(int i = 0; i < likeMemberData.length; i++) {
+				if(likeMemberData[i] != null && likeMemberData[i].isEmpty() == false)
+					likeMemberList.add(likeMemberData[i]);
+			}
+		}
+		commentList = new ArrayList<Reply>();
+	}
 }
