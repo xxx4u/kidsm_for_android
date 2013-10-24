@@ -158,6 +158,7 @@
     <string name="registerinfotakeractivity"></string>
     <string name="showconfirmedlistactivity"></string>
     <string name="addscheduleactivity"></string>
+    <string name="seementoryeactivity"></string>
 
     <string-array name="drawer_dolist">
         <item>홈</item>

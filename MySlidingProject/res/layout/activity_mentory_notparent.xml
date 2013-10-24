@@ -35,7 +35,7 @@
                     android:gravity="bottom" />
 
                 <RadioButton
-                    android:id="@+id/mentory_infant"
+                    android:id="@+id/mentory_manage"
                     style="@style/CalendarTabbar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -65,14 +65,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="bottom" />
-                
-                <RadioButton
-                    android:id="@+id/mentory_recommend"
-                    style="@style/CalendarTabbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="bottom" />
             </RadioGroup>
             
             <RelativeLayout
@@ -85,7 +77,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:weightSum="7" >
+                    android:weightSum="6" >
 
                     <TextView
                         android:id="@+id/mentory_modename_total"
@@ -106,12 +98,12 @@
                         android:textSize="8sp" />
 
                     <TextView
-                        android:id="@+id/mentory_modename_infant"
+                        android:id="@+id/mentory_modename_manage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/mentory_infant"
+                        android:text="@string/mentory_manage"
                         android:textSize="8sp" />
                     
                     <TextView
@@ -139,15 +131,6 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/mentory_scrap"
-                        android:textSize="8sp" />
-                    
-                    <TextView
-                        android:id="@+id/mentory_modename_recommend"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/mentory_recommend"
                         android:textSize="8sp" />
 
                 </LinearLayout>
@@ -207,7 +190,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                	android:id="@+id/mentory_page_infant"
+                	android:id="@+id/mentory_page_manage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
@@ -229,13 +212,6 @@
 
                 <LinearLayout
                 	android:id="@+id/mentory_page_scrap"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
-                </LinearLayout>
-                
-                <LinearLayout
-                	android:id="@+id/mentory_page_recommend"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical" >

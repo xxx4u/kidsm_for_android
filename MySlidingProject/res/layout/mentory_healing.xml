@@ -70,7 +70,9 @@
 	                android:layout_width="match_parent"
 	                android:layout_height="340dp"
 	                android:scaleType="centerCrop"
-	                android:src="@drawable/mentory_healing" />
+	                android:src="@drawable/healing_sample"
+	                android:onClick="onSeeMentory"
+	                android:tag="mentory_healing" />
 	
         	</ViewFlipper>
 
@@ -88,7 +90,7 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_margin="10dp"
-				    android:text="장미 아이스크림"
+				    android:text="나를 위한 하루 선물"
 				    android:textColor="@android:color/white" />
 
 				<TextView
@@ -96,7 +98,7 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_marginLeft="10dp"
-				    android:text="서울시 서초구 형설유치원의 김미란 선생님은 최근 아이들을 위해 색다른 시도를 했습니다. 장미 모양의..."
+				    android:text="고진감래 라는 말이 있습니다. \n쓴 것이 다하면 단것이 온다는 뜻으로 고생끝에 즐거움이 온다는 말..."
 				    android:textColor="@android:color/white"
 				    android:textSize="12sp" />
 

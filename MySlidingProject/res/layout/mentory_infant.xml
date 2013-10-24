@@ -70,7 +70,9 @@
 	                android:layout_width="match_parent"
 	                android:layout_height="340dp"
 	                android:scaleType="centerCrop"
-	                android:src="@drawable/mentory_infant" />
+	                android:src="@drawable/infant_sample"
+	                android:onClick="onSeeMentory"
+	                android:tag="mentory_infant" />
 	
         	</ViewFlipper>
 
@@ -88,7 +90,7 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_margin="10dp"
-				    android:text="아이들은 밖에서 놀아야합니다."
+				    android:text="알록달록 파프리카 계란찜"
 				    android:textColor="@android:color/white" />
 
 				<TextView
@@ -96,7 +98,7 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_marginLeft="10dp"
-				    android:text="집에서 컴퓨터만 하는 아이! 이제는 부모님들이 먼저 아이들을 데리고 나가..."
+				    android:text="요리를 좋아하는 예쁜 두 아이의 엄마. 혜성맘의 요리 이야기\n이번주 요리는 울긋불긋 단풍구경 ^^ 파프리카 계란찜"
 				    android:textColor="@android:color/white"
 				    android:textSize="12sp" />
 

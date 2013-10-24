@@ -67,7 +67,7 @@ public class MainActivity extends NetworkActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		main = this;
-		//setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.general_actionbar_bg));
 		getActionBar().setIcon(R.drawable.general_actionbar_drawer_btn_p);
@@ -281,6 +281,10 @@ public class MainActivity extends NetworkActivity {
 	
 	public void OnChangeBus(View v) {
 		businfo.OnChangeBus(v);
+	}
+	
+	public void onSeeMentory(View v) {
+		mentory.OnSeeMentory(v);
 	}
 	
 	@Override

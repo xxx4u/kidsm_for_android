@@ -25,7 +25,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/mento_icon_edu"
+                android:background="@drawable/mento_icon_nur"
                 android:cropToPadding="true" />
 
             <TextView
@@ -35,7 +35,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/news_photo_profile_picture"
-                android:text="교육멘토리"
+                android:text="운영멘토리"
                 android:textColor="#7b86ff"
                 android:textSize="12sp" />
 
@@ -70,9 +70,9 @@
 	                android:layout_width="match_parent"
 	                android:layout_height="340dp"
 	                android:scaleType="centerCrop"
-	                android:src="@drawable/edu_sample_parent"
+	                android:src="@drawable/manage_sample_manager"
 	                android:onClick="onSeeMentory"
-	                android:tag="mentory_edu" />
+	                android:tag="mentory_manage_teacher" />
 	
         	</ViewFlipper>
 
@@ -90,7 +90,7 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_margin="10dp"
-				    android:text="10월 인성 365마음℃"
+				    android:text="10월 체험학습장소정보"
 				    android:textColor="@android:color/white" />
 
 				<TextView
@@ -98,7 +98,7 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_marginLeft="10dp"
-				    android:text="협력이란 한마음으로 서로 돕는것이에요\n협력의 의미를 &apos;친구야 친구야&apos; 노래와 율동으로 표현해 봐요."
+				    android:text="▶ 서울상상나라\n복합놀이 체험시설인 &apos;서울상상나라&apos;에서는 우주선도 직접 타볼 수도있고, ... "
 				    android:textColor="@android:color/white"
 				    android:textSize="12sp" />
 

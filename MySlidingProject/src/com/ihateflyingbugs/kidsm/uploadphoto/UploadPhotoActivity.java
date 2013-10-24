@@ -670,8 +670,21 @@ public class UploadPhotoActivity extends NetworkActivity {
 					
 					String targetList = "";
 					ArrayList<String> tagList = this.makeTagListForTimeline(photo_tag);
-					for(int i = 0; i < tagList.size(); i++)
+					for(int i = 0; i < tagList.size(); i++) {
 						targetList += tagList.get(i) + ",";
+						switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+						case 'P':
+							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"학부모님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+							break;
+						case 'T':
+							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"선생님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+							break;
+						case 'M':
+							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"원장선생님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+							break;
+						}
+						
+					}
 					this.request_Timeline_setTimelineMessage(photo_member_srl, "P", photo_srl, targetList);
 				}
 				else if(uri.equals("Timeline/setTimelineMessage")) {

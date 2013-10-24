@@ -921,6 +921,16 @@ public class NetworkActivity extends Activity {
 		GET("ServiceInfo/checkServerStatus", params);
 	}
 	
+	public void request_Service_notify_sendNotify(String member_srl, String target_member_srl, String notify_title, String notify_message, String notify_type) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("target_member_srl", target_member_srl));
+		params.add(new BasicNameValuePair("notify_title", notify_title));
+		params.add(new BasicNameValuePair("notify_message", notify_message));
+		params.add(new BasicNameValuePair("notify_type", notify_type));
+		GET("Service/notify/sendNotify", params);
+	}
+	
 	public void request_Shuttlebus_getShuttlebus(String shuttle_srl, String org_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("shuttle_srl", shuttle_srl));

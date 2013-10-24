@@ -72,7 +72,7 @@
 	                android:scaleType="centerCrop"
 	                android:src="@drawable/edu_sample_parent"
 	                android:onClick="onSeeMentory"
-	                android:tag="mentory_edu" />
+	                android:tag="mentory_edu_notparent" />
 	
         	</ViewFlipper>
 

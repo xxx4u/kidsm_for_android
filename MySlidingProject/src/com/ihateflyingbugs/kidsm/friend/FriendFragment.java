@@ -81,6 +81,7 @@ public class FriendFragment extends NetworkFragment{
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					FriendFragment.this.request_Member_setFriend(friend.friendInfo.origin_srl, friend.friendInfo.target_srl);
+					FriendFragment.this.request_Service_notify_sendNotify(friend.friendInfo.origin_srl, friend.friendInfo.target_srl, "친구 신청", SlidingMenuMaker.getProfile().getCurrentChildren().student_name+"의 학부모("+SlidingMenuMaker.getProfile().member_name+")님이 회원님과 친구가 되고 싶어 합니다.", "N");
 				}
 			})
 			.setPositiveButton("취소", null)

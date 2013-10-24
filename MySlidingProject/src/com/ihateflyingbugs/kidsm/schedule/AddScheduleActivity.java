@@ -163,16 +163,20 @@ public class AddScheduleActivity extends NetworkActivity {
 					Profile profile = SlidingMenuMaker.getProfile();
 					switch(profile.member_type.charAt(0)) {
 					case 'T':
-						for(int i = 0; i < tagList.size(); i++)
+						for(int i = 0; i < tagList.size(); i++) {
 							targetList += tagList.get(i) + ",";
+							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"선생님이 새 스케줄을 등록했습니다.", "N");
+						}
 						this.request_Timeline_setTimelineMessage(SlidingMenuMaker.getProfile().member_srl, "S", cal_srl, targetList);
 //						for(int i = 0 ; i < tagList.size(); i++)
 //							this.request_Timeline_setTimelineMessage(SlidingMenuMaker.getProfile().member_srl, "S", cal_srl, tagList.get(i));
 						break;
 					case 'M':
 						if( ++getClassStudentCounter == profile.classList.size()-1 ) {
-							for(int i = 0 ; i < tagList.size(); i++)
+							for(int i = 0 ; i < tagList.size(); i++) {
 								targetList += tagList.get(i) + ",";
+								this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"원장선생님이 새 스케줄을 등록했습니다.", "N");
+							}
 							this.request_Timeline_setTimelineMessage(SlidingMenuMaker.getProfile().member_srl, "S", cal_srl, targetList);
 //							for(int i = 0 ; i < tagList.size(); i++)
 //								this.request_Timeline_setTimelineMessage(SlidingMenuMaker.getProfile().member_srl, "S", cal_srl, tagList.get(i));

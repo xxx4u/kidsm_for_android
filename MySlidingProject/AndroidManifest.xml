@@ -34,6 +34,7 @@
         android:largeHeap="true" >
         
         <!-- GCM 리시버 -->
+        <!-- GCM 리시버 -->
 		<receiver
 		   android:name="com.google.android.gcm.GCMBroadcastReceiver"
 		   android:permission="com.google.android.c2dm.permission.SEND" >
@@ -73,6 +74,7 @@
         <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.InputTagActivity" android:label="@string/inputtagactivity"></activity>
         <activity android:name="com.ihateflyingbugs.kidsm.schedule.ShowConfirmedListActivity" android:label="@string/showconfirmedlistactivity"></activity>
         <activity android:name="com.ihateflyingbugs.kidsm.schedule.AddScheduleActivity" android:label="@string/addscheduleactivity"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.mentory.SeeMentoryActivity" android:label="@string/seementoryeactivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
         
     </application>
 
