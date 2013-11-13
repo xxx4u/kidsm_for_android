@@ -54,6 +54,7 @@ import com.ihateflyingbugs.kidsm.menu.OrgClassTeacher;
 import com.ihateflyingbugs.kidsm.menu.Profile;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
 import com.ihateflyingbugs.kidsm.uploadphoto.UploadPhotoActivity;
+import com.localytics.android.LocalyticsSession;
 
 public class LoginActivity extends NetworkActivity {
 
@@ -76,6 +77,7 @@ public class LoginActivity extends NetworkActivity {
 	boolean isLoginRequested;
 	int teacherGetClassStudentCounter;
 	String register_parent_member_srl;
+	private LocalyticsSession localyticsSession;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,21 @@ public class LoginActivity extends NetworkActivity {
 //			params.add(new BasicNameValuePair("member_password", passwd));
 //			POST("Member/login", params);
 		}
+		
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	public void OnLoginClick(View v) {
@@ -323,7 +340,7 @@ public class LoginActivity extends NetworkActivity {
 				}
 			}
 			if( findOrg == false ) {
-				showDialogMessage("유치원 코드가 올바르지 않습니다.");
+				showDialogMessage("기관 코드가 올바르지 않습니다.");
 			}
 			break;
 		case 4:
@@ -467,7 +484,7 @@ public class LoginActivity extends NetworkActivity {
 				if( currentChildFormCount != 0 )
 					preCounter = ""+(i+1)+"번째 ";
 //				if(currentChildFormCount != 0 && parent_org.isEmpty())
-//					return preCounter+"자녀의 유치원을 선택해주세요.";
+//					return preCounter+"자녀의 기관을 선택해주세요.";
 				if(parent_childname.isEmpty())
 					return preCounter+"자녀의 이름을 입력해주세요.";
 				if( hasDigit(parent_childname) )
@@ -493,7 +510,7 @@ public class LoginActivity extends NetworkActivity {
 			if( checkPhoneLevel(teacher_phone) == false )
 				return "휴대폰 번호는 숫자만 입력가능합니다.";
 			if( teacher_orgcode.isEmpty() )
-				return "유치원 코드를 입력해주세요.";
+				return "기관 코드를 입력해주세요.";
 			break;
 		case 4:
 			String orgmaster_name = ((EditText)findViewById(R.id.register_orgmaster_name)).getText().toString();
@@ -509,9 +526,9 @@ public class LoginActivity extends NetworkActivity {
 			if( checkPhoneLevel(orgmaster_phone) == false )
 				return "휴대폰 번호는 숫자만 입력가능합니다.";
 			if( orgmaster_org.isEmpty() )
-				return "유치원 이름을 입력해주세요.";
+				return "기관 이름을 입력해주세요.";
 			if( orgmaster_orglocation.isEmpty() )
-				return "유치원 위치를 입력해주세요.";
+				return "기관 위치를 입력해주세요.";
 			break;
 		}
 		return "OK";
@@ -643,7 +660,7 @@ public class LoginActivity extends NetworkActivity {
 				}
 				Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+ phoneListString));
 				intent.putExtra("sms_body", "[KIDSM]" + ((EditText)findViewById(R.id.register_orgmaster_name)).getText().toString() +" 원장님께서 선생님을 " + ((EditText)findViewById(R.id.register_orgmaster_org)).getText().toString()
-						+"으로 초대하셨습니다. \n\n안드로이드 앱 다운로드 :\nhttps://db.tt/09P0dxrz\n아이폰 앱 다운로드 :\nhttps://db.tt/09P0dxrz\n유치원 초대코드 : " + ((TextView)findViewById(R.id.register_finish_orgcode)).getText().toString());
+						+"으로 초대하셨습니다. \n\n안드로이드 앱 다운로드 :\nhttps://play.google.com/store/apps/details?id=com.ihateflyingbugs.kidsm\n기관 초대코드 : " + ((TextView)findViewById(R.id.register_finish_orgcode)).getText().toString());
 				startActivity(intent);
 				this.showDialogMessage("초대를 완료했습니다!");
 				goNextPage();
@@ -716,6 +733,7 @@ public class LoginActivity extends NetworkActivity {
 	void tempGoMainActivity() {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("profile", profile);
+		intent.putExtra("auth_key", auth_key);
 		startActivity(intent);
 		finish();
 		overridePendingTransition(0, android.R.anim.fade_out);
@@ -774,7 +792,7 @@ public class LoginActivity extends NetworkActivity {
 					             public void run() {
 									goNextPage();
 									if(currentRegisterMode == 1)
-										LoginActivity.this.showDialogMessage("자신의 자녀가 유치원생이 아닐경우 자녀명/생년월일만 입력후 다음단계로 넘어가세요.");
+										LoginActivity.this.showDialogMessage("자신의 자녀가 기관 원생이 아닐경우 자녀명/생년월일만 입력후 다음단계로 넘어가세요.");
 					            }
 					        });
 					    }
@@ -1079,7 +1097,21 @@ public class LoginActivity extends NetworkActivity {
 								}
 								else {
 									registerNewClassTeacher_member_srl = member_srl;
-									this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname);
+									Spinner spinner = (Spinner)findViewById(R.id.register_teacher_classlevel);
+									switch(spinner.getSelectedItemPosition()) {
+									case 0:
+										this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname, "7");
+										break;
+									case 1:
+										this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname, "6");
+										break;
+									case 2:
+										this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname, "5");
+										break;
+									case 3:
+										this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname, "4");
+										break;
+									}
 								}
 								break;
 							}
@@ -1140,11 +1172,11 @@ public class LoginActivity extends NetworkActivity {
 					        runOnUiThread(new Runnable(){
 					            @Override
 					             public void run() {
-					            	Intent intent = new Intent(LoginActivity.this, RegisterInfoTakerActivity.class);
-					        		intent.putExtra("type", 3);
-					        		startActivityForResult(intent, 3);
-//									showDialogMessage("회원가입을 축하합니다!");
-//									goNextPage();
+//					            	Intent intent = new Intent(LoginActivity.this, RegisterInfoTakerActivity.class);
+//					        		intent.putExtra("type", 3);
+//					        		startActivityForResult(intent, 3);
+									showDialogMessage("회원가입을 축하합니다!");
+									goNextPage();
 					            }
 					        });
 					    }
@@ -1216,6 +1248,7 @@ public class LoginActivity extends NetworkActivity {
 					            	txt.setText(org_name+"( "+org_address+")");
 					            	txt = (TextView)findViewById(R.id.register_finish_orgcode);
 					            	txt.setText(org_teacher_key);
+					            	showDialogMessage("회원가입 및 기관등록이 완료됐습니다!");
 									goNextPage();
 					            }
 					        });

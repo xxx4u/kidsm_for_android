@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/ll_cell"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="1" >
+
+            <View
+                android:id="@+id/view_busstop"
+                android:layout_width="2dp"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/iv_busstop"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="13dp" />
+
+            <TextView
+                android:id="@+id/tv_busstop_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button_next"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@drawable/bus_info_down_btnset" />
+        </LinearLayout>
+
+        <!-- 
+        <View
+            android:id="@+id/view_line_grey"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="45dp"
+            android:background="#FFdddddd" >
+        </View>
+        
+        <View
+            android:id="@+id/view_line_blue"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="45dp"
+            android:background="#FF0000FF" >
+        </View>
+         -->
+        
+        <View
+            android:id="@+id/view_line_blue_bottom"
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="45dp"
+            android:background="#b6ebf4" >
+        </View>
+        
+        <View
+            android:id="@+id/view_line_blue_top"
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="45dp"
+            android:background="#b6ebf4" >
+        </View>
+        
+        <View
+            android:id="@+id/view_line_grey_bottom"
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="45dp"
+            android:background="#dddddd" >
+        </View>
+        
+        <View
+            android:id="@+id/view_line_grey_top"
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="45dp"
+            android:background="#dddddd" >
+        </View>
+        
+    </RelativeLayout>
+
+</LinearLayout>

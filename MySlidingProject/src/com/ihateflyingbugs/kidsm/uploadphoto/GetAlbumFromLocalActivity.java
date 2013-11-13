@@ -30,6 +30,7 @@ import android.widget.ViewFlipper;
 
 import com.ihateflyingbugs.kidsm.ExpandableHeightGridView;
 import com.ihateflyingbugs.kidsm.R;
+import com.localytics.android.LocalyticsSession;
 
 public class GetAlbumFromLocalActivity extends Activity {
 	Map<String, LocalAlbum> albumInfo;
@@ -38,6 +39,7 @@ public class GetAlbumFromLocalActivity extends Activity {
 	ExpandableHeightGridView gridView;
 	PhotoWithCheckAdapter adapter;
 	ArrayList<PhotoWithCheck> photoList;
+	private LocalyticsSession localyticsSession;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,6 +65,20 @@ public class GetAlbumFromLocalActivity extends Activity {
 		
 
 		isAlbumShowing = true;
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	void flipView() {

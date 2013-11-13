@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp" >
     
     <ImageButton
-		android:id="@+id/notice_profile_picture"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@drawable/ic_launcher" />
+        android:id="@+id/notice_profile_picture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/profile_default" />
 
     <TextView
         android:id="@+id/notice_message"
@@ -34,4 +39,4 @@
         android:textSize="8sp" />
     
 </RelativeLayout>
-
+</LinearLayout>

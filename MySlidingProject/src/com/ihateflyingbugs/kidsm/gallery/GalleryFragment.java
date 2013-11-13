@@ -19,6 +19,7 @@ import com.ihateflyingbugs.kidsm.gallery.Album.ALBUMTYPE;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
 import com.ihateflyingbugs.kidsm.schedule.ScheduleFragment;
 import com.ihateflyingbugs.kidsm.uploadphoto.GetAlbumFromLocalActivity;
+import com.ihateflyingbugs.kidsm.uploadphoto.SimpleCamera;
 import com.ihateflyingbugs.kidsm.uploadphoto.UploadPhotoActivity;
 
 import android.app.Activity;
@@ -65,9 +66,18 @@ public class GalleryFragment extends NetworkFragment{
 	int getPhotosCounter;
 	boolean isGetMemberPhotosResponded;
 	boolean isGetMemberTaggedPhotosResponded;
-
+	int requestModeFromNewsfeed;
+	
     public ImageLoader imageLoader; 
 	
+    public GalleryFragment() {
+    	requestModeFromNewsfeed = 0;
+    }
+    
+    public void setRequestFromNewsfeed(int requestModeFromNewsfeed) {
+    	this.requestModeFromNewsfeed = requestModeFromNewsfeed;
+    }
+    
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if(layout != null) {
@@ -94,6 +104,10 @@ public class GalleryFragment extends NetworkFragment{
         
 		FrameLayout frame = (FrameLayout) layout.findViewById(R.id.gallery_seeallphoto_frame);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(displaymetrics.widthPixels-20, sizeOfView);
+		params.setMargins(10, 10, 10, 0);
+		frame.setLayoutParams(params);
+		frame = (FrameLayout) layout.findViewById(R.id.gallery_seetaggedphoto_frame);
+		params = new LinearLayout.LayoutParams(displaymetrics.widthPixels-20, sizeOfView);
 		params.setMargins(10, 10, 10, 0);
 		frame.setLayoutParams(params);
         adapter = new GalleryAdapter(albumList, getActivity(), sizeOfView);
@@ -123,8 +137,8 @@ public class GalleryFragment extends NetworkFragment{
 				Intent intent;
 				switch(position) {
 				case 0:
-					intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
+					intent = new Intent(getActivity(), SimpleCamera.class);
+					//intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
 					startActivityForResult(intent, 0);
 					break;
 				case 1:
@@ -152,7 +166,7 @@ public class GalleryFragment extends NetworkFragment{
 			case 0:
 				intent = new Intent(getActivity(), UploadPhotoActivity.class);
 				intent.putExtra("mode", 0);
-				intent.putExtra("filePath", filePath);
+				intent.putExtra("filePath", data.getStringExtra("uri"));
 				intent.putExtra("albumList", makeAlbumListForSpinner());
 				startActivityForResult(intent, 2);
 				break;
@@ -178,11 +192,12 @@ public class GalleryFragment extends NetworkFragment{
 						adapter.notifyDataSetChanged();
 						View v = new View(getActivity());
 						v.setTag(album_srl);
-						OnSeeAlbum(v);
+						//OnSeeAlbum(v);
 						break;
 					}
 				}
 				refreshDataSet();
+				MainActivity.changeFragment(0);
 				break;
 			case 3:
 				Album modifiedData = data.getParcelableExtra("modifiedData");
@@ -323,6 +338,13 @@ public class GalleryFragment extends NetworkFragment{
 		startActivity(intent);
 	}
 	
+	public void OnSeeTaggedPhoto(View v) {
+		Intent intent = new Intent(getActivity(), AlbumActivity.class);
+		intent.putExtra("album", taggedPhotoAlbum);
+		intent.putExtra("albumList", makeAlbumListForSpinner());
+		startActivity(intent);
+	}
+	
 	public void OnSettingClick(View v) {
 		final String album_srl = v.getTag().toString();
 		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gallery_albumsettingmode, android.R.layout.simple_list_item_1);
@@ -398,8 +420,25 @@ public class GalleryFragment extends NetworkFragment{
 	private boolean isAllResponsesArrived() {
 		if( getPhotosCounter == albumList.size()-2 &&
 			getPhotoCounter == numOfScrappedPhoto &&
-			isGetMemberPhotosResponded /*&& isGetMemberTaggedPhotosResponded*/ )
+			isGetMemberPhotosResponded && isGetMemberTaggedPhotosResponded ) {
+			
+
+			Intent intent;
+			switch(requestModeFromNewsfeed) {
+			case 1:
+				intent = new Intent(getActivity(), SimpleCamera.class);
+				startActivityForResult(intent, 0);
+				requestModeFromNewsfeed = 0;
+				break;
+			case 2:
+				intent = new Intent(getActivity(), GetAlbumFromLocalActivity.class);
+				startActivityForResult(intent, 1);
+				requestModeFromNewsfeed = 0;
+				break;
+			}
+			
 			return true;
+		}
 		return false;
 	}
 	
@@ -412,17 +451,14 @@ public class GalleryFragment extends NetworkFragment{
 		             public void run() {
 		            	adapter.notifyDataSetChanged();
 		            	((TextView)layout.findViewById(R.id.gallery_seeallphoto_name)).setText(getString(R.string.gallery_seeallphoto) + " (" + allPhotoAlbum.photoList.size() + ")");
+		            	ImageView image;
 		            	if( allPhotoAlbum.photoList.size() != 0) {
-			            	ImageView image = (ImageView) layout.findViewById(R.id.gallery_seeallphoto_image);
+			            	image = (ImageView) layout.findViewById(R.id.gallery_seeallphoto_image);
 			            	imageLoader.DisplayImage(getString(R.string.image_url)+allPhotoAlbum.photoList.get(allPhotoAlbum.photoList.size()-1).photo_path, image);
-//			            	String[] tokens = allPhotoAlbum.photoList.get(allPhotoAlbum.photoList.size()-1).photo_path.split("/");
-//			            	String uri = "";
-//			            	for( int i = 0; i < tokens.length; i++ ) {
-//			            		uri += tokens[i];
-//			            		if( i == 0 )
-//			            			uri += "/";
-//			            	}
-//			            	imageLoader.DisplayImage(getString(R.string.image_url)+uri, image);	
+		            	}
+		            	if( taggedPhotoAlbum.photoList.size() != 0 ) {
+		            		image = (ImageView) layout.findViewById(R.id.gallery_seetaggedphoto_image);
+		            		imageLoader.DisplayImage(getString(R.string.image_url)+taggedPhotoAlbum.photoList.get(taggedPhotoAlbum.photoList.size()-1).photo_path, image);
 		            	}
 		            }
 		        });
@@ -454,11 +490,22 @@ public class GalleryFragment extends NetworkFragment{
 						GalleryFragment.this.request_Album_getPhotos(album_srl, SlidingMenuMaker.getProfile().member_srl, 1, 10000);
 					}
 					albumList.add(new Album(ALBUMTYPE.SCRAP, "", "", getResources().getString(R.string.scrap_album), "", "", "", ""));
-					GalleryFragment.this.request_Scrap_getScraps(SlidingMenuMaker.getProfile().member_srl, 1, 10000, "P");
 					allPhotoAlbum = new Album(ALBUMTYPE.ALL, "", "", getResources().getString(R.string.gallery_seeallphoto), "", "", "", "");
 					taggedPhotoAlbum = new Album(ALBUMTYPE.TAGGED, "", "", getResources().getString(R.string.tagged_album), "", "", "", "");
-					GalleryFragment.this.request_Album_getMemberPhotos(SlidingMenuMaker.getProfile().member_srl, 1, 10000);
-					// GalleryFragment.this.request_Album_getMemberTaggedPhotos(SlidingMenuMaker.getProfile().member_srl, 1, 10000);
+			
+					switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+					case 'P':
+						GalleryFragment.this.request_Album_getMemberPhotos(SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl, 1, 10000);
+						GalleryFragment.this.request_Scrap_getScraps(SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl, 1, 10000, "P");
+						GalleryFragment.this.request_Album_getMemberTaggedPhotos(SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl, 1, 10000);
+						break;
+					case 'T':
+					case 'M':
+						GalleryFragment.this.request_Album_getMemberPhotos(SlidingMenuMaker.getProfile().member_srl, 1, 10000);
+						GalleryFragment.this.request_Scrap_getScraps(SlidingMenuMaker.getProfile().member_srl, 1, 10000, "P");
+						GalleryFragment.this.request_Album_getMemberTaggedPhotos(SlidingMenuMaker.getProfile().member_srl, 1, 10000);
+						break;
+					}
 					refreshDataSet();
 				}
 				else if(uri.equals("Album/setAlbum")) {

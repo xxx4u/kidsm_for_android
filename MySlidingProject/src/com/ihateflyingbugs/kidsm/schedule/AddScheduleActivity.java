@@ -29,6 +29,8 @@ import com.ihateflyingbugs.kidsm.friend.FriendFragment;
 import com.ihateflyingbugs.kidsm.login.RegisterOrgItem;
 import com.ihateflyingbugs.kidsm.menu.Profile;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
+import com.ihateflyingbugs.kidsm.uploadphoto.InputTag;
+import com.localytics.android.LocalyticsSession;
 
 public class AddScheduleActivity extends NetworkActivity {
 	int year, month, day;
@@ -36,6 +38,9 @@ public class AddScheduleActivity extends NetworkActivity {
 	int getClassStudentCounter;
 	int setTimelineMessageCounter;
 	String cal_srl;
+	int alarmingCounter;
+	boolean isSetTimelineMessageFinished;
+	private LocalyticsSession localyticsSession;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,7 +54,24 @@ public class AddScheduleActivity extends NetworkActivity {
 		day = calendar.get(Calendar.DAY_OF_MONTH);
 		((EditText)findViewById(R.id.addschedule_date)).setText(""+year+"년 "+(month+1)+"월 "+day+"일");
 		
+		alarmingCounter = 0;
+		isSetTimelineMessageFinished = false;
+		
 		tagList = new ArrayList<String>();
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	@Override
@@ -110,6 +132,12 @@ public class AddScheduleActivity extends NetworkActivity {
 		}
 	}
 	
+	public void isFinished() {
+		if( alarmingCounter == 0 && isSetTimelineMessageFinished ) {
+			setResult(Activity.RESULT_OK, new Intent());
+			finish();
+		}
+	}
 	@Override
 	public void response(String uri, String response) {
 		try {
@@ -163,9 +191,10 @@ public class AddScheduleActivity extends NetworkActivity {
 					Profile profile = SlidingMenuMaker.getProfile();
 					switch(profile.member_type.charAt(0)) {
 					case 'T':
+						alarmingCounter = tagList.size();
 						for(int i = 0; i < tagList.size(); i++) {
 							targetList += tagList.get(i) + ",";
-							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"선생님이 새 스케줄을 등록했습니다.", "N");
+							this.request_Member_getMember(tagList.get(i));
 						}
 						this.request_Timeline_setTimelineMessage(SlidingMenuMaker.getProfile().member_srl, "S", cal_srl, targetList);
 //						for(int i = 0 ; i < tagList.size(); i++)
@@ -173,10 +202,14 @@ public class AddScheduleActivity extends NetworkActivity {
 						break;
 					case 'M':
 						if( ++getClassStudentCounter == profile.classList.size()-1 ) {
+							alarmingCounter = tagList.size();
 							for(int i = 0 ; i < tagList.size(); i++) {
 								targetList += tagList.get(i) + ",";
-								this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"원장선생님이 새 스케줄을 등록했습니다.", "N");
+								this.request_Member_getMember(tagList.get(i));
 							}
+							// 선생님 알림줘야지
+//							for( int i = 0; i < SlidingMenuMaker.getProfile().getCurrentClass().getTeacherList().size(); i++)
+//								this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, SlidingMenuMaker.getProfile().getCurrentClass().getTeacherList().get(i).teacher_member_srl, "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"원장선생님이 새 스케줄을 등록했습니다.", "N");
 							this.request_Timeline_setTimelineMessage(SlidingMenuMaker.getProfile().member_srl, "S", cal_srl, targetList);
 //							for(int i = 0 ; i < tagList.size(); i++)
 //								this.request_Timeline_setTimelineMessage(SlidingMenuMaker.getProfile().member_srl, "S", cal_srl, tagList.get(i));
@@ -184,11 +217,97 @@ public class AddScheduleActivity extends NetworkActivity {
 						break;
 					}
 				}
+				else if(uri.equals("Member/getMember")) {
+					String nativeData = jsonObj.getString("data");
+					jsonObj = new JSONObject(nativeData);
+					String member_srl = jsonObj.getString("member_srl");
+					String member_name = jsonObj.getString("member_name");
+					String member_type = jsonObj.getString("member_type");
+					switch(member_type.charAt(0)) {
+					case 'S':
+						JSONObject studentObj = jsonObj.getJSONObject("student");
+						String student_parent_srl = studentObj.getString("student_parent_srl");
+						if( student_parent_srl.equals("0") ) {
+							new Thread(new Runnable() {
+							    @Override
+							    public void run() {    
+							        runOnUiThread(new Runnable(){
+							            @Override
+							             public void run() {
+											alarmingCounter--;
+											isFinished();
+							            }
+							        });
+							    }
+							}).start();
+						}
+						else
+							this.request_Member_getParent(student_parent_srl);
+						break;
+					case 'T':
+					case 'M':
+						switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+						case 'T':
+							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"선생님이 새 스케줄을 등록했습니다.", "N");
+							break;
+						case 'M':
+							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"원장선생님이 새 스케줄을 등록했습니다.", "N");
+							break;
+						}
+						new Thread(new Runnable() {
+						    @Override
+						    public void run() {    
+						        runOnUiThread(new Runnable(){
+						            @Override
+						             public void run() {
+										alarmingCounter--;
+										isFinished();
+						            }
+						        });
+						    }
+						}).start();
+						break;
+					}
+				}
+				else if(uri.equals("Member/getParent")) {
+					String nativeData = jsonObj.getString("data");
+					jsonObj = new JSONObject(nativeData);
+					String member_srl = jsonObj.getString("member_srl");
+					
+					switch( SlidingMenuMaker.getProfile().member_type.charAt(0) ) {
+					case 'T':
+						this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"선생님이 새 스케줄을 등록했습니다.", "N");
+						break;
+					case 'M':
+						this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "스케줄 등록 안내", SlidingMenuMaker.getProfile().member_name+"원장선생님이 새 스케줄을 등록했습니다.", "N");
+						break;
+					}
+					new Thread(new Runnable() {
+					    @Override
+					    public void run() {    
+					        runOnUiThread(new Runnable(){
+					            @Override
+					             public void run() {
+									alarmingCounter--;
+									isFinished();
+					            }
+					        });
+					    }
+					}).start();
+				}
 				else if(uri.equals("Timeline/setTimelineMessage")) {
-					//if(++setTimelineMessageCounter == tagList.size()) {
-						setResult(Activity.RESULT_OK, new Intent());
-						finish();
-					//}
+					new Thread(new Runnable() {
+					    @Override
+					    public void run() {    
+					        runOnUiThread(new Runnable(){
+					            @Override
+					             public void run() {
+									isSetTimelineMessageFinished = true;
+									isFinished();
+					            }
+					        });
+					    }
+					}).start();
 				}
 				else if(uri.equals("Organization/getOrganization")) {
 					String nativeData = jsonObj.getString("data");

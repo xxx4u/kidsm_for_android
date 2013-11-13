@@ -10,9 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        
-        
         <LinearLayout
+            android:id="@+id/busselect_linearlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
@@ -34,6 +33,16 @@
                 android:text="자녀가 탑승하는 등원버스를 선택해주세요"
                 android:textColor="@android:color/darker_gray" />
 
+            <ListView
+                android:id="@+id/bus_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:divider="@null"
+                android:dividerHeight="0dp" >
+            </ListView>
+
+            <!--
             <Button
                 android:id="@+id/businfo_bus1"
                 android:layout_width="match_parent"
@@ -45,44 +54,10 @@
                 android:onClick="OnBusClick"
                 android:text="1호차( 합정 - 상수 )"
                 android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/businfo_bus2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bus_select_btnset"
-                android:onClick="OnBusClick"
-                android:text="2호차( 망원 - 마포 )"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/businfo_bus3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bus_select_btnset"
-                android:onClick="OnBusClick"
-                android:text="3호차( 당산 - 영등포 )"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/businfo_bus4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bus_select_btnset"
-                android:onClick="OnBusClick"
-                android:text="4호차( 여의도 - 샛강 )"
-                android:textColor="@android:color/white" />
+            -->
+            
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -91,6 +66,27 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:gravity="right" >
+
+                    <ImageView
+                        android:id="@+id/iv_busstop_teacher"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/mom" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="요다겅주 선생님" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -114,13 +110,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:onClick="goPrev"
                         android:text="버스바꾸기" />
 
+                    <Button
+                        android:id="@+id/button_next_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="버스 이동" />
                 </LinearLayout>
-
             </RelativeLayout>
 
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:divider="@null"
+                android:dividerHeight="0dp" >
+            </ListView>
+
+            <!--
             <RelativeLayout
+                android:id="@+id/busstop_layout"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent" >
 
@@ -143,7 +155,7 @@
                     android:paddingLeft="50dp"
                     android:text="버그스 유치원 출발"
                     android:textSize="12sp" />
-
+  
                 <CheckBox
                     style="@style/BusInfoCheckBox"
                     android:layout_width="wrap_content"
@@ -204,8 +216,8 @@
                     android:text="버그스 유치원 도착"
                     android:textSize="12sp" />
             </RelativeLayout>
-
+            -->
         </LinearLayout>
     </ViewFlipper>
-    
+
 </LinearLayout>

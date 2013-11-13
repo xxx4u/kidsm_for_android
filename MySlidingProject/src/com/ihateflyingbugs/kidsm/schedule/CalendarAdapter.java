@@ -1,8 +1,11 @@
 package com.ihateflyingbugs.kidsm.schedule;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +14,7 @@ import com.ihateflyingbugs.kidsm.R;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,7 +100,16 @@ public class CalendarAdapter extends BaseAdapter {
 		dayView = (TextView) v.findViewById(R.id.date);
 		dayView.setGravity(Gravity.CENTER);
 		// separates daystring into parts.
+		Calendar cal = Calendar.getInstance();
 		String[] separatedTime = dayString.get(position).split("-");
+		Date todayDateValue;
+		try {
+			todayDateValue = new SimpleDateFormat("yyyy-MM-dd").parse(dayString.get(position));
+			cal.setTime(todayDateValue);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// taking last part of date. ie; 2 from 2012-12-02
 		String gridvalue = separatedTime[2].replaceFirst("^0*", "");
 		// checking whether the day is in current month or not.
@@ -111,7 +124,10 @@ public class CalendarAdapter extends BaseAdapter {
 			dayView.setFocusable(false);
 		} else {
 			// setting curent month's days in blue color.
-			dayView.setTextColor(Color.parseColor("#6D6E70"));
+			if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+				dayView.setTextColor(Color.parseColor("#FF5258"));
+			else
+				dayView.setTextColor(Color.parseColor("#6D6E70"));
 		}
 
 		if (dayString.get(position).equals(currentDateString)) {
@@ -149,11 +165,11 @@ public class CalendarAdapter extends BaseAdapter {
 				if(eventOnSameDate.size() == 1 ) {
 					switch( eventOnSameDate.get(0).type ) {
 					case 0:
-						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_circle_schedule));
+						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_icon_schedule));
 						dayView.setTextColor(Color.parseColor("#FF5258"));
 						break;
 					case 1:
-						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_circle_birthday));
+						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_icon_birthday));
 						dayView.setTextColor(Color.parseColor("#FFA2C2"));
 						break;
 					}
@@ -171,15 +187,15 @@ public class CalendarAdapter extends BaseAdapter {
 						}
 					}
 					if( scheduleCounter == 0 ) {
-						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_circle_birthday));
+						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_icon_birthday));
 						dayView.setTextColor(Color.parseColor("#FFA2C2"));
 					}
 					else if( birthdayCounter == 0 ) {
-						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_circle_schedule));
+						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_icon_schedule));
 						dayView.setTextColor(Color.parseColor("#FF5258"));
 					}
 					else {
-						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_circle_both));
+						iw.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cal_month_icon_both));
 						dayView.setTextColor(Color.parseColor("#FF5258"));
 					}
 				}

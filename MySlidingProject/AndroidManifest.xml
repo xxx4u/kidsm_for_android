@@ -20,11 +20,13 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 
 	<uses-permission android:name="android.permission.INTERNET"/>   
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.READ_CALENDAR" />
 	<uses-permission android:name="android.permission.READ_CONTACTS" />
 	<uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 	
     <application
         android:allowBackup="true"
@@ -58,23 +60,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.login.LoginActivity" android:label="@string/loginactivity" android:theme="@android:style/Theme.NoTitleBar"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.login.RegisterInfoTakerActivity" android:label="@string/registerinfotakeractivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.MainActivity" android:label="@string/default_string"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.point.PointActivity" android:label="@string/pointactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.notice.NoticeActivity" android:label="@string/noticeactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.photonotice.PhotoActivity" android:label="@string/photoactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.newsfeed.NewsfeedReplyActivity" android:label="@string/replyactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ShowImageActivity" android:label="@string/showimageactivity" android:theme="@android:style/Theme.NoTitleBar"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ShowUploadImageListActivity" android:label="@string/showimageactivity" android:theme="@android:style/Theme.NoTitleBar"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ModifyImageActivity" android:label="@string/modifyimageactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.gallery.AlbumActivity" android:label="@string/albumactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.UploadPhotoActivity" android:label="@string/uploadphotoactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.GetAlbumFromLocalActivity" android:label="@string/getalbumfromlocalactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.InputTagActivity" android:label="@string/inputtagactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.schedule.ShowConfirmedListActivity" android:label="@string/showconfirmedlistactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.schedule.AddScheduleActivity" android:label="@string/addscheduleactivity"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.mentory.SeeMentoryActivity" android:label="@string/seementoryeactivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.login.LoginActivity" android:label="@string/loginactivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.login.RegisterInfoTakerActivity" android:label="@string/registerinfotakeractivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.MainActivity" android:label="@string/default_string" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.point.PointActivity" android:label="@string/pointactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.newsfeed.ReplyActivity" android:label="@string/replyactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ShowImageActivity" android:label="@string/showimageactivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ShowUploadImageListActivity" android:label="@string/showimageactivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.showimage.ModifyImageActivity" android:label="@string/modifyimageactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.gallery.AlbumActivity" android:label="@string/albumactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.UploadPhotoActivity" android:label="@string/uploadphotoactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.GetAlbumFromLocalActivity" android:label="@string/getalbumfromlocalactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.InputTagActivity" android:label="@string/inputtagactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.schedule.ShowConfirmedListActivity" android:label="@string/showconfirmedlistactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.schedule.AddScheduleActivity" android:label="@string/addscheduleactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.mentory.SeeMentoryActivity" android:label="@string/seementoryeactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.SimpleCamera" android:label="@string/simplecamera" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.menu.AddChildActivity" android:label="@string/addchildactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.menu.AddChildInfoTakerActivity" android:label="@string/addchildactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.DoctypeErrorActivity" android:label="@string/doctypeerroractivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar"></activity>
+        <meta-data android:name="LOCALYTICS_APP_KEY" android:value="57a3da8eb614e04bc056f79-c3bce004-49e6-11e3-15c8-004a77f8b47f"/>
         
     </application>
 

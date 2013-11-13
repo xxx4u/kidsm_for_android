@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,8 +29,9 @@ import com.ihateflyingbugs.kidsm.login.LoginActivity;
 import com.ihateflyingbugs.kidsm.menu.Children;
 import com.ihateflyingbugs.kidsm.menu.Profile;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
+import com.localytics.android.LocalyticsSession;
 
-public class SplashActivity extends NetworkActivity {
+public class SplashActivity extends Activity {
 	Profile profile;
 	int numOfStudent;
 	int studentCounter;
@@ -39,6 +41,8 @@ public class SplashActivity extends NetworkActivity {
 	
 	static Sender sender;
 	static com.google.android.gcm.server.Message message;
+	
+	private LocalyticsSession localyticsSession;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,22 @@ public class SplashActivity extends NetworkActivity {
 		progressbar = (ProgressBar)findViewById(R.id.splash_progressbar);
 		state = (TextView)findViewById(R.id.splash_state);
 		initialize();
+	
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
 	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
+	}	
 	
 	private static Handler handler = new Handler() {
         @Override
@@ -173,112 +192,5 @@ public class SplashActivity extends NetworkActivity {
 		    }
 		}).start();
 	}
-	@Override
-	public void response(String uri, String response) {
-		try {
-			JSONObject jsonObj = new JSONObject(response);
-			String result = jsonObj.getString("result");
-			if( result.equals("OK") == false ) {
-				new AlertDialog.Builder(this)
-				.setMessage("서버로부터 데이터를 받아오는 데 실패했습니다 : " + result)
-				.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						finish();
-					}
-				})
-				.show();
-				return;
-			}
-			
-			if(uri.equals("Member/getMember")) {
-				String nativeData = jsonObj.getString("data");
-				jsonObj = new JSONObject(nativeData);
-				String member_srl = jsonObj.getString("member_srl");
-				String member_name = jsonObj.getString("member_name");
-				String member_type = jsonObj.getString("member_type");
-				String member_org_srl = jsonObj.getString("member_org_srl");
-				String member_point = jsonObj.getString("member_point");
-				String member_email = jsonObj.getString("member_email");
-				String member_picture = jsonObj.getString("member_picture");
-				String member_device_type = "";//jsonObj.getString("member_device_type");
-				String member_device_uuid = "";//jsonObj.getString("member_device_uuid");
-				if(member_type.equals("T")){
-					
-				}
-				else if(member_type.equals("S")) {
-					updateState("자식 정보를 받아옵니다2");
-					jsonObj = jsonObj.getJSONObject("student");
-					String student_srl = jsonObj.getString("student_srl");
-					String student_member_srl = jsonObj.getString("student_member_srl");
-					String student_class_srl = jsonObj.getString("student_class_srl");
-					String student_parent_srl = jsonObj.getString("student_parent_srl");
-					String student_teacher_srl = jsonObj.getString("student_teacher_srl");
-					String student_shuttle_srl = jsonObj.getString("student_shuttle_srl");
-					String student_birthday = jsonObj.getString("student_birthday");
-					String student_parent_key = jsonObj.getString("student_parent_key");
-//					profile.addChildren(Integer.parseInt(student_member_srl), new Children(student_srl, student_member_srl, member_name, member_picture, profile.getMember_name(), member_org_srl, 
-//							student_class_srl, student_parent_srl, student_teacher_srl, student_shuttle_srl, student_birthday, student_parent_key));
-//					
-//					if( ++studentCounter == numOfStudent ) {
-//						profile.addChildren(-1, new Children("", "", "자녀 추가하기", "", "", "", "", "", "", "", "", ""));
-//						SlidingMenuMaker.setProfile(profile);
-//						startNewsfeedActivity();
-//					}
-					
-					//List<NameValuePair> params = new ArrayList<NameValuePair>();
-					//params.add(new BasicNameValuePair("org_srl", member_org_srl));
-					//GET("/Organization/getOrganization", params);
-				}
-				else if(member_type.equals("P")) {
-					updateState("부모 정보를 받아옵니다");
-					jsonObj = jsonObj.getJSONObject("parent");
-					String parent_srl = jsonObj.getString("parent_srl");
-					//profile = new Profile(member_srl, member_name, member_type, member_org_srl, member_point, 
-					//		member_email, member_picture, member_device_type, member_device_uuid, parent_srl);
-					
-					List<NameValuePair> params = new ArrayList<NameValuePair>();
-					params.add(new BasicNameValuePair("parent_srl", parent_srl));
-					GET("Member/getParentStudents", params);
-				}
-				else if(member_type.equals("V")) {
-					
-				}
-			}
-			else if(uri.equals("Member/getParentStudents")) {
-				updateState("자식 정보를 받아옵니다1");
-				String nativeData = jsonObj.getString("data");
-				JSONArray dataArray = new JSONArray(nativeData);
-				numOfStudent = dataArray.length();
-				for(int i = 0; i < dataArray.length(); i++) {
-//					String student_srl = dataArray.getJSONObject(i).getString("student_srl");
-					String student_member_srl = dataArray.getJSONObject(i).getString("student_member_srl");
-//					String student_class_srl = dataArray.getJSONObject(i).getString("student_class_srl");
-//					String student_parent_srl = dataArray.getJSONObject(i).getString("student_parent_srl");
-//					String student_teacher_srl = dataArray.getJSONObject(i).getString("student_teacher_srl");
-//					String student_shuttle_srl = dataArray.getJSONObject(i).getString("student_shuttle_srl");
-//					String student_birthday = dataArray.getJSONObject(i).getString("student_birthday");
-//					String student_parent_key = dataArray.getJSONObject(i).getString("student_parent_key");
-//					profile.addChildren(Integer.parseInt(student_member_srl), new Children(student_srl, student_member_srl, student_class_srl, 
-//							student_parent_srl, student_teacher_srl, student_shuttle_srl, student_birthday, student_parent_key));
-				
-					List<NameValuePair> params = new ArrayList<NameValuePair>();
-					params.add(new BasicNameValuePair("member_srl", student_member_srl));
-					GET("Member/getMember", params);
-				
-				}
-			}
-			else if(uri.equals("Organization/getOrganization")) {
-				
-			}
-		}
-		catch(JSONException e) {
-			e.printStackTrace();
-		}
-		
-		
-//		if( uri.equals("Member/getRecommendFriends") ) {
-//		}
-	}
+	
 }

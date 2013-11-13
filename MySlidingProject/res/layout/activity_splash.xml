@@ -3,7 +3,7 @@
     android:id="@+id/newsfeed"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/general_splash"
+    android:background="@drawable/general_splash_beta"
     android:gravity="bottom|center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity" >

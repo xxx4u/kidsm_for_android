@@ -27,11 +27,14 @@ import com.ihateflyingbugs.kidsm.R;
 import com.ihateflyingbugs.kidsm.gallery.AlbumActivity;
 import com.ihateflyingbugs.kidsm.uploadphoto.InputTag;
 import com.ihateflyingbugs.kidsm.uploadphoto.InputTagActivity;
+import com.localytics.android.LocalyticsSession;
 
 public class ModifyImageActivity extends Activity {
 	ImageView image;
 	String filepath;
 	ArrayList<InputTag> tagList;
+	private LocalyticsSession localyticsSession;
+	
 	public void onCreate(Bundle savedInstanceState) {
 //		super.onCreate(savedInstanceState);
 //		setContentView(R.layout.activity_modifyimage);
@@ -84,6 +87,20 @@ public class ModifyImageActivity extends Activity {
 //			}
 //			
 //		});
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

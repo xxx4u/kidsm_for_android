@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/uploadphoto_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+<LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/general_bg"
@@ -33,9 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:checked="true"
             android:text="@string/gallery_seeallfriend"
-            android:textColor="#63C3B1"
             android:textSize="12sp" />
 
         <RadioButton
@@ -44,7 +47,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:checked="true"
             android:text="@string/gallery_seetaggedfriend"
+            android:textColor="#63C3B1"
             android:textSize="12sp" />
 
         <RadioButton
@@ -61,7 +66,7 @@
     <ViewFlipper
         android:id="@+id/uploadphoto_photolist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="305dp" >
     </ViewFlipper>
 
     <LinearLayout
@@ -69,14 +74,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="invisible" >
+        android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal" >
 
             <ImageView
@@ -90,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="7dp"
                 android:gravity="center_vertical"
                 android:hint="@string/gallery_tagmessage"
                 android:textSize="14sp" />
@@ -103,11 +108,29 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:onClick="OnApplyAllClick"
             android:text="@string/tag_all"
             android:textSize="14sp" />
 
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/uploadphoto_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="사진과 관련된 말을 입력해주세요."
+        android:inputType="textMultiLine"
+        android:minLines="5"
+        android:padding="10dp"
+        android:textSize="12sp" >
+
+        <requestFocus />
+    </EditText>
+
 </LinearLayout>
+</ScrollView>

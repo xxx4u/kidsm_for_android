@@ -26,13 +26,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
+
 import android.app.Activity;
-import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Base64;
 
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public class NetworkActivity extends Activity {
 	public static HashMap<String, String> results;
@@ -55,6 +55,8 @@ public class NetworkActivity extends Activity {
     		if( i != params.size()-1 )
     			query += '&';
     	}
+		
+		query = query.replace(" ", "%20");
 		return query;
 	}
 	
@@ -114,6 +116,13 @@ public class NetworkActivity extends Activity {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(NetworkActivity.this, DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", makeQuery(params));
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -150,6 +159,13 @@ public class NetworkActivity extends Activity {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(NetworkActivity.this, DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", makeQuery(params));
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -171,6 +187,7 @@ public class NetworkActivity extends Activity {
 					HttpPost post = new HttpPost(url+uri);
 					if(auth_key.isEmpty() == false)
 						post.addHeader("Authorization", auth_key);
+		            post.addHeader("Accept-Charset", "UTF-8");
 					post.setEntity(reqEntity);
 					HttpResponse response = client.execute(post);
 					HttpEntity entity = response.getEntity();
@@ -183,6 +200,13 @@ public class NetworkActivity extends Activity {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(NetworkActivity.this, DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", "");
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -217,6 +241,53 @@ public class NetworkActivity extends Activity {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(NetworkActivity.this, DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", makeQuery(params));
+							startActivity(intent);
+						}
+						response(uri, result);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		return "";
+	}
+	
+	public String PUT_IMAGE(final String uri, final MultipartEntity reqEntity) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+			    try {	
+					String result = "";
+					HttpClient client = new DefaultHttpClient();
+				    HttpPut put = new HttpPut(url+uri);
+					if(auth_key.isEmpty() == false)
+						put.addHeader("Authorization", auth_key);
+					put.addHeader("Accept-Charset", "UTF-8");
+					put.setEntity(reqEntity);
+					HttpResponse response = client.execute(put);
+				    HttpEntity entity = response.getEntity();
+					if(entity != null) {
+						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+						while(true) {
+							String line = br.readLine();
+							if( line == null ) break;
+							result += line;
+						}
+						br.close();
+						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(NetworkActivity.this, DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", "");
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -248,6 +319,13 @@ public class NetworkActivity extends Activity {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(NetworkActivity.this, DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", makeQuery(params));
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -356,7 +434,7 @@ public class NetworkActivity extends Activity {
         try {
 			reqEntity.addPart("album_srl", new StringBody(album_srl));
 	        reqEntity.addPart("member_srl", new StringBody(member_srl));
-	        reqEntity.addPart("photo_message", new StringBody(photo_message));
+	        reqEntity.addPart("photo_message", new StringBody(URLEncoder.encode(photo_message, HTTP.UTF_8)));
 	        reqEntity.addPart("photo_tag", new StringBody(photo_tag));
 	        reqEntity.addPart("photo_private", new StringBody(photo_private));
 	        reqEntity.addPart("photo", bab);
@@ -484,18 +562,20 @@ public class NetworkActivity extends Activity {
 		GET("Calender/getCheckCalender", params);
 	}
 	
-	public void request_Class_setClass(String org_srl, String class_name) {
+	public void request_Class_setClass(String org_srl, String class_name, String class_age) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("org_srl", org_srl));
 		params.add(new BasicNameValuePair("class_name", class_name));
+		params.add(new BasicNameValuePair("class_age", class_age));
 		POST("Class/setClass", params);
 	}
 	
-	public void request_Class_modClass(String class_srl, String org_srl, String class_name, String class_status) {
+	public void request_Class_modClass(String class_srl, String org_srl, String class_name, String class_age, String class_status) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("class_srl", class_srl));
 		params.add(new BasicNameValuePair("org_srl", org_srl));
 		params.add(new BasicNameValuePair("class_name", class_name));
+		params.add(new BasicNameValuePair("class_age", class_age));
 		params.add(new BasicNameValuePair("class_status", class_status));
 		PUT("Class/modClass", params);
 	}
@@ -672,6 +752,24 @@ public class NetworkActivity extends Activity {
 		PUT("Member/modMemberStatus", params);
 	}
 	
+	public void request_Member_modMemberPicture(String member_srl, Bitmap member_picture) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		
+		member_picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        ByteArrayBody bab = new ByteArrayBody(baos.toByteArray(), "image.jpg");
+       
+		MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+        try {
+			reqEntity.addPart("member_srl", new StringBody(member_srl));
+	        reqEntity.addPart("member_picture", bab);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        PUT_IMAGE("Member/modMemberPicture", reqEntity);
+	}
+	
 	public void request_Member_getParentStudents(String parent_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("parent_srl", parent_srl));
@@ -800,6 +898,13 @@ public class NetworkActivity extends Activity {
 		GET("Mentor/getMentoringCategory", params);
 	}
 	
+	public void request_Mentor_broadMentoringArticle(String member_srl, String mentoring_srl) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("mentoring_srl", mentoring_srl));
+		POST("Mentor/broadMentoringArticle", params);
+	}
+	
 	public void request_Organization_setOrganization(String member_srl, String org_name, String org_phone, String org_address) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("member_srl", member_srl));
@@ -916,6 +1021,13 @@ public class NetworkActivity extends Activity {
 		DELETE("Scrap/delScrap", params);
 	}
 	
+	public void request_Scrap_getScrapCount(String scrap_target_srl, String scrap_type) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("scrap_target_srl", scrap_target_srl));
+		params.add(new BasicNameValuePair("scrap_type", scrap_type));
+		GET("Scrap/getScrapCount", params);
+	}
+	
 	public void request_ServiceInfo_checkServerStatus() {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		GET("ServiceInfo/checkServerStatus", params);
@@ -931,6 +1043,14 @@ public class NetworkActivity extends Activity {
 		GET("Service/notify/sendNotify", params);
 	}
 	
+	public void request_Shuttlebus_setShuttlebus(String org_srl, String shuttle_name, String shuttle_route) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("org_srl", org_srl));
+		params.add(new BasicNameValuePair("shuttle_name", shuttle_name));
+		params.add(new BasicNameValuePair("shuttle_route", shuttle_route));
+		POST("Shuttlebus/setShuttlebus", params);
+	}
+	
 	public void request_Shuttlebus_getShuttlebus(String shuttle_srl, String org_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("shuttle_srl", shuttle_srl));
@@ -938,9 +1058,11 @@ public class NetworkActivity extends Activity {
 		GET("Shuttlebus/getShuttlebus", params);
 	}
 	
-	public void request_Shuttlebus_getShuttlebuses(String org_srl) {
+	public void request_Shuttlebus_getShuttlebuses(String org_srl, int index, int count) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("org_srl", org_srl));
+		params.add(new BasicNameValuePair("index", ""+index));
+		params.add(new BasicNameValuePair("count", ""+count));
 		GET("Shuttlebus/getShuttlebuses", params);
 	}
 	
@@ -1026,5 +1148,13 @@ public class NetworkActivity extends Activity {
 		params.add(new BasicNameValuePair("member_srl", member_srl));
 		params.add(new BasicNameValuePair("timeline_srl", timeline_srl));
 		DELETE("Timeline/delLike", params);
+	}
+	
+	public void request_Timeline_broadTimelineMessage(String member_srl, String timeline_srl, String timeline_type) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("timeline_srl", timeline_srl));
+		params.add(new BasicNameValuePair("timeline_type", timeline_type));
+		POST("Timeline/broadTimelineMessage", params);
 	}
 }

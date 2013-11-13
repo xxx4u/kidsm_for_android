@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ihateflyingbugs.kidsm.R;
+import com.localytics.android.LocalyticsSession;
 
 public class InputTagActivity extends Activity {
 	ArrayList<InputTag> tagList;
@@ -26,6 +27,8 @@ public class InputTagActivity extends Activity {
 	InputTagAdapter adapter;
 	ListView listView;
 	boolean checkListenerOnlyOnce;
+	private LocalyticsSession localyticsSession;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.uploadphoto_taglist);
@@ -67,6 +70,20 @@ public class InputTagActivity extends Activity {
 			}
 			
 		});
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	public void OnButtonCheck(View v) {

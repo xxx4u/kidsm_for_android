@@ -58,20 +58,17 @@ public class AlbumAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) contxt
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
  
-        View gridView;
-        gridView = null;
-        convertView = null;// avoids recycling of grid view
-        if (convertView == null) {
+        if (photoList.get(position).layout == null) {
  
-            gridView = new View(contxt);
+        	// photoList.get(position).layout = new View(contxt);
             // inflating grid view item
-            gridView = inflater.inflate(R.layout.gallery_photo, null);
+        	photoList.get(position).layout = inflater.inflate(R.layout.gallery_photo, parent, false);
             
             DisplayMetrics displaymetrics = new DisplayMetrics();
             ((Activity) contxt).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 			int size = (displaymetrics.widthPixels - 6*(numOfColumn+1))/numOfColumn;
-            gridView.setLayoutParams(new GridView.LayoutParams(size, size));
-            CheckBox cb = (CheckBox) gridView.findViewById(R.id.gallery_check);
+			photoList.get(position).layout.setLayoutParams(new GridView.LayoutParams(size, size));
+            CheckBox cb = (CheckBox) photoList.get(position).layout.findViewById(R.id.gallery_check);
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -83,18 +80,18 @@ public class AlbumAdapter extends BaseAdapter {
             });
         }
 		
-        Button btn = (Button) gridView.findViewById(R.id.gallery_photo_scrap);
+        Button btn = (Button) photoList.get(position).layout.findViewById(R.id.gallery_photo_scrap);
         //deprecate
         btn.setTag(position);
         
-        CheckBox cb = (CheckBox) gridView.findViewById(R.id.gallery_check);
+        CheckBox cb = (CheckBox) photoList.get(position).layout.findViewById(R.id.gallery_check);
         //deprecate
         cb.setTag(-position-1);
         
         if(photoList.size() != 0) {
-        	ImageView image = (ImageView) gridView.findViewById(R.id.gallery_photo);
+        	ImageView image = (ImageView) photoList.get(position).layout.findViewById(R.id.gallery_photo);
         	imageLoader.DisplayImage(((Activity)contxt).getString(R.string.image_url)+photoList.get(position).photo_path, image);
-        	image.setTag(((Activity)contxt).getString(R.string.image_url)+photoList.get(position).photo_path);
+        	image.setTag(position);
 //        	String[] tokens = photoList.get(position).photo_path.split("/");
 //        	String uri = "";
 //        	for( int i = 0; i < tokens.length; i++ ) {
@@ -104,7 +101,7 @@ public class AlbumAdapter extends BaseAdapter {
 //        	}
 //        	imageLoader.DisplayImage(((Activity)contxt).getString(R.string.image_url)+uri, image);
         }
-        return gridView;
+        return photoList.get(position).layout;
     }
  
 }

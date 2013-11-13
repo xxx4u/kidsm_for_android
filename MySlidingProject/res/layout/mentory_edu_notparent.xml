@@ -69,9 +69,9 @@
 	                android:id="@+id/news_photo_picture"
 	                android:layout_width="match_parent"
 	                android:layout_height="340dp"
-	                android:scaleType="centerCrop"
-	                android:src="@drawable/edu_sample_parent"
 	                android:onClick="onSeeMentory"
+	                android:scaleType="centerCrop"
+	                android:src="@drawable/edu_sample_notparent"
 	                android:tag="mentory_edu_notparent" />
 	
         	</ViewFlipper>
@@ -90,7 +90,7 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_margin="10dp"
-				    android:text="10월 인성 365마음℃"
+				    android:text="[마음365℃] 인성 동화"
 				    android:textColor="@android:color/white" />
 
 				<TextView
@@ -98,7 +98,7 @@
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 				    android:layout_marginLeft="10dp"
-				    android:text="협력이란 한마음으로 서로 돕는것이에요\n협력의 의미를 &apos;친구야 친구야&apos; 노래와 율동으로 표현해 봐요."
+				    android:text="&lt;파리와 꿀벌>\n서로 싸우면서 날개 한쪽이 떨어진 파리와 꿀벌. 얼마 뒤, 파리와 꿀벌은 황소개구리에게..."
 				    android:textColor="@android:color/white"
 				    android:textSize="12sp" />
 

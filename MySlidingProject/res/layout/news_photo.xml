@@ -10,12 +10,17 @@
         android:background="#ffffff"
         android:orientation="vertical" >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/general_cell_photo_bg"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp" >
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
 
             <ImageButton
                 android:id="@+id/news_photo_profile_picture"
@@ -25,7 +30,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/mom"
+                android:background="@android:color/transparent"
                 android:cropToPadding="true"
                 android:scaleType="fitCenter" />
 
@@ -64,6 +69,18 @@
                 android:textSize="10sp" />
 
         </RelativeLayout>
+        
+            <TextView
+                android:id="@+id/news_photo_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:text="TextView"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
         <RelativeLayout
 	        android:id="@+id/RelativeLayout1"
@@ -261,5 +278,6 @@
 	            </RelativeLayout>
 	        </LinearLayout>
 	    </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

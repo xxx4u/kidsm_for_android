@@ -5,217 +5,272 @@
     android:background="@drawable/general_bg"
     android:orientation="vertical" >
 
-            <RadioGroup
-                android:id="@+id/mentory_mode"
-                android:layout_width="match_parent"
+    <RadioGroup
+        android:id="@+id/mentory_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/mentory_total"
+            style="@style/CalendarTabbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:checked="true"
+            android:gravity="bottom" />
+
+        <RadioButton
+            android:id="@+id/mentory_edu"
+            style="@style/CalendarTabbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="bottom" />
+
+        <RadioButton
+            android:id="@+id/mentory_manage"
+            style="@style/CalendarTabbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom" />
+
+        <RadioButton
+            android:id="@+id/mentory_healing"
+            style="@style/CalendarTabbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom" />
+
+        <RadioButton
+            android:id="@+id/mentory_kidsmnews"
+            style="@style/CalendarTabbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom" />
+
+        <RadioButton
+            android:id="@+id/mentory_scrap"
+            style="@style/CalendarTabbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom" />
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="false"
+        android:layout_marginTop="10dp" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:weightSum="6" >
+
+            <TextView
+                android:id="@+id/mentory_modename_total"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"
-                android:orientation="horizontal" >
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/mentory_total"
+                android:textSize="8sp" />
 
-                <RadioButton
-                    android:id="@+id/mentory_total"
-                    style="@style/CalendarTabbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:gravity="bottom" />
-                
-                <RadioButton
-                    android:id="@+id/mentory_edu"
-                    style="@style/CalendarTabbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:gravity="bottom" />
-
-                <RadioButton
-                    android:id="@+id/mentory_manage"
-                    style="@style/CalendarTabbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="bottom" />
-                
-                <RadioButton
-                    android:id="@+id/mentory_healing"
-                    style="@style/CalendarTabbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="bottom" />
-                
-                <RadioButton
-                    android:id="@+id/mentory_kidsmnews"
-                    style="@style/CalendarTabbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="bottom" />
-                
-                <RadioButton
-                    android:id="@+id/mentory_scrap"
-                    style="@style/CalendarTabbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="bottom" />
-            </RadioGroup>
-            
-            <RelativeLayout
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/mentory_modename_edu"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="false"
-                android:layout_marginTop="10dp" >
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/mentory_edu"
+                android:textSize="8sp" />
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:weightSum="6" >
+            <TextView
+                android:id="@+id/mentory_modename_manage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/mentory_manage"
+                android:textSize="8sp" />
 
-                    <TextView
-                        android:id="@+id/mentory_modename_total"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/mentory_total"
-                        android:textSize="8sp" />
-                    
-                    <TextView
-                        android:id="@+id/mentory_modename_edu"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/mentory_edu"
-                        android:textSize="8sp" />
+            <TextView
+                android:id="@+id/mentory_modename_healing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/mentory_healing"
+                android:textSize="8sp" />
 
-                    <TextView
-                        android:id="@+id/mentory_modename_manage"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/mentory_manage"
-                        android:textSize="8sp" />
-                    
-                    <TextView
-                        android:id="@+id/mentory_modename_healing"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/mentory_healing"
-                        android:textSize="8sp" />
+            <TextView
+                android:id="@+id/mentory_modename_kidsmnews"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/mentory_kidsmnews"
+                android:textSize="8sp" />
 
-                    <TextView
-                        android:id="@+id/mentory_modename_kidsmnews"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/mentory_kidsmnews"
-                        android:textSize="8sp" />
-                    
-                    <TextView
-                        android:id="@+id/mentory_modename_scrap"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/mentory_scrap"
-                        android:textSize="8sp" />
+            <TextView
+                android:id="@+id/mentory_modename_scrap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/mentory_scrap"
+                android:textSize="8sp" />
+        </LinearLayout>
+    </RelativeLayout>
 
-                </LinearLayout>
-            </RelativeLayout>
+    <ViewFlipper
+        android:id="@+id/mentory_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mentory_mode"
+        android:layout_margin="10dp" >
 
-            <ViewFlipper
-                android:id="@+id/mentory_page"
+        <ListView
+            android:id="@+id/mentory_article_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" >
+        </ListView>
+        
+        <ListView
+            android:id="@+id/mentory_edu_article_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" >
+        </ListView>
+        
+        <ListView
+            android:id="@+id/mentory_manage_article_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" >
+        </ListView>
+        
+        <ListView
+            android:id="@+id/mentory_healing_article_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" >
+        </ListView>
+        
+        <ListView
+            android:id="@+id/mentory_kidsmnews_article_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" >
+        </ListView>
+        
+        <ListView
+            android:id="@+id/mentory_scrap_article_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" >
+        </ListView>
+    </ViewFlipper>
+
+    <!--
+    <ViewFlipper
+        android:id="@+id/mentory_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mentory_mode"
+        android:layout_margin="10dp" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:id="@+id/mentory_page_total"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/mentory_mode"
-                android:layout_margin="10dp" >
+                android:orientation="vertical" >
 
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    
                 <LinearLayout
-                	android:id="@+id/mentory_page_total"
+                    android:id="@+id/mentory_page_total1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
-                    
-                    <LinearLayout
-                        android:id="@+id/mentory_page_total1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" >
-
-                </LinearLayout>
-                
-                    <LinearLayout
-                        android:id="@+id/mentory_page_total2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="vertical" >
-
-                </LinearLayout>
-                
-                    <LinearLayout
-                        android:id="@+id/mentory_page_total3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="vertical" >
-
-                </LinearLayout>
-                </LinearLayout>
-                </ScrollView>
-                
-                <LinearLayout
-                	android:id="@+id/mentory_page_edu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical" >
                 </LinearLayout>
 
                 <LinearLayout
-                	android:id="@+id/mentory_page_manage"
+                    android:id="@+id/mentory_page_total2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical" >
                 </LinearLayout>
 
                 <LinearLayout
-                	android:id="@+id/mentory_page_healing"
+                    android:id="@+id/mentory_page_total3"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical" >
                 </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
-                <LinearLayout
-                	android:id="@+id/mentory_page_kidsmnews"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
-                </LinearLayout>
+        <LinearLayout
+            android:id="@+id/mentory_page_edu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
 
-                <LinearLayout
-                	android:id="@+id/mentory_page_scrap"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
-                </LinearLayout>
-            </ViewFlipper>
+        <LinearLayout
+            android:id="@+id/mentory_page_manage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mentory_page_healing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mentory_page_kidsmnews"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mentory_page_scrap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ViewFlipper>
+    -->
 
 </RelativeLayout>

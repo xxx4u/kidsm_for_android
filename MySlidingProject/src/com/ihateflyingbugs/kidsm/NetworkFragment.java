@@ -20,14 +20,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
+import android.util.Log;
 
 public class NetworkFragment extends Fragment {
 	public static HashMap<String, String> results;
@@ -112,6 +109,13 @@ public class NetworkFragment extends Fragment {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(getActivity(), DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", makeQuery(params));
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -148,6 +152,13 @@ public class NetworkFragment extends Fragment {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(getActivity(), DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", makeQuery(params));
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -182,6 +193,13 @@ public class NetworkFragment extends Fragment {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(getActivity(), DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", makeQuery(params));
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -213,6 +231,13 @@ public class NetworkFragment extends Fragment {
 						}
 						br.close();
 						results.put(uri, result);
+						if(result.startsWith("<!DOCTYPE html>")) {
+							Intent intent = new Intent(getActivity(), DoctypeErrorActivity.class);
+							intent.putExtra("error", result);
+							intent.putExtra("uri", uri);
+							intent.putExtra("params", makeQuery(params));
+							startActivity(intent);
+						}
 						response(uri, result);
 					}
 				} catch (Exception e) {
@@ -421,18 +446,20 @@ public class NetworkFragment extends Fragment {
 		GET("Calender/getCheckCalender", params);
 	}
 	
-	public void request_Class_setClass(String org_srl, String class_name) {
+	public void request_Class_setClass(String org_srl, String class_name, String class_age) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("org_srl", org_srl));
 		params.add(new BasicNameValuePair("class_name", class_name));
+		params.add(new BasicNameValuePair("class_age", class_age));
 		POST("Class/setClass", params);
 	}
 	
-	public void request_Class_modClass(String class_srl, String org_srl, String class_name, String class_status) {
+	public void request_Class_modClass(String class_srl, String org_srl, String class_name, String class_age, String class_status) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("class_srl", class_srl));
 		params.add(new BasicNameValuePair("org_srl", org_srl));
 		params.add(new BasicNameValuePair("class_name", class_name));
+		params.add(new BasicNameValuePair("class_age", class_age));
 		params.add(new BasicNameValuePair("class_status", class_status));
 		PUT("Class/modClass", params);
 	}
@@ -693,13 +720,20 @@ public class NetworkFragment extends Fragment {
 		GET("Mentor/getMentoringArticle", params);
 	}
 	
-	public void request_Mentor_getMentoringArticles(String mentoring_category, String order_by, String order_type, int index, int count) {
+	//public void request_Mentor_getMentoringArticles(String mentoring_category, String order_by, String order_type, int index, int count) {
+	public void request_Mentor_getMentoringArticles(String mentoring_category, int index, int count, String member_type, String member_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("mentoring_category", mentoring_category));
-		params.add(new BasicNameValuePair("order_by", order_by));
-		params.add(new BasicNameValuePair("order_type", order_type));
+		params.add(new BasicNameValuePair("mentoring_category_srl", mentoring_category));
+		//params.add(new BasicNameValuePair("order_by", order_by));
+		//params.add(new BasicNameValuePair("order_type", order_type));
 		params.add(new BasicNameValuePair("index", ""+index));
 		params.add(new BasicNameValuePair("count", ""+count));
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("member_type", member_type));
+		Log.d("NetworkFragment", mentoring_category);
+		Log.d("NetworkFragment", member_type);
+		Log.d("NetworkFragment", member_srl);
+		
 		GET("Mentor/getMentoringArticles", params);
 	}
 	
@@ -708,6 +742,13 @@ public class NetworkFragment extends Fragment {
 		params.add(new BasicNameValuePair("mentoring_srl", mentoring_srl));
 		params.add(new BasicNameValuePair("member_srl", member_srl));
 		POST("Mentor/setMentoringArticleLikes", params);
+	}
+	
+	public void request_Mentor_delMentoringArticleLikes(String mentoring_srl, String member_srl) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("mentoring_srl", mentoring_srl));
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		DELETE("Mentor/delMentoringArticleLikes", params);
 	}
 	
 	public void request_Mentor_getMentor(String mentor_srl) {
@@ -752,6 +793,21 @@ public class NetworkFragment extends Fragment {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("member_type", member_type));
 		GET("Mentor/getMentoringCategory", params);
+	}
+	
+	public void request_Mentor_broadMentoringArticle(String member_srl, String mentoring_srl) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("mentoring_srl", mentoring_srl));
+		POST("Mentor/broadMentoringArticle", params);
+	}
+	
+	public void request_Mentor_getMentoringRecommendArticles(String member_srl, int index, int count) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("index", ""+index));
+		params.add(new BasicNameValuePair("count", ""+count));
+		GET("Mentor/getMentoringRecommendArticles", params);
 	}
 	
 	public void request_Organization_setOrganization(String member_srl, String org_name, String org_phone, String org_address) {
@@ -870,6 +926,13 @@ public class NetworkFragment extends Fragment {
 		DELETE("Scrap/delScrap", params);
 	}
 	
+	public void request_Scrap_getScrapCount(String scrap_target_srl, String scrap_type) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("scrap_target_srl", scrap_target_srl));
+		params.add(new BasicNameValuePair("scrap_type", scrap_type));
+		GET("Scrap/getScrapCount", params);
+	}
+	
 	public void request_ServiceInfo_checkServerStatus() {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		GET("ServiceInfo/checkServerStatus", params);
@@ -885,6 +948,14 @@ public class NetworkFragment extends Fragment {
 		GET("Service/notify/sendNotify", params);
 	}
 	
+	public void request_Shuttlebus_setShuttlebus(String org_srl, String shuttle_name, String shuttle_route) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("org_srl", org_srl));
+		params.add(new BasicNameValuePair("shuttle_name", shuttle_name));
+		params.add(new BasicNameValuePair("shuttle_route", shuttle_route));
+		POST("Shuttlebus/setShuttlebus", params);
+	}
+	
 	public void request_Shuttlebus_getShuttlebus(String shuttle_srl, String org_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("shuttle_srl", shuttle_srl));
@@ -892,16 +963,18 @@ public class NetworkFragment extends Fragment {
 		GET("Shuttlebus/getShuttlebus", params);
 	}
 	
-	public void request_Shuttlebus_getShuttlebuses(String org_srl) {
+	public void request_Shuttlebus_getShuttlebuses(String org_srl, int index, int count) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("org_srl", org_srl));
+		params.add(new BasicNameValuePair("index", ""+index));
+		params.add(new BasicNameValuePair("count", ""+count));
 		GET("Shuttlebus/getShuttlebuses", params);
 	}
 	
 	public void request_Shuttlebus_setNextBusStopSequence(String shuttle_srl, String teacher_srl) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("shuttle_srl", shuttle_srl));
-		params.add(new BasicNameValuePair("teacher_srl", teacher_srl));
+		params.add(new BasicNameValuePair("shuttle_org_srl", teacher_srl));
 		POST("Shuttlebus/setNextBusStopSequence", params);
 	}
 	
@@ -980,5 +1053,13 @@ public class NetworkFragment extends Fragment {
 		params.add(new BasicNameValuePair("member_srl", member_srl));
 		params.add(new BasicNameValuePair("timeline_srl", timeline_srl));
 		DELETE("Timeline/delLike", params);
+	}
+	
+	public void request_Timeline_broadTimelineMessage(String member_srl, String timeline_srl, String timeline_type) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("member_srl", member_srl));
+		params.add(new BasicNameValuePair("timeline_srl", timeline_srl));
+		params.add(new BasicNameValuePair("timeline_type", timeline_type));
+		POST("Timeline/broadTimelineMessage", params);
 	}
 }

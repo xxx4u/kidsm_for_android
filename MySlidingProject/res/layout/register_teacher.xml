@@ -52,6 +52,7 @@
                 android:layout_weight="6.5"
                 android:background="@drawable/login_input_short"
                 android:ems="10"
+                android:hint="@string/hint_teacher_name"
                 android:inputType="textPersonName"
                 android:textColorHint="#63c3b1"
                 android:textSize="15sp" >
@@ -86,6 +87,7 @@
                 android:layout_weight="6.5"
                 android:background="@drawable/login_input_short"
                 android:ems="10"
+                android:hint="@string/hint_teacher_phone"
                 android:inputType="phone"
                 android:textColorHint="#63c3b1"
                 android:textSize="15sp" >
@@ -119,6 +121,7 @@
                 android:layout_weight="6.5"
                 android:background="@drawable/login_input_short"
                 android:ems="10"
+                android:hint="@string/hint_teacher_orgcode"
                 android:inputType="textCapSentences"
                 android:textColorHint="#63c3b1"
                 android:textSize="15sp" >

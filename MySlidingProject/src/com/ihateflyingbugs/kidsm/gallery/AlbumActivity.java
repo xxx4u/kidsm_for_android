@@ -33,6 +33,7 @@ import com.ihateflyingbugs.kidsm.gallery.Album.ALBUMTYPE;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
 import com.ihateflyingbugs.kidsm.showimage.ShowImageActivity;
 import com.ihateflyingbugs.kidsm.uploadphoto.UploadPhotoActivity;
+import com.localytics.android.LocalyticsSession;
 
 public class AlbumActivity extends NetworkActivity {
 	ExpandableHeightGridView gridView;
@@ -53,6 +54,7 @@ public class AlbumActivity extends NetworkActivity {
 	ArrayList<Photo> photoList;
 	int requestCounter;
 	Album modifiedData;
+	private LocalyticsSession localyticsSession;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -109,6 +111,20 @@ public class AlbumActivity extends NetworkActivity {
 		albumGridView.setExpanded(true);
 		albumGridView.setAdapter(albumAdapter);
 		viewFlipper = (ViewFlipper)findViewById(R.id.album_flipper);
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	@Override
@@ -193,8 +209,10 @@ public class AlbumActivity extends NetworkActivity {
 	public void OnSelectImage(View v) {
 		switch(albumMode) {
 		case 0:
+			int position = Integer.parseInt(v.getTag().toString());
 			Intent intent = new Intent(this, ShowImageActivity.class);
-			intent.putExtra("url", v.getTag().toString());
+			intent.putExtra("photo_url", photoList.get(position).photo_path);
+			intent.putExtra("photo_srl", photoList.get(position).photo_srl);
 			startActivity(intent);
 			break;
 		case 1:
@@ -380,6 +398,7 @@ public class AlbumActivity extends NetworkActivity {
 					String photo_created = jsonObj.getString("photo_created");
 					String photo_updated = jsonObj.getString("photo_updated");
 					modifiedData.photoList.add(new Photo(photo_srl, photo_member_srl, photo_album_srl, photo_timeline_srl, photo_tag, photo_path, photo_thumbnail, photo_like, photo_private, photo_created, photo_updated));
+					this.request_Timeline_delTimelineMessage(photo_member_srl, photo_timeline_srl);
 					if(--requestCounter == 0) {
 						Intent intent = new Intent();
 						if(modifiedData.type == ALBUMTYPE.MODIFIED)

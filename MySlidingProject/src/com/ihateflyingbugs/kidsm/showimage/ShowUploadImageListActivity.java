@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ihateflyingbugs.kidsm.R;
+import com.localytics.android.LocalyticsSession;
 
 public class ShowUploadImageListActivity extends Activity{
 	
@@ -39,6 +40,8 @@ public class ShowUploadImageListActivity extends Activity{
 	int fileIndex;
 	ArrayList<String> filePathList;
 	RelativeLayout linear;
+	private LocalyticsSession localyticsSession;
+	
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,6 +78,20 @@ public class ShowUploadImageListActivity extends Activity{
 		minScale = mRatio = Math.min(screenWidth/image.width, screenHeight/image.height);
 		view.setScaleX(mRatio);
 		view.setScaleY(mRatio);
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 
 	public void OnClose(View v) {

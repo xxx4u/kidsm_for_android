@@ -20,6 +20,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -45,6 +47,7 @@ import android.widget.ViewFlipper;
 import com.ihateflyingbugs.kidsm.NetworkActivity;
 import com.ihateflyingbugs.kidsm.R;
 import com.ihateflyingbugs.kidsm.uploadphoto.UploadPhotoActivity;
+import com.localytics.android.LocalyticsSession;
 
 public class RegisterInfoTakerActivity extends NetworkActivity {
 	
@@ -61,6 +64,8 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 	RegisterOrgAdapter orgAdapter;
 	int indexOfOrg, indexOfClass, indexOfChild;
 	int classDataLoadRequestCounter, classDataLoadResponseCounter;
+	
+	private LocalyticsSession localyticsSession;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,7 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 		case 2:
 			setTitle(getString(R.string.register_invite_teacher));
 			flipper.addView(LayoutInflater.from(this).inflate(R.layout.register_infotaker_invite_teacher, null));
+			((TextView)flipper.findViewById(R.id.register_infotaker_invite_guide)).setText(R.string.register_infotaker_invite_guide_manager);
 			break;
 		case 3:
 			setTitle(getString(R.string.register_invite_parent));
@@ -94,6 +100,20 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 		}
 		setListResources();
 		currentPageNumber = 0;
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	private void setListResources() {
@@ -361,7 +381,7 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent result = new Intent();
+		
 		switch(item.getItemId()) {
 		case android.R.id.home:
 			if(currentPageNumber == 0)
@@ -372,6 +392,7 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 		case R.id.register_onebutton:
 			switch(type) {
 			case 0:
+				Intent result = new Intent();
 				result.putExtra("formNumber", getIntent().getIntExtra("formNumber", -1));
 				result.putExtra("org", orgList.get(indexOfOrg).getName());
 				result.putExtra("class", orgList.get(indexOfOrg).classList.get(indexOfClass).getName());
@@ -386,24 +407,37 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 				}
 				result.putExtra("index_class", indexOfClass);
 				result.putExtra("index_child", indexOfChild);
+				setResult(Activity.RESULT_OK, result);
+				finish();
 				break;
 			case 2:
 			case 3:
-				EditText editText = (EditText)flipper.findViewById(R.id.register_infotaker_invite_teacher_search);
-				if(editText.isFocused()) {
-					InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-				}
-				ArrayList<String> phoneList = new ArrayList<String>();
-				for(int i = 0; i < inviteTeacherList_pool.size(); i++) {
-					if( inviteTeacherList_pool.get(i).isChecked ) 
-						phoneList.add(inviteTeacherList_pool.get(i).number);
-				}
-				result.putExtra("phoneList", phoneList);
+				new AlertDialog.Builder(this)
+				.setMessage("초대하실 명단을 모두 선택하셨나요?")
+				.setPositiveButton("예", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent result = new Intent();
+						EditText editText = (EditText)flipper.findViewById(R.id.register_infotaker_invite_teacher_search);
+						if(editText.isFocused()) {
+							InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+						}
+						ArrayList<String> phoneList = new ArrayList<String>();
+						for(int i = 0; i < inviteTeacherList_pool.size(); i++) {
+							if( inviteTeacherList_pool.get(i).isChecked ) 
+								phoneList.add(inviteTeacherList_pool.get(i).number);
+						}
+						result.putExtra("phoneList", phoneList);
+						setResult(Activity.RESULT_OK, result);
+						finish();
+					}
+				})
+				.setNegativeButton("아니오", null)
+				.show();
+				
 				break;
 			}
-			setResult(Activity.RESULT_OK, result);
-			finish();
 			return true;
 		}
 		return false;

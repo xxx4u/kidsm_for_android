@@ -102,14 +102,14 @@ public class GalleryAdapter extends BaseAdapter {
         	if(albumList.get(position).photoList.size() != 0) {
             	ImageView image = (ImageView) gridView.findViewById(R.id.gallery_albumimage);
             	//imageLoader.DisplayImage(((Activity)contxt).getString(R.string.image_url)+albumList.get(position).photoList.get(0).photo_path, image);
-            	String[] tokens = albumList.get(position).photoList.get(0).photo_path.split("/");
-            	String uri = "";
-            	for( int i = 0; i < tokens.length; i++ ) {
-            		uri += tokens[i];
-            		if( i == 0 )
-            			uri += "/";
-            	}
-            	imageLoader.DisplayImage(((Activity)contxt).getString(R.string.image_url)+uri, image);
+//            	String[] tokens = albumList.get(position).photoList.get(0).photo_path.split("/");
+//            	String uri = "";
+//            	for( int i = 0; i < tokens.length; i++ ) {
+//            		uri += tokens[i];
+//            		if( i == 0 )
+//            			uri += "/";
+//            	}
+            	imageLoader.DisplayImage(((Activity)contxt).getString(R.string.image_url)+albumList.get(position).photoList.get(albumList.get(position).photoList.size()-1).photo_path, image);
             }
         	break;
         case NORMAL:

@@ -11,6 +11,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,13 +28,20 @@ import com.google.android.gcm.GCMBaseIntentService;
 public class GCMIntentService extends GCMBaseIntentService {
     private static final String tag = "GCMIntentService";
     private static final String PROJECT_ID = "413007677888";
+	SharedPreferences prefs;
+    int msgCount;
+    
     //구글 api 페이지 주소 [https://code.google.com/apis/console/#project:긴 번호]
    //#project: 이후의 숫자가 위의 PROJECT_ID 값에 해당한다
    
     //public 기본 생성자를 무조건 만들어야 한다.
-    public GCMIntentService(){ this(PROJECT_ID); }
+    public GCMIntentService(){ 
+    	this(PROJECT_ID);
+	}
    
-    public GCMIntentService(String project_id) { super(project_id); }
+    public GCMIntentService(String project_id) { 
+    	super(project_id);
+    }
  
     /** 푸시로 받은 메시지 */
     @Override
@@ -58,8 +66,24 @@ public class GCMIntentService extends GCMBaseIntentService {
             public void run() {
                 String title = intent.getStringExtra("title");
                 String data = intent.getStringExtra("msg");
-                String ticker = intent.getStringExtra("ticker");
-                
+                String ticker = ""+System.currentTimeMillis()/1000;
+                String type = intent.getStringExtra("type");
+                String from_srl = intent.getStringExtra("origin_srl");
+                String member_srl = intent.getStringExtra("target_srl");
+                if( prefs == null ) {
+	            	prefs = getSharedPreferences("notice", MODE_PRIVATE);
+                }
+            	msgCount = Integer.parseInt(prefs.getString(""+member_srl+"_msgCount", "0"));
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putString(""+member_srl+"title"+msgCount, title);
+				editor.putString(""+member_srl+"msg"+msgCount, data);
+				editor.putString(""+member_srl+"from_srl"+msgCount, from_srl);
+				editor.putString(""+member_srl+"type"+msgCount, type);
+				editor.putString(""+member_srl+"ticker"+msgCount, ticker);
+				editor.putString(""+member_srl+"_msgCount", ""+(++msgCount));
+				
+				editor.commit();
+				
                 NotificationManager notificationManager = (NotificationManager)context.getSystemService(Activity.NOTIFICATION_SERVICE);
 
 				// 해당 어플을 실행하는 이벤트를 하고싶을 때 아래 주석을 풀어주세요
@@ -69,7 +93,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 				
 				Notification notification = new Notification();
 				notification.icon = R.drawable.icon;
-				notification.tickerText = ticker;
+				notification.tickerText = data;
 				notification.when = System.currentTimeMillis();
 				notification.vibrate = new long[] { 500, 500, 100, 100 };
 				notification.sound = Uri.parse("/system/media/audio/notifications/20_Cloud.ogg");

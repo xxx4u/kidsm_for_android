@@ -43,15 +43,28 @@ public class ImageLoader {
             imageView.setImageBitmap(bitmap);
         else
         {
-            queuePhoto(url, imageView);
+            queuePhoto(url, imageView, false);
             imageView.setImageResource(stub_id);
         }
     }
         
-    private void queuePhoto(String url, ImageView imageView)
+    public void DisplayCroppedImage(String url, ImageView imageView)
+    {
+        imageViews.put(imageView, url);
+        Bitmap bitmap=memoryCache.get(url);
+        if(bitmap!=null)
+            imageView.setImageBitmap(ImageMaker.getCroppedBitmap(bitmap));
+        else
+        {
+            queuePhoto(url, imageView, true);
+            imageView.setImageResource(stub_id);
+        }
+    }
+    
+    private void queuePhoto(String url, ImageView imageView, boolean isCropped)
     {
         PhotoToLoad p=new PhotoToLoad(url, imageView);
-        executorService.submit(new PhotosLoader(p));
+        executorService.submit(new PhotosLoader(p, isCropped));
     }
     
     public Bitmap getBitmap(String url) 
@@ -136,8 +149,10 @@ public class ImageLoader {
     
     class PhotosLoader implements Runnable {
         PhotoToLoad photoToLoad;
-        PhotosLoader(PhotoToLoad photoToLoad){
+        boolean isCropped;
+        PhotosLoader(PhotoToLoad photoToLoad, boolean isCropped){
             this.photoToLoad=photoToLoad;
+            this.isCropped = isCropped;
         }
         
         @Override
@@ -149,7 +164,7 @@ public class ImageLoader {
                 memoryCache.put(photoToLoad.url, bmp);
                 if(imageViewReused(photoToLoad))
                     return;
-                BitmapDisplayer bd=new BitmapDisplayer(bmp, photoToLoad);
+                BitmapDisplayer bd=new BitmapDisplayer(bmp, photoToLoad, isCropped);
                 handler.post(bd);
             }catch(Throwable th){
                 th.printStackTrace();
@@ -169,13 +184,19 @@ public class ImageLoader {
     {
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
-        public BitmapDisplayer(Bitmap b, PhotoToLoad p){bitmap=b;photoToLoad=p;}
+        boolean isCropped;
+        
+        public BitmapDisplayer(Bitmap b, PhotoToLoad p, boolean i){bitmap=b;photoToLoad=p;isCropped=i;}
         public void run()
         {
             if(imageViewReused(photoToLoad))
                 return;
-            if(bitmap!=null)
-                photoToLoad.imageView.setImageBitmap(bitmap);
+            if(bitmap!=null) {
+                if(isCropped)
+                	photoToLoad.imageView.setImageBitmap(ImageMaker.getCroppedBitmap(bitmap));
+                else
+                	photoToLoad.imageView.setImageBitmap(bitmap);
+            }
             else
                 photoToLoad.imageView.setImageResource(stub_id);
         }

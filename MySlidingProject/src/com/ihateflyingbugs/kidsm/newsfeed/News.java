@@ -25,13 +25,24 @@ public class News extends BaseItem {
 		BUSINFO,
 		MENTORY
 	}
+	
 	NEWSTYPE type;
+	String identifier;
 	String timeline_srl;
+	String timeline_member_srl;
+	int timeline_created;
 	ArrayList<String> likeMemberList;
 	ArrayList<Reply> commentList;
+	String member_scrap_srl;
+	int scrapCount;
+	View layout;
 	
-	News(String timeline_srl, String timeline_like) {
+	News(String identifier, String timeline_srl, String timeline_member_srl, String timeline_like, String timeline_created) {
+		this.identifier = identifier;
 		this.timeline_srl = timeline_srl;
+		this.timeline_member_srl = timeline_member_srl;
+		this.timeline_created = Integer.parseInt(timeline_created);
+		
 		likeMemberList = new ArrayList<String>();
 		if( timeline_like.isEmpty() == false ) {
 			String[] likeMemberData = timeline_like.split(",");
@@ -41,5 +52,7 @@ public class News extends BaseItem {
 			}
 		}
 		commentList = new ArrayList<Reply>();
+		member_scrap_srl = "";
+		scrapCount = 0;
 	}
 }

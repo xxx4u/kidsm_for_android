@@ -2,10 +2,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-	
+
+    <ViewFlipper
+        android:id="@+id/main_flipper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+        
     <FrameLayout
         android:id="@+id/main_fragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
+
+    <ListView
+        android:id="@+id/main_normal_notice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+
+    <ListView
+        android:id="@+id/main_photo_notice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+    
+    </ViewFlipper>
+	
     
 </LinearLayout>

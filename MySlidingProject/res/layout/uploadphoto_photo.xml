@@ -26,7 +26,8 @@
 	    android:layout_alignRight="@+id/uploadphoto_selected"
 	    android:layout_alignTop="@+id/uploadphoto_selected"
 	    android:onClick="OnDeleteImage"
-	    android:src="@drawable/photo_edit_thum_delete_btnset" />
+	    android:src="@drawable/photo_edit_thum_delete_btnset"
+	    android:visibility="invisible" />
 
 	</RelativeLayout>
 
@@ -37,8 +38,7 @@
 	    android:layout_marginLeft="15dp"
 	    android:layout_marginRight="15dp"
 	    android:layout_marginTop="5dp"
-	    android:background="@drawable/photo_edit_tag_list_bg"
-	    android:visibility="invisible" >
+	    android:background="@drawable/photo_edit_tag_list_bg" >
 
 		<ListView
 		    android:id="@+id/uploadphoto_taglist"

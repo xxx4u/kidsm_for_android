@@ -17,12 +17,12 @@
                 android:id="@+id/register_infotaker_orglocation_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_input_search"
+                android:background="@drawable/login_finding_box"
                 android:ems="10"
                 android:hint="@string/hint_put_dong"
                 android:imeOptions="actionSearch"
                 android:inputType="textPersonName"
-                android:paddingLeft="15dp"
+                android:paddingLeft="35dp"
                 android:textColorHint="#63c3b1" >
 
                 <requestFocus />

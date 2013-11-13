@@ -53,6 +53,7 @@
                 android:layout_weight="6.5"
                 android:background="@drawable/login_input_short"
                 android:ems="10"
+                android:hint="@string/hint_parent_name"
                 android:inputType="textPersonName"
                 android:textColorHint="#63c3b1"
                 android:textSize="15sp" >
@@ -87,6 +88,7 @@
                 android:layout_weight="6.5"
                 android:background="@drawable/login_input_short"
                 android:ems="10"
+                android:hint="@string/hint_parent_nickname"
                 android:inputType="textPersonName"
                 android:textColorHint="#63c3b1"
                 android:textSize="15sp" >
@@ -120,6 +122,7 @@
                 android:layout_weight="6.5"
                 android:background="@drawable/login_input_short"
                 android:ems="10"
+                android:hint="@string/hint_parent_phone"
                 android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:textColorHint="#63c3b1"

@@ -75,11 +75,16 @@ public class ReplyAdapter extends BaseAdapter {
 		}
 
 		TextView txt = (TextView)convertView.findViewById(R.id.reply_name);
-		txt.setText(arSrc.get(position).tcomment_member_srl);
+		txt.setText(arSrc.get(position).tcomment_name);
 		txt = (TextView)convertView.findViewById(R.id.reply_secondtext);
 		txt.setText(arSrc.get(position).tcomment_message);
 		txt = (TextView)convertView.findViewById(R.id.reply_timelog);
 		txt.setText(makeTimeLog(arSrc.get(position).tcomment_created));
+		
+		if(arSrc.get(position).getTcomment_member_picture_uri() != null && arSrc.get(position).getTcomment_member_picture_uri().startsWith("profile"))
+			imageLoader.DisplayCroppedImage(context.getString(R.string.default_profile_url)+arSrc.get(position).getTcomment_member_picture_uri(), (ImageView)convertView.findViewById(R.id.reply_profilepicture));
+		else
+			imageLoader.DisplayCroppedImage(context.getString(R.string.profile_url)+arSrc.get(position).getTcomment_member_picture_uri(), (ImageView)convertView.findViewById(R.id.reply_profilepicture));
 		
 		return convertView;
 	}

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#6ed4bf"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:weightSum="10" >
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="3.5"
+           android:gravity="right"
+           android:paddingRight="10dp"
+           android:text="@string/hint_org"
+           android:textColor="#ffffff" />
+
+       <EditText
+           android:id="@+id/register_parent_org"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginRight="40dp"
+           android:layout_marginTop="2dp"
+           android:layout_weight="6.5"
+           android:background="@drawable/login_input_short"
+           android:ems="10"
+           android:focusableInTouchMode="false"
+           android:onClick="OnClickForAddInfo"
+           android:textColorHint="#63c3b1"
+           android:textSize="15sp" >
+
+ </EditText>
+
+   </LinearLayout>
+   
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center_vertical"
+       android:weightSum="10" >
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="3.5"
+           android:gravity="right"
+           android:paddingRight="10dp"
+           android:text="@string/hint_class"
+           android:textColor="#ffffff"
+           android:textSize="16sp" />
+
+       <EditText
+           android:id="@+id/register_parent_class"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginRight="40dp"
+           android:layout_marginTop="2dp"
+           android:layout_weight="6.5"
+           android:background="@drawable/login_input_short"
+           android:ems="10"
+           android:focusableInTouchMode="false"
+           android:inputType="textPersonName"
+           android:textColorHint="#63c3b1"
+           android:textSize="15sp" >
+
+ </EditText>
+
+   </LinearLayout>
+   
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center_vertical"
+       android:weightSum="10" >
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="3.5"
+           android:gravity="right"
+           android:paddingRight="10dp"
+           android:text="@string/hint_childname"
+           android:textColor="#ffffff"
+           android:textSize="16sp" />
+
+       <EditText
+           android:id="@+id/register_parent_childname"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginRight="40dp"
+           android:layout_marginTop="2dp"
+           android:layout_weight="6.5"
+           android:background="@drawable/login_input_short"
+           android:ems="10"
+           android:focusableInTouchMode="false"
+           android:textColorHint="#63c3b1"
+           android:textSize="15sp" >
+
+ </EditText>
+
+   </LinearLayout>
+   
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center_vertical"
+       android:weightSum="10" >
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="3.5"
+           android:gravity="right"
+           android:paddingRight="10dp"
+           android:text="@string/birthday"
+           android:textColor="#ffffff"
+           android:textSize="16sp" />
+
+       <EditText
+           android:id="@+id/register_parent_birthday"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginRight="40dp"
+           android:layout_marginTop="2dp"
+           android:layout_weight="6.5"
+           android:background="@drawable/login_input_short"
+           android:ems="10"
+           android:enabled="true"
+           android:hint="@string/hint_birthday"
+           android:inputType="number"
+           android:textColorHint="#63c3b1"
+           android:textSize="15sp" >
+
+ </EditText>
+
+   </LinearLayout>
+</LinearLayout>

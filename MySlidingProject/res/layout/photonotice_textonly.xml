@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp" >
     
     <ImageButton
-		android:id="@+id/photonotice_profile_picture"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@drawable/ic_launcher" />
+        android:id="@+id/photonotice_profile_picture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/profile_default" />
 
     <TextView
         android:id="@+id/photonotice_message"
@@ -17,7 +23,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/photonotice_profile_picture"
-        android:text="@string/photonotice_text"
+        android:text="@string/notice_text"
         android:textSize="12sp" />
 
     <TextView
@@ -30,8 +36,8 @@
         android:layout_marginBottom="2dp"
         android:gravity="right"
         android:maxLines="1"
-        android:text="@string/photonotice_timelog"
+        android:text="@string/notice_timelog"
         android:textSize="8sp" />
     
 </RelativeLayout>
-
+</LinearLayout>

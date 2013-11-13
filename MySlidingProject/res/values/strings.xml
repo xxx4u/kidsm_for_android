@@ -3,10 +3,14 @@
 
     <string name="url">http://1.234.83.55:1050/</string>
     <string name="image_url">http://static.kidsmentory.co.kr/photos/</string>
-    <string name="app_name">KidsM</string>
+    <string name="default_profile_url">http://static.kidsmentory.co.kr/</string>
+    <string name="profile_url">http://static.kidsmentory.co.kr/profile/</string>
+    <string name="app_name">키즈멘토리</string>
     <string name="action_settings">Settings</string>
     <string name="login">로그인</string>
     <string name="login_automatically">자동 로그인</string>
+    <string name="invite_friend">친구 초대하기</string>
+    <string name="invite_teacher">선생님 초대하기</string>
     <string name="register">가입</string>
     <string name="register_full">가입하기</string>
     <string name="member_register">회원가입</string>
@@ -20,13 +24,13 @@
     <string name="register_nickname">닉네임</string>
     <string name="register_phone">전화번호</string>
     <string name="register_children">자녀정보</string>
-    <string name="register_org">유치원</string>
-    <string name="register_orglocation">유치원 위치</string>
-    <string name="register_orgcode">유치원 코드</string>
+    <string name="register_org">기관명</string>
+    <string name="register_orglocation">기관 위치</string>
+    <string name="register_orgcode">기관 코드</string>
     <string name="register_newclass">새 반 이름</string>
     <string name="register_newclassage">새 반 연령</string>
-    <string name="register_find_org">유치원 검색</string>
-    <string name="register_find_orglocation">유치원 위치 검색</string>
+    <string name="register_find_org">기관 검색</string>
+    <string name="register_find_orglocation">기관 위치 검색</string>
     <string name="register_invite_teacher">선생님 초대하기</string>
     <string name="register_invite_parent">학부모 초대하기</string>
     <string name="location_not_found">검색된 주소 없음</string>
@@ -36,6 +40,7 @@
     <string name="close">닫기</string>
     <string name="finish">완료</string>
     <string name="invite">초대하기</string>
+    <string name="invite_short">초대</string>
     <string name="select">선택</string>
     <string name="modify">수정</string>
     <string name="move">이동</string>
@@ -57,6 +62,7 @@
     <string name="week">주</string>
     <string name="month">월</string>
     <string name="year">년</string>
+    <string name="birthday">생일</string>
     <string name="first_week">첫째주</string>
     <string name="second_week">둘째주</string>
     <string name="third_week">셋째주</string>
@@ -71,8 +77,10 @@
     <string name="select_album">사진첩 선택</string>
     <string name="make_new_album">새 사진첩 추가</string>
    	<string name="tag_all">태그 전체 적용</string> 
-    <string name="scrap_album">즐겨찾기 사진</string>
+    <string name="scrap_album">스크랩 폴더</string>
     <string name="tagged_album">내가 태그된 사진</string>
+    <string name="recommend_mentory">추천하기</string>
+	<string name="profile_select_photo">프로필 사진 선택</string>
     <string name="profile_childname">팥쥐</string>
     <string name="profile_parentname">김미정</string>
     <string name="profile_class">햇님반</string>
@@ -88,13 +96,13 @@
     <string name="news_numofscrap">99+</string>
     <string name="news_like">좋아요</string>
     <string name="news_likecancel">좋아요취소</string>
-    <string name="news_reply">댓글달기</string>
-    <string name="news_scrap">즐겨찾기</string>
-    <string name="news_donescrap">즐겨찾기됨</string>
+    <string name="news_reply">댓글</string>
+    <string name="news_scrap">스크랩</string>
+    <string name="news_donescrap">스크랩됨</string>
     <string name="reply_likelist">좋아하는 사람들</string>
     <string name="notice_text">콩쥐의 담임 선생님께서 새로운 \'육아팁\'을 추천하셨습니다. </string>
     <string name="notice_timelog">10분전</string>
-    <string name="photonotice_text">콩쥐의 담임 선생님께서 \'유치원\'사진첩에 새로운 사진을 추가하셨습니다. </string>
+    <string name="photonotice_text">콩쥐의 담임 선생님께서 \'기관\'사진첩에 새로운 사진을 추가하셨습니다. </string>
     <string name="photonotice_timelog">15분전</string>
     <string name="friend_namecab">네임캡</string>
     <string name="friend_friendname">김철수</string>
@@ -109,6 +117,7 @@
     <string name="friend_verified_teacher">인증됨</string>
     <string name="schedule_show_confirmed_list">확인\n리스트\n보기</string>
     <string name="gallery_seeallphoto">전체 보기</string>
+    <string name="gallery_seetaggedphoto">내가 태그된 사진</string>
     <string name="gallery_seeallfriend">전체 보기</string>
     <string name="gallery_seetaggedfriend">태그된 친구만 보기</string>
     <string name="gallery_seeprivate">나만 보기</string>
@@ -126,13 +135,26 @@
 	<string name="hint_email">E-mail 아이디</string>
 	<string name="hint_password">비밀번호</string>
 	<string name="hint_confirmpassword">비밀번호 확인</string>
-	<string name="hint_org">유치원</string>
+	<string name="hint_org">기관명</string>
 	<string name="hint_class">반</string>
 	<string name="hint_childname">자녀 이름</string>
 	<string name="hint_birthday">생년월일 예)081026</string>
-	<string name="hint_put_orgname">유치원 이름 입력</string>
+	<string name="hint_put_orgname">원명을 입력해주세요</string>
 	<string name="hint_put_dong">동 이름 입력 예)정자동</string>
 	<string name="hint_put_invite_teacher_name">이름을 입력해서 찾을 수 있습니다.</string>
+	<string name="hint_parent_name">부모님 명</string>
+	<string name="hint_parent_nickname">사용할 닉네임</string>
+	<string name="hint_parent_phone">휴대폰 번호</string>
+	<string name="hint_teacher_name">선생님 명</string>
+	<string name="hint_teacher_phone">휴대폰 번호</string>
+	<string name="hint_teacher_orgcode">코드 입력</string>
+	<string name="hint_manager_name">원장님 명</string>
+	<string name="hint_manager_phone">휴대폰 번호</string>
+	<string name="hint_manager_orgname">유치원/어린이집</string>
+	<string name="hint_manager_orglocation">유치원/어린이집 주소</string>
+	<string name="register_infotaker_invite_guide_manager">초대할 선생님을 모두 선택해주세요</string>
+	<string name="register_infotaker_invite_guide_not_manager">초대할 대상을 모두 선택해주세요</string>
+	<string name="guide_register_manager_program">키즈엠에서 제공하는 프로그램이 있으신가요?</string>
    	<string name="default_content_description"></string>
 	<string name="default_string">기본</string>
 	
@@ -159,6 +181,9 @@
     <string name="showconfirmedlistactivity"></string>
     <string name="addscheduleactivity"></string>
     <string name="seementoryeactivity"></string>
+    <string name="simplecamera"></string>
+    <string name="addchildactivity">자녀 추가하기</string>
+    <string name="doctypeerroractivity"></string>
 
     <string-array name="drawer_dolist">
         <item>홈</item>
@@ -194,7 +219,14 @@
     
     <string-array name="gallery_uploadmode">
         <item>카메라 사용</item>
-        <item>앨범에서 올리기(속도 보완 업데이트 10월 13일)</item>
+        <item>앨범에서 올리기</item>
+    </string-array>
+    
+    <string-array name="profile_image_mode">
+        <item>사진 촬영</item>
+        <item>사진 앨범</item>
+        <item>삭제</item>
+        <item>취소</item>
     </string-array>
     
     <string-array name="register_teacher_classlevel">
@@ -202,5 +234,9 @@
         <item>6세 반</item>
         <item>5세 반</item>
         <item>4세 이하 반</item>
+    </string-array>
+    
+    <string-array name="setting_mode">
+        <item>개선사항 보내기</item>
     </string-array>
 </resources>

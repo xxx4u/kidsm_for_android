@@ -22,6 +22,7 @@ import com.ihateflyingbugs.kidsm.gallery.Album.ALBUMTYPE;
 import com.ihateflyingbugs.kidsm.menu.Profile;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
 import com.ihateflyingbugs.kidsm.showimage.ShowUploadImageListActivity;
+import com.localytics.android.LocalyticsSession;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -52,6 +53,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,6 +100,9 @@ public class UploadPhotoActivity extends NetworkActivity {
 	int requestGetClassStudentCounter;
 	int requestGetMemberCounter;
 	ImageLoader imageLoader;
+	boolean isRequestAlarmingMember;
+	int alarmingCounter;
+	private LocalyticsSession localyticsSession;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,17 +110,19 @@ public class UploadPhotoActivity extends NetworkActivity {
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.general_actionbar_function_bg));
 		getActionBar().setIcon(R.drawable.general_actionbar_back_btnset);
-		
+
 		sendCounter = 0;
 		photoList = new ArrayList<UploadPhoto>();
 		viewFlipper = (ViewFlipper)findViewById(R.id.uploadphoto_photolist);
 		RelativeLayout linear;
 		
 		photoMode = getIntent().getIntExtra("mode", -1);
-		tagMode = TAGMODE.SEE_ALL_FRIEND;
+		tagMode = TAGMODE.SEE_TAGGED_FRIEND;
 		
 		uploadedPhotoList = new ArrayList<Photo>();
 		
+		isRequestAlarmingMember = false;
+		alarmingCounter = 0;
 		tagMemberList = new ArrayList<InputTag>();
 		requestTagData();
 		
@@ -141,14 +148,21 @@ public class UploadPhotoActivity extends NetworkActivity {
     			}
     			
     		});
+        	photo.listView.setOnTouchListener(new View.OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					((ScrollView)findViewById(R.id.uploadphoto_scroll)).requestDisallowInterceptTouchEvent(true);
+					return false;
+				}
+			});
         	photoList.add(photo);
         	
         	
 	        image = (ImageView)linear.findViewById(R.id.uploadphoto_selected);
 	        //imageLoader.DisplayImage(photoList.get(0).filepath, image);
 	        BitmapFactory.Options opt = new BitmapFactory.Options();
-	        imageLoader.getBitmap(photoList.get(0).filepath);
-        	image.setImageBitmap(BitmapFactory.decodeFile(photoList.get(0).filepath, opt));
+	        //imageLoader.getBitmap(photoList.get(0).filepath);
+        	image.setImageBitmap(readBitmap(Uri.parse(photoList.get(0).filepath)));
 	        linear.setTag(photoList.get(0).filepath);
 	        viewFlipper.addView(linear);
         	break;
@@ -173,6 +187,13 @@ public class UploadPhotoActivity extends NetworkActivity {
 		    			}
 		    			
 		    		});
+		        	photo.listView.setOnTouchListener(new View.OnTouchListener() {
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							((ScrollView)findViewById(R.id.uploadphoto_scroll)).requestDisallowInterceptTouchEvent(true);
+							return false;
+						}
+					});
 					photoList.add(photo);
 					Bitmap bm = readBitmap(Uri.parse(photoList.get(i).filepath));
 			        image = (ImageView)linear.findViewById(R.id.uploadphoto_selected);
@@ -238,22 +259,48 @@ public class UploadPhotoActivity extends NetworkActivity {
 				switch(checkedId) {
 				case R.id.uploadphoto_tagmode_all:
 					tagMode = TAGMODE.SEE_ALL_FRIEND;
-					layout.setVisibility(View.INVISIBLE);
+					layout.setVisibility(View.GONE);
+					for( int i = 0; i < photoList.size(); i++ ) {
+						viewFlipper.getChildAt(i).findViewById(R.id.uploadphoto_tagpage).setVisibility(View.INVISIBLE);
+			        	viewFlipper.getChildAt(i).findViewById(R.id.uploadphoto_delete).setVisibility(View.VISIBLE);
+					}
 					OnFinishTagging(null);
 					break;
 				case R.id.uploadphoto_tagmode_tagged:
 					tagMode = TAGMODE.SEE_TAGGED_FRIEND;
 					layout.setVisibility(View.VISIBLE);
+					for( int i = 0; i < photoList.size(); i++ ) {
+						viewFlipper.getChildAt(i).findViewById(R.id.uploadphoto_tagpage).setVisibility(View.VISIBLE);
+			        	viewFlipper.getChildAt(i).findViewById(R.id.uploadphoto_delete).setVisibility(View.INVISIBLE);
+					}
 					break;
 				case R.id.uploadphoto_tagmode_private:
 					tagMode = TAGMODE.SEE_PRIVATE;
-					layout.setVisibility(View.INVISIBLE);
+					layout.setVisibility(View.GONE);
+					for( int i = 0; i < photoList.size(); i++ ) {
+						viewFlipper.getChildAt(i).findViewById(R.id.uploadphoto_tagpage).setVisibility(View.INVISIBLE);
+			        	viewFlipper.getChildAt(i).findViewById(R.id.uploadphoto_delete).setVisibility(View.VISIBLE);
+					}
 					OnFinishTagging(null);
 					break;
 				}
 			}
 			
 		});
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -264,6 +311,24 @@ public class UploadPhotoActivity extends NetworkActivity {
 				break;
 			}
 		}
+	}
+	
+	public void OnSetMessage(View v) {
+		final EditText txt = new EditText(this);
+		txt.setText(((EditText)findViewById(R.id.uploadphoto_message)).getText().toString());
+		new AlertDialog.Builder(this)
+		.setView(txt)
+		.setMessage("메세지를 입력하세요")
+		.setNegativeButton("취소", null)
+		.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				EditText message = (EditText)findViewById(R.id.uploadphoto_message);
+				message.setText(txt.getText().toString());
+			}
+		})
+		.show();
 	}
 	
 	private void setTagMemberData() { 
@@ -452,6 +517,7 @@ public class UploadPhotoActivity extends NetworkActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.uploadphoto_register, menu);
+		
 		return true;
 	}
 	
@@ -459,6 +525,7 @@ public class UploadPhotoActivity extends NetworkActivity {
 		Intent intent;
 		switch(item.getItemId()) {
 		case android.R.id.home:
+		case R.id.uploadphoto_cancel:
 			finish();
 			return true;
 		case R.id.uploadphoto_register:
@@ -469,7 +536,8 @@ public class UploadPhotoActivity extends NetworkActivity {
 				if( photoMode == 0 ) {
 					BitmapFactory.Options opt = new BitmapFactory.Options();
 					opt.inSampleSize = 2;
-					bitmap = BitmapFactory.decodeFile(photoList.get(i).filepath, opt);
+					//bitmap = BitmapFactory.decodeFile(photoList.get(i).filepath, opt);
+					bitmap = readBitmap(Uri.parse(photoList.get(i).filepath));
 				}
 				else {
 					bitmap = readBitmap(Uri.parse(photoList.get(i).filepath));
@@ -485,15 +553,18 @@ public class UploadPhotoActivity extends NetworkActivity {
 					break;
 				}
 				
+				String album_srl = current_album_srl.split(",")[0];
+				String message = ((EditText)findViewById(R.id.uploadphoto_message)).getText().toString();
+				
 				switch(tagMode) {
 				case SEE_ALL_FRIEND:
-					this.request_Album_setPhoto(current_album_srl, member_srl, "MESSAGE", makeAllMemberIncludedTag(), "N", bitmap);
+					this.request_Album_setPhoto(album_srl, member_srl, message, makeAllMemberIncludedTag(), "N", bitmap);
 					break;
 				case SEE_TAGGED_FRIEND:
-					this.request_Album_setPhoto(current_album_srl, member_srl, "MESSAGE", photoList.get(i).tagValue, "N", bitmap);
+					this.request_Album_setPhoto(album_srl, member_srl, message, photoList.get(i).tagValue, "N", bitmap);
 					break;
 				case SEE_PRIVATE:
-					this.request_Album_setPhoto(current_album_srl, member_srl, "MESSAGE", "", "Y", bitmap);
+					this.request_Album_setPhoto(album_srl, member_srl, message, "", "Y", bitmap);
 					break;
 				}
 			}
@@ -644,6 +715,17 @@ public class UploadPhotoActivity extends NetworkActivity {
 		return tagList;
 	}
 	
+	private void isFinished() {
+		if( alarmingCounter == 0 && sendCounter == photoList.size() ) {
+			Intent data = new Intent();
+			data.putExtra("uploadedPhotoList", uploadedPhotoList);
+			data.putExtra("album_srl", uploadedPhotoList.get(0).photo_album_srl);
+			data.putExtra("albumList", newAlbumList);
+			setResult(Activity.RESULT_OK, data);
+			finish();
+		}
+	}
+	
 	@Override
 	public void response(String uri, String response) {
 		try {
@@ -669,21 +751,12 @@ public class UploadPhotoActivity extends NetworkActivity {
 					uploadedPhotoList.add(new Photo(photo_srl, photo_member_srl, photo_album_srl, photo_timeline_srl, photo_tag, photo_path, photo_thumbnail, photo_like, photo_private, photo_created, photo_updated));
 					
 					String targetList = "";
+					isRequestAlarmingMember = true;
 					ArrayList<String> tagList = this.makeTagListForTimeline(photo_tag);
+					alarmingCounter = tagList.size();
 					for(int i = 0; i < tagList.size(); i++) {
 						targetList += tagList.get(i) + ",";
-						switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
-						case 'P':
-							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"학부모님이 회원님이 태그된 사진을 업로드했습니다.", "P");
-							break;
-						case 'T':
-							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"선생님이 회원님이 태그된 사진을 업로드했습니다.", "P");
-							break;
-						case 'M':
-							this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, tagList.get(i), "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"원장선생님이 회원님이 태그된 사진을 업로드했습니다.", "P");
-							break;
-						}
-						
+						this.request_Member_getMember(tagList.get(i));
 					}
 					this.request_Timeline_setTimelineMessage(photo_member_srl, "P", photo_srl, targetList);
 				}
@@ -710,14 +783,18 @@ public class UploadPhotoActivity extends NetworkActivity {
 					//}
 				}
 				else if(uri.equals("Album/setPhotoTimeline")) {
-					if( ++sendCounter == photoList.size() ) {
-						Intent data = new Intent();
-						data.putExtra("uploadedPhotoList", uploadedPhotoList);
-						data.putExtra("album_srl", uploadedPhotoList.get(0).photo_album_srl);
-						data.putExtra("albumList", newAlbumList);
-						setResult(Activity.RESULT_OK, data);
-						finish();
-					}
+					new Thread(new Runnable() {
+					    @Override
+					    public void run() {    
+					        runOnUiThread(new Runnable(){
+					            @Override
+					             public void run() {
+									sendCounter++;
+									isFinished();
+					            }
+					        });
+					    }
+					}).start();
 				}
 				else if(uri.equals("Album/setAlbum")) {
 					String nativeData = jsonObj.getString("data");
@@ -803,10 +880,93 @@ public class UploadPhotoActivity extends NetworkActivity {
 					jsonObj = new JSONObject(nativeData);
 					String member_srl = jsonObj.getString("member_srl");
 					String member_name = jsonObj.getString("member_name");
-					tagMemberList.add(new InputTag(member_srl, member_name));
-					if(--requestGetMemberCounter == 0) {
-						setTagMemberData();
+					String member_type = jsonObj.getString("member_type");
+					if( isRequestAlarmingMember ) {
+						switch(member_type.charAt(0)) {
+						case 'S':
+							JSONObject studentObj = jsonObj.getJSONObject("student");
+							String student_parent_srl = studentObj.getString("student_parent_srl");
+							if( student_parent_srl.equals("0") ) {
+								new Thread(new Runnable() {
+								    @Override
+								    public void run() {    
+								        runOnUiThread(new Runnable(){
+								            @Override
+								             public void run() {
+												alarmingCounter--;
+												isFinished();
+								            }
+								        });
+								    }
+								}).start();
+							}
+							else 
+								this.request_Member_getParent(student_parent_srl);
+							break;
+						case 'T':
+						case 'M':
+							switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+							case 'P':
+								this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"학부모님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+								break;
+							case 'T':
+								this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"선생님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+								break;
+							case 'M':
+								this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"원장선생님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+								break;
+							}
+							
+							new Thread(new Runnable() {
+							    @Override
+							    public void run() {    
+							        runOnUiThread(new Runnable(){
+							            @Override
+							             public void run() {
+											alarmingCounter--;
+											isFinished();
+							            }
+							        });
+							    }
+							}).start();
+							
+							break;
+						}
 					}
+					else {
+						tagMemberList.add(new InputTag(member_srl, member_name));
+						if(--requestGetMemberCounter == 0) {
+							setTagMemberData();
+						}
+					}
+				}
+				else if(uri.equals("Member/getParent")) {
+					String nativeData = jsonObj.getString("data");
+					jsonObj = new JSONObject(nativeData);
+					String member_srl = jsonObj.getString("member_srl");
+					switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+					case 'P':
+						this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"학부모님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+						break;
+					case 'T':
+						this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"선생님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+						break;
+					case 'M':
+						this.request_Service_notify_sendNotify(SlidingMenuMaker.getProfile().member_srl, member_srl, "사진 태그 알림", SlidingMenuMaker.getProfile().member_name+"원장선생님이 회원님이 태그된 사진을 업로드했습니다.", "P");
+						break;
+					}
+					new Thread(new Runnable() {
+					    @Override
+					    public void run() {    
+					        runOnUiThread(new Runnable(){
+					            @Override
+					             public void run() {
+									alarmingCounter--;
+									isFinished();
+					            }
+					        });
+					    }
+					}).start();
 				}
 			}
 			else {

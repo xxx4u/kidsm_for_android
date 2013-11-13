@@ -58,6 +58,37 @@
 	    android:verticalSpacing="5dp" >
 
 	</com.ihateflyingbugs.kidsm.ExpandableHeightGridView>
+	<FrameLayout
+        android:id="@+id/gallery_seetaggedphoto_frame"
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp" >
+
+        <ImageView
+            android:id="@+id/gallery_seetaggedphoto_image"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/photo_in_album_default" />
+
+	    <ImageView
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:background="@drawable/photo_album_layer_total"
+	        android:onClick="OnSeeTaggedPhoto"
+	        android:padding="30dp" />
+
+	    <TextView
+	        android:id="@+id/gallery_seetaggedphoto_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:text="@string/gallery_seetaggedphoto"
+	        android:textColor="@android:color/white" />
+
+    </FrameLayout>
 </LinearLayout>
 </ScrollView>
 

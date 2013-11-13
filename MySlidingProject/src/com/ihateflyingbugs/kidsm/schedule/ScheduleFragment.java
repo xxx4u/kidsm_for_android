@@ -156,12 +156,16 @@ public class ScheduleFragment extends NetworkFragment {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				switch(checkedId) {
 				case R.id.schedule_monthmode:
+					layout.findViewById(R.id.schedule_prev).setVisibility(View.VISIBLE);
+					layout.findViewById(R.id.schedule_next).setVisibility(View.VISIBLE);
 					viewFlipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.viewin_right));
 					viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.viewout_right));
 					viewFlipper.showPrevious();
 					scheduleMode = 0;
 					break;
 				case R.id.schedule_weekmode:
+					layout.findViewById(R.id.schedule_prev).setVisibility(View.INVISIBLE);
+					layout.findViewById(R.id.schedule_next).setVisibility(View.INVISIBLE);
 					viewFlipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.viewin_left));
 					viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.viewout_left));
 					viewFlipper.showNext();
@@ -730,11 +734,13 @@ public class ScheduleFragment extends NetworkFragment {
 	}
 
 	public void OnPrevMonth(View v) {
-	
+		setPreviousMonth();
+		refreshCalendar();
 	}
 	
 	public void OnNextMonth(View v) {
-	
+		setNextMonth();
+		refreshCalendar();
 	}
 	
 	private void showConfirmedList(String cal_srl) {

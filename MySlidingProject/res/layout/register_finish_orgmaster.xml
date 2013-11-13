@@ -49,14 +49,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="생성되었습니다.\n\n해당 원의 선생님을 초대해주세요."
+        android:text="생성되었습니다.\n\n해당 기관의 선생님을 초대해주세요."
         android:textColor="#ffffff" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\n유치원 코드번호"
+        android:text="\n기관 코드번호"
         android:textColor="#ffffff"
         android:textSize="20sp" />
 

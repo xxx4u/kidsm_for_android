@@ -1,17 +1,25 @@
 package com.ihateflyingbugs.kidsm.menu;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -21,8 +29,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ihateflyingbugs.kidsm.ImageLoader;
 import com.ihateflyingbugs.kidsm.ImageMaker;
 import com.ihateflyingbugs.kidsm.MainActivity;
+import com.ihateflyingbugs.kidsm.NetworkFragment;
+import com.ihateflyingbugs.kidsm.OverlayFragment;
 import com.ihateflyingbugs.kidsm.R;
 import com.ihateflyingbugs.kidsm.WrappingSlidingDrawer;
 import com.ihateflyingbugs.kidsm.notice.NoticeFragment;
@@ -40,6 +51,7 @@ public class SlidingMenuMaker {
 	ArrayList<MenuDoButton> doListItem;
 	ArrayList<MenuDoButton> doListItem2;
 	View dolistlayout;
+	ImageLoader imageLoader;
 	
 	public static Profile getProfile() {
 		return profile;
@@ -48,14 +60,11 @@ public class SlidingMenuMaker {
 	public static void setProfile(Profile _profile) {
 		profile = _profile;
 	}
-	
-	
 
 	public void Initiate(MainActivity activity) {
 		this.activity = activity;
 		slidingMenu = new SlidingMenu(activity);
 		slidingMenu.attachToActivity(activity, SlidingMenu.SLIDING_WINDOW);
-		
 		
 		switch(profile.member_type.charAt(0)) {
 		case 'P':
@@ -126,8 +135,13 @@ public class SlidingMenuMaker {
 //				"1", "1", "1", "1", "1", "1"));
 //		profile.addChildren(-1, new Children("", "", "자녀 추가하기", "", "", "", "", "", "", "", "", ""));
 
+		imageLoader = new ImageLoader(activity, R.drawable.profile_default);
 		ImageView profile_image = (ImageView)activity.findViewById(R.id.mainpicture);
-		profile_image.setImageBitmap(ImageMaker.getCroppedBitmap(BitmapFactory.decodeResource(activity.getResources(), R.drawable.mom)));
+		//profile_image.setImageBitmap(ImageMaker.getCroppedBitmap(BitmapFactory.decodeResource(activity.getResources(), R.drawable.mom)));
+		if(profile.member_picture_uri.startsWith("profile"))
+			imageLoader.DisplayCroppedImage(activity.getString(R.string.default_profile_url)+profile.member_picture_uri, profile_image);
+		else
+			imageLoader.DisplayCroppedImage(activity.getString(R.string.profile_url)+profile.member_picture_uri, profile_image);
 		
 		TextView txt;
 		switch(profile.member_type.charAt(0)) {
@@ -167,13 +181,14 @@ public class SlidingMenuMaker {
 	}
 	
 	public void changeFragment(long id) {
-		if(MainActivity.getCurrentFragment() != Integer.parseInt(""+id))
+		if(MainActivity.getCurrentFragmentIndex() != Integer.parseInt(""+id))
 			MainActivity.changeFragment(Integer.parseInt(""+id));
 		slidingMenu.showContent();
 	}
 	
 	public void OnSeeChildren(View v) {
 		if( profileDrawer.isOpened() == false ) {
+			((Button)v).setBackgroundResource(R.drawable.drawer_btnset2);
 			dolistlayout.setAlpha(0.2f);
 			profileDrawer.animateOpen();
 			((Button)v).setText(R.string.close);
@@ -181,6 +196,7 @@ public class SlidingMenuMaker {
 		else {
 			dolistlayout.setAlpha(1.0f);
 			profileDrawer.animateClose();
+			((Button)v).setBackgroundResource(R.drawable.drawer_btnset);
 			
 			switch(profile.member_type.charAt(0)) {
 			case 'P':
@@ -226,11 +242,50 @@ public class SlidingMenuMaker {
 		profileDrawer.animateClose();
 	}
 	
+	private boolean checkIsDate(String date) {
+		if(date.length() != 6)
+			return false;
+		try {	
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd");
+			dateFormat.setLenient(false);
+			dateFormat.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 	public void OnAddChild(View v) {
-		new AlertDialog.Builder(activity)
-		.setMessage("업데이트 예정입니다")
-		.setPositiveButton("확인", null)
-		.show();
+//		final View view = ((LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.register_parent_addchild, null);
+//		((TextView)view.findViewById(R.id.register_parent_org)).setText(orgName);
+//		((TextView)view.findViewById(R.id.register_parent_class)).setText(className);
+//		((TextView)view.findViewById(R.id.register_parent_childname)).setText(childName);
+//		new AlertDialog.Builder(activity)
+//		.setTitle("자녀 추가하기")
+//		.setView(view)
+//		.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				// TODO Auto-generated method stub
+//				if( ((TextView)view.findViewById(R.id.register_parent_birthday)).getText().toString().isEmpty() ) {
+//					new AlertDialog.Builder(activity)
+//					.setMessage("생일을 입력해주세요.")
+//					.setPositiveButton("확인", null)
+//					.show();
+//				}
+//				else if(checkIsDate(((TextView)view.findViewById(R.id.register_parent_birthday)).getText().toString()) == false) {
+//					new AlertDialog.Builder(activity)
+//					.setMessage("생일이 올바르지 않습니다.")
+//					.setPositiveButton("확인", null)
+//					.show();
+//				}
+//				else {
+//					
+//				}
+//			}
+//		})
+//		.
 		switch(profile.member_type.charAt(0)) {
 		case 'P':
 			((Button)activity.findViewById(R.id.profile_seechildren)).setText(R.string.profile_seechildren);
@@ -241,5 +296,8 @@ public class SlidingMenuMaker {
 		}
 		dolistlayout.setAlpha(1.0f);
 		profileDrawer.animateClose();
+		
+		Intent intent = new Intent(activity, AddChildActivity.class);
+		activity.startActivity(intent);
 	}
 }

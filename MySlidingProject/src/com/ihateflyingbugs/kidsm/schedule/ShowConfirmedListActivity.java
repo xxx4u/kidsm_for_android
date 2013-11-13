@@ -17,12 +17,15 @@ import android.widget.ListView;
 import com.ihateflyingbugs.kidsm.NetworkActivity;
 import com.ihateflyingbugs.kidsm.R;
 import com.ihateflyingbugs.kidsm.menu.SlidingMenuMaker;
+import com.localytics.android.LocalyticsSession;
 
 public class ShowConfirmedListActivity extends NetworkActivity {
 	
 	ArrayList<ConfirmedMember> memberList;
 	ConfirmedMemberAdapter memberListAdapter;
 	int memberListCounter;
+	private LocalyticsSession localyticsSession;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_showconfirmedlist);
@@ -35,6 +38,20 @@ public class ShowConfirmedListActivity extends NetworkActivity {
 		for(int i = 0; i < memberList.size(); i++)
 			this.request_Member_getMember(memberList.get(i).member_name);
 		setTitle("확인한 학부모("+memberList.size()+"/"+SlidingMenuMaker.getProfile().getCurrentClass().getNumOfStudentHavingParent()+")");
+		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
+		this.localyticsSession.open();                // open the session
+		this.localyticsSession.upload();      // upload any data
+	}
+	
+	public void onResume() {
+	    super.onResume();
+	    this.localyticsSession.open();
+	}
+	
+	public void onPause() {
+	    this.localyticsSession.close();
+	    this.localyticsSession.upload();
+	    super.onPause();
 	}
 	
 	@Override

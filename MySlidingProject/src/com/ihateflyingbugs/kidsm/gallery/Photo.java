@@ -2,6 +2,7 @@ package com.ihateflyingbugs.kidsm.gallery;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.View;
 
 import com.ihateflyingbugs.kidsm.BaseItem;
 
@@ -18,6 +19,7 @@ public class Photo extends BaseItem implements Parcelable {
 	public String photo_created;
 	public String photo_updated;
 	boolean isSelected;
+	View layout;
 	
 	public Photo(String photo_srl, String photo_member_srl, String photo_album_srl, String photo_timeline_srl, String photo_tag, String photo_path
 				, String photo_thumbnail, String photo_like, String photo_private, String photo_created, String photo_updated) {

@@ -22,7 +22,9 @@
                 android:id="@+id/schedule_schedule_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
                 android:text="카이스트 면접 월 12시 40분 전산학동 E3-1 1층 1441호실 수험번호 3020404 카이스트 면접 월 12시 40분 전산학동 E3-1 1층 1441호실 수험번호 3020404 카이스트 면접 월 12시 40분 전산학동 E3-1 1층 1441호실 수험번호 3020404 카이스트 면접 월 12시 40분 전산학동 E3-1 1층 1441호실 수험번호 3020404 카이스트 면접 월 12시 40분 전산학동 E3-1 1층 1441호실 수험번호 3020404 카이스트 면접 월 12시 40분 전산학동 E3-1 1층 1441호실 수험번호 3020404 카이스트 면접 월 12시 40분 전산학동 E3-1 1층 1441호실 수험번호 3020404 카이스트 면접 월 12시 40분 전산학동 E3-1 1층 1441호실 수험번호 3020404" />
 
         </LinearLayout>
