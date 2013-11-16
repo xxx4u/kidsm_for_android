@@ -290,7 +290,7 @@ public class MentoryFragment extends NetworkFragment {
 					break;
 				case R.id.mentory_recommend:
 					articleList.clear();
-					request_Mentor_getMentoringRecommendArticles(SlidingMenuMaker.getProfile().member_srl, 1, 100);
+					request_Mentor_getMentoringRecommendArticles(SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl, 1, 100);
 					
 					switch(mentoryType) {
 					case total:
