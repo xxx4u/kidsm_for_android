@@ -64,6 +64,7 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 	RegisterOrgAdapter orgAdapter;
 	int indexOfOrg, indexOfClass, indexOfChild;
 	int classDataLoadRequestCounter, classDataLoadResponseCounter;
+	RegisterChildAdapter currentChildAdapter;
 	
 	private LocalyticsSession localyticsSession;
 	
@@ -124,34 +125,7 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 			editText = (EditText)flipper.findViewById(R.id.register_infotaker_org_search);
 			editText.addTextChangedListener(textWatcher);
 			listView = (ListView) flipper.findViewById(R.id.register_infotaker_org_list);
-//			ArrayList<RegisterChildItem> childList = new ArrayList<RegisterChildItem>();
-//			childList.add(new RegisterChildItem("°­¹Î°æ", "901226"));
-//			childList.add(new RegisterChildItem("°­¹ÎÁö", "941226"));
-//			childList.add(new RegisterChildItem("°­¹ÎÇô", "931026"));
-//			ArrayList<RegisterClassItem> classList = new ArrayList<RegisterClassItem>();
-//			RegisterClassItem tempClass = new RegisterClassItem("ÇŞ´Ô¹İ");
-//			tempClass.setChildList(childList);
-//			classList.add(tempClass);
-//			childList = new ArrayList<RegisterChildItem>();
-//			childList.add(new RegisterChildItem("°­¹Î°æ", "901226"));
-//			childList.add(new RegisterChildItem("°­¹ÎÁö", "941226"));
-//			childList.add(new RegisterChildItem("°­¹ÎÇô", "931026"));
-//			childList.add(new RegisterChildItem("°­¹Î°æ", "901226"));
-//			childList.add(new RegisterChildItem("°­¹ÎÁö", "941226"));
-//			childList.add(new RegisterChildItem("°­¹ÎÇô", "931026"));
-//			tempClass = new RegisterClassItem("º°´Ô¹İ");
-//			tempClass.setChildList(childList);
-//			classList.add(tempClass);
 			orgList = new ArrayList<RegisterOrgItem>();
-//			RegisterOrgItem tempOrg = new RegisterOrgItem("¹ö±×½º1 À¯Ä¡¿ø");
-//			tempOrg.setClassList(classList);
-//			orgList_pool.add(tempOrg);
-//			tempOrg = new RegisterOrgItem("¹ö±×½º3 À¯Ä¡¿ø");
-//			tempOrg.setClassList(classList);
-//			orgList_pool.add(tempOrg);
-//			tempOrg = new RegisterOrgItem("¹ö±×½º3 À¯Ä¡¿ø");
-//			tempOrg.setClassList(classList);
-//			orgList_pool.add(tempOrg);
 			refreshListData();
 			orgAdapter = new RegisterOrgAdapter(this, orgList);
 			listView.setAdapter(orgAdapter);
@@ -168,27 +142,36 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 						public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 							indexOfClass = position;
 							ListView childListView = (ListView) flipper.findViewById(R.id.register_infotaker_child_list);
-							final ArrayList<RegisterChildItem> selectedChildList = selectedClassList.get(position).childList;
-							RegisterChildAdapter childAdapter = new RegisterChildAdapter(RegisterInfoTakerActivity.this, selectedChildList);
+							final ArrayList<RegisterChildItem> selectedChildList = selectedClassList.get(position).getChildList();
+							final RegisterChildAdapter childAdapter = new RegisterChildAdapter(RegisterInfoTakerActivity.this, selectedChildList);
+							currentChildAdapter = childAdapter;
 							childListView.setAdapter(childAdapter);
 							childListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 								public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-									indexOfChild = position;
+									indexOfChild = Integer.parseInt(view.getTag().toString());
 									MenuItem item = menu.findItem(R.id.register_onebutton);
-									CheckBox cb = (CheckBox)view.findViewById(R.id.register_info_namechecker_checker);
+									//CheckBox cb = (CheckBox)view.findViewById(R.id.register_info_namechecker_checker);
 									int index = Integer.parseInt(view.getTag().toString());
-									if( selectedChildList.get(index).isChecked ) {
-										selectedChildList.get(index).isChecked = false;
+									if( selectedChildList.get(index).isChecked() ) {
+										selectedChildList.get(index).setChecked(false);
+										item.setVisible(false);
 									}
 									else {
+										int count = selectedChildList.size();
 										for(int i = 0; i < selectedChildList.size(); i++) {
-											if( selectedChildList.get(i).layout != null ) {
-												selectedChildList.get(i).isChecked = false;
-											}
+											//if( selectedChildList.get(i).layout != null ) {
+												selectedChildList.get(i).setChecked(false);
+											//}
 										}
-										selectedChildList.get(index).isChecked = true;
-										item.setVisible(true);
+										if( selectedChildList.get(position).getParent_srl().equals("0")) {
+											selectedChildList.get(index).setChecked(true);
+											item.setVisible(true);
+										}
+										else {
+											item.setVisible(false);
+										}
 									}
+									childAdapter.notifyDataSetChanged();
 								}
 							});
 							goNextPage();
@@ -256,8 +239,8 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 		case 0:
 			orgList.clear();
 			for(RegisterOrgItem item : LoginActivity.orgList_pool) {
-				if(item.isVisible) {
-					orgList.add(new RegisterOrgItem(""+item.org_srl, item.getName(), item.org_address, item.org_teacher_key, item.classList));
+				if(item.isVisible()) {
+					orgList.add(new RegisterOrgItem(""+item.getOrg_srl(), item.getName(), item.getOrg_address(), item.getOrg_teacher_key(), item.classList));
 				}
 			}
 			break;
@@ -276,28 +259,43 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 	
 	public void OnNameCheckerClick(View v) {
 		CheckBox cb = (CheckBox)v;
+		int position = Integer.parseInt(v.getTag().toString());
 		switch(type) {
 		case 0:
-			ArrayList<RegisterChildItem> childList = orgList.get(indexOfOrg).classList.get(indexOfClass).childList;
+			ArrayList<RegisterChildItem> childList = orgList.get(indexOfOrg).classList.get(indexOfClass).getChildList();
 			MenuItem item = menu.findItem(R.id.register_onebutton);
 			if( cb.isChecked() ) {
 				for(int i = 0; i < childList.size(); i++) {
-					cb = (CheckBox) childList.get(i).layout.findViewById(R.id.register_info_namechecker_checker);
-					cb.setChecked(false);
+					//if( childList.get(i).layout == null )
+					//	continue;
+					//cb = (CheckBox) childList.get(i).layout.findViewById(R.id.register_info_namechecker_checker);
+					//cb.setChecked(false);
+					childList.get(i).setChecked(false);
 				}
-				cb= (CheckBox)v;
-				cb.setChecked(true);
-				item.setVisible(true);
-				for(int i = 0; i < childList.size(); i++) {
-					cb = (CheckBox) childList.get(i).layout.findViewById(R.id.register_info_namechecker_checker);
-					if( cb.isChecked() ) {
-						indexOfChild = i;
-					}
+				//cb = (CheckBox)v;
+				//cb.setChecked(true);
+				if( childList.get(position).getParent_srl().equals("0")) {
+					childList.get(position).setChecked(true);
+					item.setVisible(true);
+					indexOfChild = position;
 				}
+				else {
+					item.setVisible(false);
+				}
+//				for(int i = 0; i < childList.size(); i++) {
+//					if( childList.get(i).layout == null )
+//						continue;
+//					cb = (CheckBox) childList.get(i).layout.findViewById(R.id.register_info_namechecker_checker);
+//					if( cb.isChecked() ) {
+//						indexOfChild = i;
+//					}
+//				}
 			}
 			else {
 				item.setVisible(false);
+				childList.get(position).setChecked(false);
 			}
+			currentChildAdapter.notifyDataSetChanged();
 			break;
 		case 2:
 		case 3:
@@ -327,9 +325,9 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 				if(edit.isFocused()) {
 					for(int i = 0; i < LoginActivity.orgList_pool.size(); i++) {
 						if(LoginActivity.orgList_pool.get(i).getName().contains(edit.getText()))
-							LoginActivity.orgList_pool.get(i).isVisible = true;
+							LoginActivity.orgList_pool.get(i).setVisible(true);
 						else
-							LoginActivity.orgList_pool.get(i).isVisible = false;
+							LoginActivity.orgList_pool.get(i).setVisible(false);
 					}
 					refreshListData();
 					orgAdapter.notifyDataSetChanged();
@@ -396,11 +394,11 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 				result.putExtra("formNumber", getIntent().getIntExtra("formNumber", -1));
 				result.putExtra("org", orgList.get(indexOfOrg).getName());
 				result.putExtra("class", orgList.get(indexOfOrg).classList.get(indexOfClass).getName());
-				result.putExtra("childname", orgList.get(indexOfOrg).classList.get(indexOfClass).childList.get(indexOfChild).getName());
-				result.putExtra("birthday", orgList.get(indexOfOrg).classList.get(indexOfClass).childList.get(indexOfChild).birthday);
+				result.putExtra("childname", orgList.get(indexOfOrg).classList.get(indexOfClass).getChildList().get(indexOfChild).getName());
+				result.putExtra("birthday", orgList.get(indexOfOrg).classList.get(indexOfClass).getChildList().get(indexOfChild).getBirthday());
 				
 				for(int i = 0; i < LoginActivity.orgList_pool.size(); i++) {
-					if( orgList.get(indexOfOrg).org_srl.equals(LoginActivity.orgList_pool.get(i).org_srl)) {
+					if( orgList.get(indexOfOrg).getOrg_srl().equals(LoginActivity.orgList_pool.get(i).getOrg_srl())) {
 						result.putExtra("index_org", i);
 						break;
 					}
@@ -413,8 +411,8 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 			case 2:
 			case 3:
 				new AlertDialog.Builder(this)
-				.setMessage("ÃÊ´ëÇÏ½Ç ¸í´ÜÀ» ¸ğµÎ ¼±ÅÃÇÏ¼Ì³ª¿ä?")
-				.setPositiveButton("¿¹", new DialogInterface.OnClickListener() {
+				.setMessage("ì´ˆëŒ€í•˜ì‹¤ ëª…ë‹¨ì„ ëª¨ë‘ ì„ íƒí•˜ì…¨ë‚˜ìš”?")
+				.setPositiveButton("ì˜ˆ", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						Intent result = new Intent();
@@ -433,7 +431,7 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 						finish();
 					}
 				})
-				.setNegativeButton("¾Æ´Ï¿À", null)
+				.setNegativeButton("ì•„ë‹ˆì˜¤", null)
 				.show();
 				
 				break;
@@ -552,9 +550,9 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 		Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
 
 		String[] projection = new String[] {
-				ContactsContract.CommonDataKinds.Phone.CONTACT_ID, // ¿¬¶ôÃ³ ID -> »çÁø Á¤º¸ °¡Á®¿À´Âµ¥ »ç¿ë
-				ContactsContract.CommonDataKinds.Phone.NUMBER,        // ¿¬¶ôÃ³
-				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME }; // ¿¬¶ôÃ³ ÀÌ¸§.
+				ContactsContract.CommonDataKinds.Phone.CONTACT_ID, // å ì™ì˜™å ì™ì˜™ì²˜ ID -> å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ì™ì˜™å ì™ì˜™å ìŠ¹ë“¸ì˜™ å ì™ì˜™å ï¿½
+				ContactsContract.CommonDataKinds.Phone.NUMBER,        // å ì™ì˜™å ì™ì˜™ì²˜
+				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME }; // å ì™ì˜™å ì™ì˜™ì²˜ å ì‹±ëªŒì˜™.
 
 		String[] selectionArgs = null;
 
@@ -583,7 +581,7 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 				//acontact.setPhotoid(contactCursor.getLong(0));
 				//acontact.setPhonenum(phonenumber);
 				//acontact.setName(contactCursor.getString(2));
-				//inviteTeacherList_pool.add(new RegisterInviteTeacherItem(0, "¤¡"));
+				//inviteTeacherList_pool.add(new RegisterInviteTeacherItem(0, "å ì™ì˜™"));
 				if( currentNameTag != checkNameTag(contactCursor.getString(2)) ) {
 					currentNameTag = checkNameTag(contactCursor.getString(2));
 					inviteTeacherList_pool.add(new RegisterInviteTeacherItem(inviteTeacherList_pool.size(), 0, ""+currentNameTag, false, contactCursor.getString(1)));
@@ -594,11 +592,11 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 	}
 	
 	private char checkNameTag(String name) {
-		// typo½ºÆ®¸µÀÇ ±ÛÀÚ¼ö ¸¸Å­ list¿¡ ´ã¾ÆµÓ´Ï´Ù.
+		// typoå ì™ì˜™íŠ¸å ì™ì˜™å ì™ì˜™ å ì™ì˜™å ìŒ˜ì‡½ì˜™ å ì™ì˜™í¼ listå ì™ì˜™ å ì™ì˜™í‹‰é›æ±‚å ï¿½
 		//for (int i = 0; i < name.length(); i++) {
 //		String source = "" + name.charAt(0);
 //		char result;
-//		if( source.matches("[0-9|a-z|A-Z|¤¡-¤¾|¤¿-¤Ó|°¡-Èş]*"))
+//		if( source.matches("[0-9|a-z|A-Z|å ì™ì˜™-å ì™ì˜™|å ì™ì˜™-å ì™ì˜™|å ì™ì˜™-å ì™ì˜™]*"))
 		char source = name.charAt(0);
 		char result = source;
 		char comVal = (char) (source-0xAC00);
@@ -616,7 +614,7 @@ public class RegisterInfoTakerActivity extends NetworkActivity {
 			}
 			else {
 				String s = ""+source;
-				if(Character.isDigit(source) || Character.isSpace(source) || !s.matches("[0-9|a-z|A-Z|¤¡-¤¾|¤¿-¤Ó|°¡-Èş]*") )
+				if(Character.isDigit(source) || Character.isSpace(source) || !s.matches("[0-9|a-z|A-Z|ã„±-ã…|ã…-ã…£|ê°€-í]*") )
 					result = '#';
 				else
 					result = source;

@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -111,6 +112,17 @@ public class AlbumActivity extends NetworkActivity {
 		albumGridView.setExpanded(true);
 		albumGridView.setAdapter(albumAdapter);
 		viewFlipper = (ViewFlipper)findViewById(R.id.album_flipper);
+		
+		switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+		case 'P':
+			this.request_Scrap_getScraps(SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl, 1, 10000, "P");
+			break;
+		case 'T':
+		case 'M':
+			this.request_Scrap_getScraps(SlidingMenuMaker.getProfile().member_srl, 1, 10000, "P");
+			break;
+		}
+		
 		this.localyticsSession = new LocalyticsSession(this.getApplicationContext());  // Context used to access device resources
 		this.localyticsSession.open();                // open the session
 		this.localyticsSession.upload();      // upload any data
@@ -336,6 +348,47 @@ public class AlbumActivity extends NetworkActivity {
 		}
 	}
 	
+	public void OnScrapClick(View v) {
+		final int position = Integer.parseInt(v.getTag().toString());
+		final String member_srl;
+		switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+		case 'P':
+			member_srl = SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl;
+			break;
+		case 'T':
+		case 'M':
+			member_srl = SlidingMenuMaker.getProfile().member_srl;
+			break;
+		default:
+			member_srl = "";
+			break;
+		}
+		if(photoList.get(position).member_scrap_srl.isEmpty()) {
+			new AlertDialog.Builder(this)
+			.setMessage("사진을 즐겨찾기 폴더에 추가하시겠습니까?")
+			.setPositiveButton("예", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					AlbumActivity.this.request_Scrap_setScrap(member_srl, "P", photoList.get(position).photo_srl);
+				}
+			})
+			.setNegativeButton("아니오", null)
+			.show();
+		}
+		else {
+			new AlertDialog.Builder(this)
+			.setMessage("사진을 즐겨찾기 폴더에서 삭제하시겠습니까?")
+			.setPositiveButton("예", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					AlbumActivity.this.request_Scrap_delScrap(member_srl, photoList.get(position).member_scrap_srl, photoList.get(position).photo_srl);
+				}
+			})
+			.setNegativeButton("아니오", null)
+			.show();
+		}
+	}
+	
 	@Override
 	public void response(String uri, String response) {
 		try {
@@ -407,6 +460,86 @@ public class AlbumActivity extends NetworkActivity {
 						intent.putExtra("newAlbumList", newAlbumList);
 						setResult(Activity.RESULT_OK, intent);
 						finish();
+					}
+				}
+				else if(uri.equals("Scrap/getScraps")) {
+					String nativeData = jsonObj.getString("data");
+					JSONArray dataArray = new JSONArray(nativeData);
+					for(int i = 0; i < dataArray.length(); i++) {
+						String scrap_srl = dataArray.getJSONObject(i).getString("scrap_srl");
+						String scrap_member_srl = dataArray.getJSONObject(i).getString("scrap_member_srl");
+						String scrap_type = dataArray.getJSONObject(i).getString("scrap_type");
+						String scrap_target_srl = dataArray.getJSONObject(i).getString("scrap_target_srl");
+						String scrap_created = dataArray.getJSONObject(i).getString("scrap_created");
+						for(int j = 0; j < photoList.size(); j++) {
+							if( photoList.get(j).photo_srl.equals(scrap_target_srl) ) {
+								photoList.get(j).member_scrap_srl = scrap_srl;
+								new Thread(new Runnable() {
+								    @Override
+								    public void run() {    
+								        runOnUiThread(new Runnable(){
+								            @Override
+								             public void run() {
+								            	adapter.notifyDataSetChanged();
+								            }
+								        });
+								    }
+								}).start();
+								break;
+							}
+						}
+					}
+				}
+				else if( uri.equals("Scrap/setScrap") ) {
+					String nativeData = jsonObj.getString("data");
+					jsonObj = new JSONObject(nativeData);
+					String scrap_srl = jsonObj.getString("scrap_srl");
+					String scrap_member_srl = jsonObj.getString("scrap_member_srl");
+					String scrap_type = jsonObj.getString("scrap_type");
+					String scrap_target_srl = jsonObj.getString("scrap_target_srl");
+					String scrap_created = jsonObj.getString("scrap_created");
+					for(int i = 0; i < photoList.size(); i++) {
+						if( photoList.get(i).photo_srl.equals(scrap_target_srl) ) {
+							photoList.get(i).member_scrap_srl = scrap_srl;
+							new Thread(new Runnable() {
+							    @Override
+							    public void run() {    
+							        runOnUiThread(new Runnable(){
+							            @Override
+							             public void run() {
+							            	adapter.notifyDataSetChanged();
+							            }
+							        });
+							    }
+							}).start();
+							break;
+						}
+					}
+				}
+				else if( uri.equals("Scrap/delScrap") ) {
+					String nativeData = jsonObj.getString("data");
+					jsonObj = new JSONObject(nativeData);
+					String scrap_srl = jsonObj.getString("scrap_srl");
+					String scrap_member_srl = jsonObj.getString("scrap_member_srl");
+					String scrap_type = jsonObj.getString("scrap_type");
+					String scrap_target_srl = jsonObj.getString("scrap_target_srl");
+					String scrap_created = jsonObj.getString("scrap_created");
+					for(int i = 0; i < photoList.size(); i++) {
+						if( photoList.get(i).photo_srl.equals(scrap_target_srl) ) {
+							photoList.get(i).member_scrap_srl = "";
+							new Thread(new Runnable() {
+							    @Override
+							    public void run() {    
+							        runOnUiThread(new Runnable(){
+							            @Override
+							             public void run() {
+							            	adapter.notifyDataSetChanged();
+							            }
+							        });
+							    }
+							}).start();
+							break;
+						}
 					}
 				}
 			}

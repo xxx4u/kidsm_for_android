@@ -20,7 +20,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/default_content_description"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_launcher"
+            android:onClick="OnSetProfileImage" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"

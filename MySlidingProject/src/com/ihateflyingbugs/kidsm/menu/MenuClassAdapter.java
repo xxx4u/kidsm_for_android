@@ -49,22 +49,22 @@ class MenuClassAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// 최초 호출이면 항목 뷰를 생성한다. 
 		// 타입별로 뷰를 다르게 디자인할 수 있으며 높이가 달라도 상관없다.
-		if (convertView == null) {
+		if (arSrc.get(position).layout == null) {
 			int res = 0;
 			if(position != getCount()-1)
 				res = R.layout.profile_class;
 			else
 				res = R.layout.profile_addchild;
-			convertView = mInflater.inflate(res, parent, false);
+			arSrc.get(position).layout = mInflater.inflate(res, parent, false);
 			
 			// 항목 뷰를 초기화한다.
 			if(position != getCount()-1) {
-				convertView.setTag(position);
-				TextView txt = (TextView)convertView.findViewById(R.id.class_orgname);
+				arSrc.get(position).layout.setTag(position);
+				TextView txt = (TextView)arSrc.get(position).layout.findViewById(R.id.class_orgname);
 				txt.setText(SlidingMenuMaker.getProfile().org_name);
-				txt = (TextView)convertView.findViewById(R.id.class_classname);
+				txt = (TextView)arSrc.get(position).layout.findViewById(R.id.class_classname);
 				txt.setText(arSrc.get(position).getClass_name());
-				txt = (TextView)convertView.findViewById(R.id.class_teachername);
+				txt = (TextView)arSrc.get(position).layout.findViewById(R.id.class_teachername);
 				String teacherName = "";
 				for( int i = 0; i < arSrc.get(position).getTeacherList().size(); i++ ) {
 					teacherName += arSrc.get(position).getTeacherList().get(i).teacher_name;
@@ -81,12 +81,12 @@ class MenuClassAdapter extends BaseAdapter {
 				
 			}
 			else {
-				TextView txt = (TextView)convertView.findViewById(R.id.profile_add_message);
+				TextView txt = (TextView)arSrc.get(position).layout.findViewById(R.id.profile_add_message);
 				txt.setText(arSrc.get(position).getClass_name());
 			}
 		}
 		
 		
-		return convertView;
+		return arSrc.get(position).layout;
 	}
 }

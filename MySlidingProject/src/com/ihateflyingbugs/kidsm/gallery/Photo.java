@@ -19,6 +19,8 @@ public class Photo extends BaseItem implements Parcelable {
 	public String photo_created;
 	public String photo_updated;
 	boolean isSelected;
+	public String member_scrap_srl;
+	
 	View layout;
 	
 	public Photo(String photo_srl, String photo_member_srl, String photo_album_srl, String photo_timeline_srl, String photo_tag, String photo_path
@@ -35,6 +37,7 @@ public class Photo extends BaseItem implements Parcelable {
 		this.photo_created = photo_created;
 		this.photo_updated = photo_updated;
 		isSelected = false;
+		member_scrap_srl = "";
 	}
 	
 	// Parcelling part
@@ -54,6 +57,7 @@ public class Photo extends BaseItem implements Parcelable {
 		this.photo_created = data[9];
 		this.photo_updated = data[10];
         isSelected = false;
+        this.member_scrap_srl = "";
     }
     
     public static final Parcelable.Creator<Photo> CREATOR = new Parcelable.Creator<Photo>() {

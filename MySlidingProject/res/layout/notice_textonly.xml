@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp" >
     
-    <ImageButton
+    <ImageView
         android:id="@+id/notice_profile_picture"
         android:layout_width="40dp"
         android:layout_height="40dp"

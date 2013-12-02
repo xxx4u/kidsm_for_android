@@ -10,29 +10,29 @@ import com.ihateflyingbugs.kidsm.BaseItem;
 import com.ihateflyingbugs.kidsm.uploadphoto.InputTag;
 
 public class RegisterOrgItem extends BaseItem implements Parcelable {
-	String org_srl;
-	String org_address;
-	String org_teacher_key;
+	private String org_srl;
+	private String org_address;
+	private String org_teacher_key;
 	public ArrayList<RegisterClassItem> classList;
 	View layout;
-	boolean isVisible;
+	private boolean isVisible;
 	
 	public RegisterOrgItem(String org_srl, String name, String org_address, String org_teacher_key) {
-		this.org_srl = org_srl;
-		this.org_address = org_address;
-		this.org_teacher_key = org_teacher_key;
+		this.setOrg_srl(org_srl);
+		this.setOrg_address(org_address);
+		this.setOrg_teacher_key(org_teacher_key);
 		this.name = name;
 		this.classList = new ArrayList<RegisterClassItem>();
-		isVisible = true;
+		setVisible(true);
 	}
 	
 	public RegisterOrgItem(String org_srl, String name, String org_address, String org_teacher_key, ArrayList<RegisterClassItem> classList) {
-		this.org_srl = org_srl;
-		this.org_address = org_address;
-		this.org_teacher_key = org_teacher_key;
+		this.setOrg_srl(org_srl);
+		this.setOrg_address(org_address);
+		this.setOrg_teacher_key(org_teacher_key);
 		this.name = name;
 		this.classList = classList;
-		isVisible = true;
+		setVisible(true);
 	}
 	
 	public void setClassList(ArrayList<RegisterClassItem> classList) {
@@ -45,11 +45,11 @@ public class RegisterOrgItem extends BaseItem implements Parcelable {
 
 	// Parcelling part
     public RegisterOrgItem(Parcel in){
-        org_srl = in.readString();
+        setOrg_srl(in.readString());
         layout = (View) in.readValue(View.class.getClassLoader());
 		classList = new ArrayList<RegisterClassItem>();
 		in.readTypedList(classList, RegisterClassItem.CREATOR);
-        isVisible = true;
+        setVisible(true);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -69,8 +69,40 @@ public class RegisterOrgItem extends BaseItem implements Parcelable {
 	}
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(org_srl);
+		dest.writeString(getOrg_srl());
 		dest.writeValue(layout);
 		dest.writeTypedList(classList);
+	}
+
+	public String getOrg_srl() {
+		return org_srl;
+	}
+
+	public void setOrg_srl(String org_srl) {
+		this.org_srl = org_srl;
+	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+
+	public String getOrg_address() {
+		return org_address;
+	}
+
+	public void setOrg_address(String org_address) {
+		this.org_address = org_address;
+	}
+
+	public String getOrg_teacher_key() {
+		return org_teacher_key;
+	}
+
+	public void setOrg_teacher_key(String org_teacher_key) {
+		this.org_teacher_key = org_teacher_key;
 	}
 }

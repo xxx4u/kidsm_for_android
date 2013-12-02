@@ -67,7 +67,7 @@ public class NetworkFragment extends Fragment {
 					HttpEntity entity = response.getEntity();
 					if( entity != null ) {
 						//Log.e("RESPONSE", EntityUtils.toString(entity));
-						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), "EUC-KR"));
+						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
 						while(true) {
 							String line = br.readLine();
 							if( line == null ) break;
@@ -101,7 +101,7 @@ public class NetworkFragment extends Fragment {
 					HttpEntity entity = response.getEntity();
 					if( entity != null ) {
 						//Log.e("RESPONSE", EntityUtils.toString(entity));
-						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
 						while(true) {
 							String line = br.readLine();
 							if( line == null ) break;
@@ -144,7 +144,7 @@ public class NetworkFragment extends Fragment {
 					HttpResponse response = client.execute(post);
 					HttpEntity entity = response.getEntity();
 					if(entity != null) {
-						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
 						while(true) {
 							String line = br.readLine();
 							if( line == null ) break;
@@ -185,7 +185,7 @@ public class NetworkFragment extends Fragment {
 					HttpResponse response = client.execute(put);
 				    HttpEntity entity = response.getEntity();
 					if(entity != null) {
-						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
 						while(true) {
 							String line = br.readLine();
 							if( line == null ) break;
@@ -223,7 +223,7 @@ public class NetworkFragment extends Fragment {
 					HttpResponse response = client.execute(delete);
 				    HttpEntity entity = response.getEntity();
 					if(entity != null) {
-						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+						BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
 						while(true) {
 							String line = br.readLine();
 							if( line == null ) break;
@@ -506,7 +506,7 @@ public class NetworkFragment extends Fragment {
 		POST("Member/checkEmail", params);
 	}
 	
-	public void request_Member_addMember(String member_name, String member_nickname, String member_type, String org_srl, String member_email, String member_password, String member_device_type, String member_device_uuid) {
+	public void request_Member_addMember(String member_name, String member_nickname, String member_type, String org_srl, String member_email, String member_password, String member_device_type, String member_device_uuid, String member_phone) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("member_name", member_name));
 		params.add(new BasicNameValuePair("member_nickname", member_nickname));
@@ -516,15 +516,17 @@ public class NetworkFragment extends Fragment {
 		params.add(new BasicNameValuePair("member_password", member_password));
 		params.add(new BasicNameValuePair("member_device_type", member_device_type));
 		params.add(new BasicNameValuePair("member_device_uuid", member_device_uuid));
+		params.add(new BasicNameValuePair("member_phone", member_phone));
 		POST("Member/addMember", params);
 	}
 	
-	public void request_Member_modMember(String member_srl, String member_name, String member_nickname, String member_org_srl, String member_email, String member_password, String member_device_type, String member_device_uuid, String member_enabled) {
+	public void request_Member_modMember(String member_srl, String member_name, String member_nickname, String member_org_srl, String member_phone, String member_email, String member_password, String member_device_type, String member_device_uuid, String member_enabled) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("member_srl", member_srl));
 		params.add(new BasicNameValuePair("member_name", member_name));
 		params.add(new BasicNameValuePair("member_nickname", member_nickname));
 		params.add(new BasicNameValuePair("member_org_srl", member_org_srl));
+		params.add(new BasicNameValuePair("member_phone", member_phone));
 		params.add(new BasicNameValuePair("member_email", member_email));
 		params.add(new BasicNameValuePair("member_password", member_password));
 		params.add(new BasicNameValuePair("member_device_type", member_device_type));
@@ -810,12 +812,13 @@ public class NetworkFragment extends Fragment {
 		GET("Mentor/getMentoringRecommendArticles", params);
 	}
 	
-	public void request_Organization_setOrganization(String member_srl, String org_name, String org_phone, String org_address) {
+	public void request_Organization_setOrganization(String member_srl, String org_name, String org_phone, String org_address, String org_paid) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("member_srl", member_srl));
 		params.add(new BasicNameValuePair("org_name", org_name));
 		params.add(new BasicNameValuePair("org_phone", org_phone));
 		params.add(new BasicNameValuePair("org_address", org_address));
+		params.add(new BasicNameValuePair("org_paid", org_paid));
 		POST("Organization/setOrganization", params);
 	}
 	

@@ -79,14 +79,14 @@ class MenuDoAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// 최초 호출이면 항목 뷰를 생성한다. 
 		// 타입별로 뷰를 다르게 디자인할 수 있으며 높이가 달라도 상관없다.
-		if (convertView == null) {
+		if (arSrc.get(position).layout == null) {
 			int res = 0;
 			switch (arSrc.get(position).Type) {
 			case 0:
 				res = R.layout.linear_for_space;
-				convertView = mInflater.inflate(res, parent, false);
+				arSrc.get(position).layout = mInflater.inflate(res, parent, false);
 				
-				final View cv = convertView;
+				final View cv = arSrc.get(position).layout;
 				final View pv = parent;
 				arSrc.get(0).layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){
 
@@ -100,7 +100,7 @@ class MenuDoAdapter extends BaseAdapter {
 							arSrc.get(0).layout.getLocationOnScreen(above);
 							height -= above[1];
 							height -= (arSrc.size()-1)*arSrc.get(0).layout.getMeasuredHeight();
-							((LinearLayout)cv).getLayoutParams().height = height - 15;
+							((LinearLayout)cv).getLayoutParams().height = (height - 15)/2;
 							pv.getLayoutParams().height = height + (arSrc.size()-1)*arSrc.get(0).layout.getMeasuredHeight();
 							arSrc.get(0).measured = true;
 						}
@@ -110,10 +110,9 @@ class MenuDoAdapter extends BaseAdapter {
 				break;
 			case 1:
 				res = R.layout.menu_dobutton;
-				convertView = mInflater.inflate(res, parent, false);
+				arSrc.get(position).layout = mInflater.inflate(res, parent, false);
 				break;
 			}
-			arSrc.get(position).layout = convertView; 
 			
 			if(position == 0) {
 				
@@ -126,14 +125,14 @@ class MenuDoAdapter extends BaseAdapter {
 			// 항목 뷰를 초기화한다.
 			switch (arSrc.get(position).Type) {
 			case 1:
-				TextView txt1 = (TextView)convertView.findViewById(R.id.menu_dobutton_text);
+				TextView txt1 = (TextView)arSrc.get(position).layout.findViewById(R.id.menu_dobutton_text);
 				txt1.setText(arSrc.get(position).getName());
-				ImageView icon = (ImageView)convertView.findViewById(R.id.menu_dobutton_image);
+				ImageView icon = (ImageView)arSrc.get(position).layout.findViewById(R.id.menu_dobutton_image);
 				icon.setImageDrawable(arSrc.get(position).iconImage);
 				break;
 			}
 		}
 
-		return convertView;
+		return arSrc.get(position).layout;
 	}
 }

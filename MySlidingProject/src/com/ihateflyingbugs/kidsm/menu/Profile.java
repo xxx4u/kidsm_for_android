@@ -133,11 +133,19 @@ public class Profile implements Parcelable {
 	public Children getChildren(String student_member_srl) {
 		return childrens.get(student_member_srl);
 	}
+	public Children getChildren(int index) {
+		return childrenList.get(index);
+	}
 	public void addChildren(String student_member_srl, Children child) {
 		childrens.put(student_member_srl, child);
 		childrenList.add(child);
 	}
 
+	public void addChildrenByRequest(String student_member_srl, Children child) {
+		childrens.put(student_member_srl, child);
+		childrenList.add(childrenList.size()-1, child);
+	}
+	
 	public OrgClass getClass(String class_srl) {
 		return classes.get(class_srl);
 	}
@@ -145,7 +153,10 @@ public class Profile implements Parcelable {
 		classes.put(class_srl, orgClass);
 		classList.add(orgClass);
 	}
-
+	public void addClassByRequest(String class_srl, OrgClass orgClass) {
+		classes.put(class_srl, orgClass);
+		classList.add(classList.size()-1, orgClass);
+	}
 	
 	public String getMember_name() {
 		return member_name;

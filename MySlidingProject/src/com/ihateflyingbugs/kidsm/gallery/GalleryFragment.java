@@ -383,20 +383,33 @@ public class GalleryFragment extends NetworkFragment{
 					.show();
 					break;
 				case 1:
-					new AlertDialog.Builder(getActivity())
-					.setMessage("앨범을 삭제하면 안에 있는 사진도 같이 삭제됩니다.\n또한 한번 삭제된 앨범은 복구가 불가능합니다.\n정말로 삭제하시겠습니까?")
-					.setNegativeButton("취소", null)
-					.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-//							albumList.add(new Album(""+albumList.size(), 1, txt.getText().toString(), true));
-//					        adapter = new GalleryAdapter(albumList, getActivity(), sizeOfView);
-//					        gridView.setExpanded(true);
-//					        gridView.setAdapter(adapter);
-							GalleryFragment.this.request_Album_delAlbum(album_srl, SlidingMenuMaker.getProfile().member_srl);
+					for( int i = 1; i < albumList.size()-1; i++ ) {
+						if( album_srl.equals(albumList.get(i).album_srl) ) {
+							if(albumList.get(i).album_type.equals("D")) {
+								new AlertDialog.Builder(getActivity())
+								.setMessage("기본 앨범은 삭제할 수 없습니다.")
+								.setPositiveButton("확인", null)
+								.show();
+							}
+							else {
+								new AlertDialog.Builder(getActivity())
+								.setMessage("앨범을 삭제하면 안에 있는 사진도 같이 삭제됩니다.\n또한 한번 삭제된 앨범은 복구가 불가능합니다.\n정말로 삭제하시겠습니까?")
+								.setNegativeButton("취소", null)
+								.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+//										albumList.add(new Album(""+albumList.size(), 1, txt.getText().toString(), true));
+//								        adapter = new GalleryAdapter(albumList, getActivity(), sizeOfView);
+//								        gridView.setExpanded(true);
+//								        gridView.setAdapter(adapter);
+										GalleryFragment.this.request_Album_delAlbum(album_srl, SlidingMenuMaker.getProfile().member_srl);
+									}
+								})
+								.show();
+							}
+							break;
 						}
-					})
-					.show();
+					}
 					break;
 				}
 				alert.dismiss();

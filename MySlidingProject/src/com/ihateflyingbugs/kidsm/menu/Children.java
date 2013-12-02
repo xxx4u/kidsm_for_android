@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.View;
 
 import com.ihateflyingbugs.kidsm.BaseItem;
 import com.ihateflyingbugs.kidsm.login.RegisterChildItem;
@@ -25,6 +26,7 @@ public class Children extends BaseItem implements Parcelable {
 	public String organizationName;
 	public String className;
 	public ArrayList<OrgClassTeacher> teacherList;
+	public View layout;
 	
 	// Parcelling part
     public Children(Parcel in){

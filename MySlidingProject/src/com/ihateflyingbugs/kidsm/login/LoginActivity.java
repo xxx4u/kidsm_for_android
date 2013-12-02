@@ -37,8 +37,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -280,6 +282,50 @@ public class LoginActivity extends NetworkActivity {
 		case 4:
 			editText = (EditText) flipper.findViewById(R.id.register_orgmaster_orglocation);
 			editText.setKeyListener(null);
+			final CheckBox paid1Checked = (CheckBox) flipper.findViewById(R.id.register_orgmaster_paid1);
+			final CheckBox paid2Checked = (CheckBox) flipper.findViewById(R.id.register_orgmaster_paid2);
+			final CheckBox notPaidChecked = (CheckBox) flipper.findViewById(R.id.register_orgmaster_not_paid);
+			paid1Checked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					if( isChecked ) {
+						if( notPaidChecked.isChecked() )
+							notPaidChecked.setChecked(false);
+					}
+					else {
+						if( paid2Checked.isChecked() == false )
+							notPaidChecked.setChecked(true);
+					}
+				}
+			});
+			paid2Checked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					if( isChecked ) {
+						if( notPaidChecked.isChecked() )
+							notPaidChecked.setChecked(false);
+					}
+					else {
+						if( paid1Checked.isChecked() == false )
+							notPaidChecked.setChecked(true);
+					}
+				}
+			});
+			notPaidChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					if( isChecked ) {
+						if( paid1Checked.isChecked() )
+							paid1Checked.setChecked(false);
+						if( paid2Checked.isChecked() )
+							paid2Checked.setChecked(false);
+					}
+					else {
+						if( paid1Checked.isChecked() == false && paid2Checked.isChecked() == false)
+							notPaidChecked.setChecked(true);
+					}
+				}
+			});
 			break;
 		}
 		editText = (EditText)findViewById(R.id.register_email);
@@ -316,7 +362,7 @@ public class LoginActivity extends NetworkActivity {
 				setKeyboardDown(editText);
 			// TODO
 			//가입요청중입니다
-			this.request_Member_addMember(parent_name, parent_nickname, "P", "0", email, password, "A", GCMRegistrar.getRegistrationId(this));
+			this.request_Member_addMember(parent_name, parent_nickname, "P", "0", email, password, "A", GCMRegistrar.getRegistrationId(this), parent_phone);
 			break;
 		case 2:
 			break;
@@ -326,13 +372,13 @@ public class LoginActivity extends NetworkActivity {
 			String teacher_orgcode = ((EditText)findViewById(R.id.register_teacher_orgcode)).getText().toString();
 			boolean findOrg = false;
 			for(int i = 0; i < orgList_pool.size(); i++) {
-				if(teacher_orgcode.equals(orgList_pool.get(i).org_teacher_key)) {
+				if(teacher_orgcode.equals(orgList_pool.get(i).getOrg_teacher_key())) {
 					dialog = new Dialog(this, R.style.TransparentDialog);
 					View layout = LayoutInflater.from(this).inflate(R.layout.register_confirm_teacher_dialog, null);
 					TextView txt = (TextView) layout.findViewById(R.id.register_confirm_teacher_name);
 					txt.setText(teacher_name);
 					txt = (TextView) layout.findViewById(R.id.register_confirm_teacher_orgname);
-					txt.setText(orgList_pool.get(i).getName()+"("+orgList_pool.get(i).org_address+")");
+					txt.setText(orgList_pool.get(i).getName()+"("+orgList_pool.get(i).getOrg_address()+")");
 					dialog.setContentView(layout);
 					dialog.show();
 					findOrg = true;
@@ -348,7 +394,8 @@ public class LoginActivity extends NetworkActivity {
 			String orgmaster_phone = ((EditText)findViewById(R.id.register_orgmaster_phone)).getText().toString();
 			String orgmaster_org = ((EditText)findViewById(R.id.register_orgmaster_org)).getText().toString();
 			String orgmaster_orglocation = ((EditText)findViewById(R.id.register_orgmaster_orglocation)).getText().toString();
-			this.request_Member_addMember(orgmaster_name, orgmaster_name, "M", "1", email, password, "A", GCMRegistrar.getRegistrationId(this));
+			String orgmaster_specific_orglocation = ((EditText)findViewById(R.id.register_orgmaster_specific_orglocation)).getText().toString();
+			this.request_Member_addMember(orgmaster_name, orgmaster_name, "M", "1", email, password, "A", GCMRegistrar.getRegistrationId(this), orgmaster_phone);
 			editText = (EditText)findViewById(R.id.register_orgmaster_name);
 			if(editText.isFocused())
 				setKeyboardDown(editText);
@@ -362,6 +409,10 @@ public class LoginActivity extends NetworkActivity {
 				setKeyboardDown(editText);
 			else
 				editText = (EditText)findViewById(R.id.register_orgmaster_org);
+			if(editText.isFocused())
+				setKeyboardDown(editText);
+			else
+				editText = (EditText)findViewById(R.id.register_orgmaster_specific_orglocation);
 			if(editText.isFocused())
 				setKeyboardDown(editText);
 			break;
@@ -517,6 +568,7 @@ public class LoginActivity extends NetworkActivity {
 			String orgmaster_phone = ((EditText)findViewById(R.id.register_orgmaster_phone)).getText().toString();
 			String orgmaster_org = ((EditText)findViewById(R.id.register_orgmaster_org)).getText().toString();
 			String orgmaster_orglocation = ((EditText)findViewById(R.id.register_orgmaster_orglocation)).getText().toString();
+			String orgmaster_specific_orglocation = ((EditText)findViewById(R.id.register_orgmaster_specific_orglocation)).getText().toString();
 			if( orgmaster_name.isEmpty() )
 				return "이름을 입력해주세요.";
 			if( hasDigit(orgmaster_name) )
@@ -529,6 +581,8 @@ public class LoginActivity extends NetworkActivity {
 				return "기관 이름을 입력해주세요.";
 			if( orgmaster_orglocation.isEmpty() )
 				return "기관 위치를 입력해주세요.";
+			if( orgmaster_specific_orglocation.isEmpty() )
+				return "기관 상세 주소를 입력해주세요.";
 			break;
 		}
 		return "OK";
@@ -545,7 +599,7 @@ public class LoginActivity extends NetworkActivity {
 			ArrayList<String> classList = new ArrayList<String>();
 			String teacher_orgcode = ((EditText)findViewById(R.id.register_teacher_orgcode)).getText().toString();
 			for(int i = 0; i < orgList_pool.size(); i++) {
-				if(teacher_orgcode.equals(orgList_pool.get(i).org_teacher_key)) {
+				if(teacher_orgcode.equals(orgList_pool.get(i).getOrg_teacher_key())) {
 					for(int j = 0; j < orgList_pool.get(i).classList.size(); j++) {
 						classList.add(orgList_pool.get(i).classList.get(j).getName());
 					}
@@ -576,11 +630,12 @@ public class LoginActivity extends NetworkActivity {
 	public void OnFinishSelectClass(View v) {
 		String teacher_orgcode = ((EditText)findViewById(R.id.register_teacher_orgcode)).getText().toString();
 		for(int i = 0; i < orgList_pool.size(); i++) {
-			if(teacher_orgcode.equals(orgList_pool.get(i).org_teacher_key)) {
+			if(teacher_orgcode.equals(orgList_pool.get(i).getOrg_teacher_key())) {
 				String email = ((EditText)findViewById(R.id.register_email)).getText().toString();
 				String password = ((EditText)findViewById(R.id.register_password)).getText().toString();
 				String teacher_name = ((EditText)findViewById(R.id.register_teacher_name)).getText().toString();
-				this.request_Member_addMember(teacher_name, teacher_name, "T", orgList_pool.get(i).org_srl, email, password, "A", GCMRegistrar.getRegistrationId(this));
+				String teacher_phone = ((EditText)findViewById(R.id.register_teacher_phone)).getText().toString();
+				this.request_Member_addMember(teacher_name, teacher_name, "T", orgList_pool.get(i).getOrg_srl(), email, password, "A", GCMRegistrar.getRegistrationId(this), teacher_phone);
 				break;
 			}
 		}
@@ -640,7 +695,7 @@ public class LoginActivity extends NetworkActivity {
 				int index_org = data.getIntExtra("index_org", -1);
 				int index_class = data.getIntExtra("index_class", -1);
 				int index_child = data.getIntExtra("index_child", -1);
-				registerChildList.set(formNumber, orgList_pool.get(index_org).classList.get(index_class).childList.get(index_child));
+				registerChildList.set(formNumber, orgList_pool.get(index_org).classList.get(index_class).getChildList().get(index_child));
 					
 //				text = (TextView) flipper.findViewById(R.id.register_parent_birthday);
 //				text.setText(data.getStringExtra("birthday"));
@@ -760,12 +815,13 @@ public class LoginActivity extends NetworkActivity {
 					String member_type = jsonObj.getString("member_type");
 					String member_org_srl = jsonObj.getString("member_org_srl");
 					String member_point = jsonObj.getString("member_point");
+					String member_phone = jsonObj.getString("member_phone");
 					String member_email = jsonObj.getString("member_email");
 					String member_picture = jsonObj.getString("member_picture");
 					String member_device_type = jsonObj.getString("member_device_type");
 					String member_device_uuid = jsonObj.getString("member_device_uuid");
 					if(GCMRegistrar.getRegistrationId(this).equals(member_device_uuid) == false) {
-						this.request_Member_modMember(member_srl, member_name, member_name, member_org_srl, member_email, ((EditText)findViewById(R.id.register_password)).getText().toString(), member_device_type, GCMRegistrar.getRegistrationId(this), "A");
+						this.request_Member_modMember(member_srl, member_name, member_name, member_org_srl, member_phone, member_email, ((EditText)findViewById(R.id.register_password)).getText().toString(), member_device_type, GCMRegistrar.getRegistrationId(this), "A");
 					}
 					profile = new Profile(member_srl, member_name, member_type, member_org_srl, member_point, 
 							member_email, member_picture, member_device_type, member_device_uuid, "");
@@ -773,6 +829,7 @@ public class LoginActivity extends NetworkActivity {
 						JSONObject parentObj = jsonObj.getJSONObject("parent");
 						String parent_srl = parentObj.getString("parent_srl");
 						this.request_Member_getParentStudents(parent_srl);
+						profile.setParent_srl(parent_srl);
 					}
 					else if( member_type.charAt(0) == 'T' ) {
 						isRequestClassList = true;
@@ -832,7 +889,7 @@ public class LoginActivity extends NetworkActivity {
 							}
 							else {
 								for(int j = 0; j < orgList_pool.size(); j++) {
-									if( orgList_pool.get(j).org_srl.equals(class_org_srl) ) {
+									if( orgList_pool.get(j).getOrg_srl().equals(class_org_srl) ) {
 										orgList_pool.get(j).addClass(new RegisterClassItem(class_srl, class_name));
 										break;
 									}
@@ -867,9 +924,9 @@ public class LoginActivity extends NetworkActivity {
 							numOfStudentHavingParent++;
 						
 						for(int j = 0; j < orgList_pool.size(); j++) {
-							if( orgList_pool.get(j).org_srl.equals(member_org_srl) ) {
+							if( orgList_pool.get(j).getOrg_srl().equals(member_org_srl) ) {
 								for(int k = 0; k < orgList_pool.get(j).classList.size(); k++) {
-									if( orgList_pool.get(j).classList.get(k).class_srl.equals(student_class_srl)) {
+									if( orgList_pool.get(j).classList.get(k).getClass_srl().equals(student_class_srl)) {
 										orgList_pool.get(j).classList.get(k).addChild(new RegisterChildItem(member_srl, student_srl, member_name, member_org_srl, 
 												student_class_srl, student_parent_srl, student_teacher_srl, student_shuttle_srl, student_birthday));
 										break;
@@ -1088,28 +1145,28 @@ public class LoginActivity extends NetworkActivity {
 						String classname = ((EditText)findViewById(R.id.register_teacher_newclass)).getText().toString();
 						String teacher_orgcode = ((EditText)findViewById(R.id.register_teacher_orgcode)).getText().toString();
 						for(int i = 0; i < orgList_pool.size(); i++) {
-							if(teacher_orgcode.equals(orgList_pool.get(i).org_teacher_key)) {
+							if(teacher_orgcode.equals(orgList_pool.get(i).getOrg_teacher_key())) {
 								//this.request_Member_setTeacher(member_srl, member_org_srl, teacher_orgcode, class_srl, shuttle_srl)
 								if(classname.isEmpty()) {
 									Spinner spinner = (Spinner)findViewById(R.id.register_teacher_classlist);
 									int j = spinner.getSelectedItemPosition();
-									this.request_Member_setTeacher(member_srl, member_org_srl, teacher_orgcode, orgList_pool.get(i).classList.get(j).class_srl, "0");
+									this.request_Member_setTeacher(member_srl, member_org_srl, teacher_orgcode, orgList_pool.get(i).classList.get(j).getClass_srl(), "0");
 								}
 								else {
 									registerNewClassTeacher_member_srl = member_srl;
 									Spinner spinner = (Spinner)findViewById(R.id.register_teacher_classlevel);
 									switch(spinner.getSelectedItemPosition()) {
 									case 0:
-										this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname, "7");
+										this.request_Class_setClass(""+orgList_pool.get(i).getOrg_srl(), classname, "7");
 										break;
 									case 1:
-										this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname, "6");
+										this.request_Class_setClass(""+orgList_pool.get(i).getOrg_srl(), classname, "6");
 										break;
 									case 2:
-										this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname, "5");
+										this.request_Class_setClass(""+orgList_pool.get(i).getOrg_srl(), classname, "5");
 										break;
 									case 3:
-										this.request_Class_setClass(""+orgList_pool.get(i).org_srl, classname, "4");
+										this.request_Class_setClass(""+orgList_pool.get(i).getOrg_srl(), classname, "4");
 										break;
 									}
 								}
@@ -1122,7 +1179,13 @@ public class LoginActivity extends NetworkActivity {
 						String orgmaster_phone = ((EditText)findViewById(R.id.register_orgmaster_phone)).getText().toString();
 						String orgmaster_org = ((EditText)findViewById(R.id.register_orgmaster_org)).getText().toString();
 						String orgmaster_orglocation = ((EditText)findViewById(R.id.register_orgmaster_orglocation)).getText().toString();
-						this.request_Organization_setOrganization(member_srl, orgmaster_org, orgmaster_phone, orgmaster_orglocation);
+						String orgmaster_specific_orglocation = ((EditText)findViewById(R.id.register_orgmaster_specific_orglocation)).getText().toString();
+						CheckBox notPaidChecked = (CheckBox) findViewById(R.id.register_orgmaster_not_paid);
+						if( notPaidChecked.isChecked() == false )
+							this.request_Organization_setOrganization(member_srl, orgmaster_org, orgmaster_phone, orgmaster_orglocation + " " + orgmaster_specific_orglocation, "Y");
+						else
+							this.request_Organization_setOrganization(member_srl, orgmaster_org, orgmaster_phone, orgmaster_orglocation + " " + orgmaster_specific_orglocation, "N");
+						
 						break;
 					}
 				}
@@ -1185,6 +1248,7 @@ public class LoginActivity extends NetworkActivity {
 				else if(uri.equals("Member/setParent")) {
 					String email = ((EditText)findViewById(R.id.register_email)).getText().toString();
 					String password = ((EditText)findViewById(R.id.register_password)).getText().toString();
+					String parent_phone = ((EditText)findViewById(R.id.register_parent_phone)).getText().toString();
 					
 					String nativeData = jsonObj.getString("data");
 					jsonObj = new JSONObject(nativeData);
@@ -1197,11 +1261,11 @@ public class LoginActivity extends NetworkActivity {
 						String parent_childname = ((EditText)layout.findViewWithTag("register_parent_childname_"+i)).getText().toString();
 						String birthday = ((EditText)layout.findViewWithTag("register_parent_birthday_"+i)).getText().toString();
 						if(parent_org.isEmpty()) {
-							this.request_Member_addMember(parent_childname, parent_childname, "S", "1", parent_childname, parent_childname, "N", "");
+							this.request_Member_addMember(parent_childname, parent_childname, "S", "1", parent_childname, parent_childname, "N", "", parent_phone);
 						}
 						else {
-							this.request_Member_modStudent(registerChildList.get(i).student_srl, registerChildList.get(i).member_srl, registerChildList.get(i).class_srl, parent_srl, 
-								registerChildList.get(i).teacher_srl, registerChildList.get(i).shuttle_srl, "20"+birthday);
+							this.request_Member_modStudent(registerChildList.get(i).getStudent_srl(), registerChildList.get(i).getMember_srl(), registerChildList.get(i).getClass_srl(), parent_srl, 
+								registerChildList.get(i).getTeacher_srl(), registerChildList.get(i).getShuttle_srl(), "20"+birthday);
 						}
 					}
 				}
@@ -1237,7 +1301,8 @@ public class LoginActivity extends NetworkActivity {
 					String email = ((EditText)findViewById(R.id.register_email)).getText().toString();
 					String password = ((EditText)findViewById(R.id.register_password)).getText().toString();
 					String orgmaster_name = ((EditText)findViewById(R.id.register_orgmaster_name)).getText().toString();
-					this.request_Member_modMember(org_manager_member_srl, orgmaster_name, orgmaster_name, org_srl, email, password, "A", GCMRegistrar.getRegistrationId(this), "N");
+					String orgmaster_phone = ((EditText)findViewById(R.id.register_orgmaster_phone)).getText().toString();
+					this.request_Member_modMember(org_manager_member_srl, orgmaster_name, orgmaster_name, org_srl, orgmaster_phone, email, password, "A", GCMRegistrar.getRegistrationId(this), "N");
 					new Thread(new Runnable() {
 					    @Override
 					    public void run() {    

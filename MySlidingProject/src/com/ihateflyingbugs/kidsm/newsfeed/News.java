@@ -23,7 +23,8 @@ public class News extends BaseItem {
 		SCHEDULE,
 		PHOTO,
 		BUSINFO,
-		MENTORY
+		MENTORY,
+		RECOMMENDED_MENTORY
 	}
 	
 	NEWSTYPE type;

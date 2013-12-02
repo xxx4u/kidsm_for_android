@@ -11,10 +11,12 @@ import com.localytics.android.LocalyticsSession;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -100,9 +102,34 @@ public class SimpleCamera extends Activity {
 			Uri uri = Uri.parse("file://" + path);
 			intent.setData(uri);
 			sendBroadcast(intent);
-			
-//			mPlayer.seekTo(0);
-//			mPlayer.start();
+
+
+			AssetFileDescriptor afd = getResources().openRawResourceFd(R.raw.shutter);
+			mPlayer.reset();
+			mPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+			try {
+				mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				mPlayer.prepare();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			mPlayer.start();
+
 			Toast.makeText(SimpleCamera.this, "사진 저장 완료 : " + path, 0).show();
 			mSurface.mCamera.startPreview();
 			

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="url">http://1.234.83.55:1050/</string>
+    <string name="url">http://kidsmentory.co.kr:1050/</string>
     <string name="image_url">http://static.kidsmentory.co.kr/photos/</string>
     <string name="default_profile_url">http://static.kidsmentory.co.kr/</string>
     <string name="profile_url">http://static.kidsmentory.co.kr/profile/</string>
@@ -88,6 +88,7 @@
     <string name="profile_seeclass">반 보기</string>
     <string name="profile_seefriend">친구보기</string>
     <string name="profile_addchildren">자녀 추가하기</string>
+    <string name="profile_addclass">반 추가하기</string>
     <string name="profile_manager">원장님</string>
     <string name="profile_teacher">선생님</string>
     <string name="news_text">님이 새로운 사진을 추가하였습니다.</string>
@@ -152,9 +153,11 @@
 	<string name="hint_manager_phone">휴대폰 번호</string>
 	<string name="hint_manager_orgname">유치원/어린이집</string>
 	<string name="hint_manager_orglocation">유치원/어린이집 주소</string>
+	<string name="hint_manager_specific_orglocation">상세 주소</string>
 	<string name="register_infotaker_invite_guide_manager">초대할 선생님을 모두 선택해주세요</string>
 	<string name="register_infotaker_invite_guide_not_manager">초대할 대상을 모두 선택해주세요</string>
 	<string name="guide_register_manager_program">키즈엠에서 제공하는 프로그램이 있으신가요?</string>
+	<string name="guide_recommeded_message">께서 멘토리를 추천하셨습니다.</string>
    	<string name="default_content_description"></string>
 	<string name="default_string">기본</string>
 	

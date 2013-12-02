@@ -16,7 +16,7 @@ public class RegisterClassMakeAdapter extends BaseAdapter {
 	Context context;
 	ArrayList<String> list;
 	
-	RegisterClassMakeAdapter(Context context, ArrayList<String> list) {
+	public RegisterClassMakeAdapter(Context context, ArrayList<String> list) {
 		mInflater = (LayoutInflater)context.getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
 		this.context = context;

@@ -161,7 +161,7 @@ public class ShowImageActivity extends NetworkActivity{
 			case 1:
 				//news.updateLayout();
 				//NewsfeedActivity.setNews(key, news);
-				finish();
+				//finish();
 				break;
 			}
 		}
@@ -215,9 +215,10 @@ public class ShowImageActivity extends NetworkActivity{
 			this.request_Scrap_delScrap(member_srl, member_scrap_srl, photo.photo_srl);
 	}
 	public void OnModify(View v) {
-//		Intent intent = new Intent(this, ModifyImageActivity.class);
-//		intent.putExtra("filepath", "filepath");
-//		startActivityForResult(intent, 1);
+		Intent intent = new Intent(this, ModifyImageActivity.class);
+		intent.putExtra("photo_url", getString(R.string.image_url)+getIntent().getStringExtra("photo_url"));
+		intent.putExtra("photo_srl", getIntent().getStringExtra("photo_srl"));
+		startActivityForResult(intent, 1);
 		//Toast.makeText(this, "업데이트 예정입니다^^ 10월 13일", Toast.LENGTH_LONG).show();
 	}
 	
@@ -401,7 +402,6 @@ public class ShowImageActivity extends NetworkActivity{
 								likeList.add(likeMemberData[i]);
 						}
 					}
-					
 					String member_srl = "";
 					switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
 					case 'P':
@@ -411,6 +411,19 @@ public class ShowImageActivity extends NetworkActivity{
 					case 'M':
 						member_srl = SlidingMenuMaker.getProfile().member_srl;
 						break;
+					}
+					if( photo_member_srl.equals(member_srl)) {
+						new Thread(new Runnable() {
+						    @Override
+						    public void run() {    
+						        runOnUiThread(new Runnable(){
+						            @Override
+						             public void run() {
+										findViewById(R.id.image_modify).setVisibility(View.VISIBLE);
+						            }
+						        });
+						    }
+						}).start();
 					}
 					updateLayout();
 					this.request_Timeline_getTimelineComments(photo_timeline_srl, 1, 100000);

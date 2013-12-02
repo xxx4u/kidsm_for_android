@@ -63,8 +63,10 @@ public class RegisterChildAdapter extends BaseAdapter {
 
 		TextView txt = (TextView) convertView.findViewById(R.id.register_info_namechecker_name);
 		
-		if( arSrc.get(position).parent_srl.equals("0") )
+		if( arSrc.get(position).getParent_srl().equals("0") ) {
 			txt.setText(arSrc.get(position).getName());
+			txt.setTextColor(Color.BLACK);
+		}
 		else {
 			txt.setText(arSrc.get(position).getName() + "(부모있음)");
 			txt.setTextColor(Color.LTGRAY);
@@ -73,7 +75,7 @@ public class RegisterChildAdapter extends BaseAdapter {
 		convertView.setTag(position);
 		CheckBox cb = (CheckBox)convertView.findViewById(R.id.register_info_namechecker_checker);
 		cb.setTag(position);
-		cb.setChecked(arSrc.get(position).isChecked);
+		cb.setChecked(arSrc.get(position).isChecked());
 		
 		return convertView;
 	}

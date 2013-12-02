@@ -115,7 +115,7 @@ public class GalleryAdapter extends BaseAdapter {
         case NORMAL:
 
         	 
-            if( albumList.get(position).needSetting )
+            if( albumList.get(position).album_type.equals("D") == false && albumList.get(position).needSetting )
             	gridView.findViewById(R.id.gallery_settings).setVisibility(View.VISIBLE);
             else
             	gridView.findViewById(R.id.gallery_settings).setVisibility(View.INVISIBLE);

@@ -116,7 +116,8 @@
 	                android:layout_centerVertical="true"
 	                android:layout_marginRight="10dp"
 	                android:background="@drawable/general_photo_zoom_edit_btnset"
-	                android:onClick="OnModify" />
+	                android:onClick="OnModify"
+	                android:visibility="invisible" />
 
         </RelativeLayout>
 

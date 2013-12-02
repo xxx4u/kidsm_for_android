@@ -395,7 +395,16 @@ public class NewsfeedFragment extends NetworkFragment {
 			Log.d("NewsfeedFragment", response);
 			
 			if(response.startsWith("<!DOCTYPE html>")) {
-				if(uri.equals("Mentor/getMentoringArticle")) {
+				if(uri.equals("Calender/getCalender")) {
+					notifyDataSetChanged();
+				}
+				else if(uri.equals("Album/getPhoto")) {
+					notifyDataSetChanged();
+				}
+				else if(uri.equals("Mentor/getMentoringArticle")) {
+					notifyDataSetChanged();
+				}
+				else if(uri.equals("Shuttlebus/getShuttlebus")) {
 					notifyDataSetChanged();
 				}
 				return;
@@ -429,14 +438,38 @@ public class NewsfeedFragment extends NetworkFragment {
 					final String timeline_created = dataObj.getString("timeline_created");
 					switch(timeline_type.charAt(0)) {
 					case 'S':
-						newNewsList.add(new ScheduleNews(makeIdentifier(timeline_type, timeline_target_srl), timeline_srl, timeline_member_srl, timeline_like, timeline_created));
-						this.request_Calender_getCalender(timeline_target_srl);
+						boolean isScheduleAlreadyIn = false;
+						for(int j = 0; j < newNewsList.size(); j++) {
+							if( newNewsList.get(j).identifier != null && newNewsList.get(j).identifier.equals(makeIdentifier(""+timeline_type.charAt(0), timeline_target_srl))) {
+								isScheduleAlreadyIn = true;
+								break;
+							}
+						}
+						if(isScheduleAlreadyIn) {
+							notifyDataSetChanged();
+						}
+						else {
+							newNewsList.add(new ScheduleNews(makeIdentifier(timeline_type, timeline_target_srl), timeline_srl, timeline_member_srl, timeline_like, timeline_created));
+							this.request_Calender_getCalender(timeline_target_srl);
+						}
 						break;
 					case 'P':
-						newNewsList.add(new PhotoNews(makeIdentifier(timeline_type, timeline_target_srl), timeline_srl, timeline_member_srl, timeline_like, timeline_created));
-						this.request_Album_getPhoto(timeline_target_srl);
-						this.request_Timeline_getTimelineComments(timeline_srl, 1, 100000);
-						this.request_Scrap_getScrapCount(timeline_target_srl, "P");
+						boolean isPhotoAlreadyIn = false;
+						for(int j = 0; j < newNewsList.size(); j++) {
+							if( newNewsList.get(j).identifier != null && newNewsList.get(j).identifier.equals(makeIdentifier(""+timeline_type.charAt(0), timeline_target_srl))) {
+								isPhotoAlreadyIn = true;
+								break;
+							}
+						}
+						if(isPhotoAlreadyIn) {
+							notifyDataSetChanged();
+						}
+						else {
+							newNewsList.add(new PhotoNews(makeIdentifier(timeline_type, timeline_target_srl), timeline_srl, timeline_member_srl, timeline_like, timeline_created));
+							this.request_Album_getPhoto(timeline_target_srl);
+							this.request_Timeline_getTimelineComments(timeline_srl, 1, 100000);
+							this.request_Scrap_getScrapCount(timeline_target_srl, "P");
+						}
 						break;
 					case 'B':
 						newNewsList.add(new BusinfoNews(makeIdentifier(timeline_type, timeline_target_srl), timeline_srl, timeline_member_srl, timeline_like, timeline_created));
@@ -489,7 +522,7 @@ public class NewsfeedFragment extends NetworkFragment {
 						case 'M':
 							isMentoryAlreadyIn = false;
 							for(int j = 0; j < newNewsList.size(); j++) {
-								if( newNewsList.get(j).identifier != null && newNewsList.get(j).identifier.equals(makeIdentifier(""+timeline_type.charAt(1), timeline_target_srl.split("/")[1]))) {
+								if( newNewsList.get(j).identifier != null && newNewsList.get(j).identifier.equals(makeIdentifier("D"+timeline_type.charAt(1), timeline_target_srl.split("/")[1]))) {
 									isMentoryAlreadyIn = true;
 									break;
 								}
@@ -498,13 +531,16 @@ public class NewsfeedFragment extends NetworkFragment {
 								notifyDataSetChanged();
 							}
 							else {
-								MentoryNews mentoryNews = new MentoryNews(makeIdentifier(""+timeline_type.charAt(1), timeline_target_srl.split("/")[1]), timeline_srl, timeline_member_srl, timeline_like, timeline_created);
-								mentoryNews.setTimeline_type(timeline_type);
-								newNewsList.add(mentoryNews);
+								RecommendedMentoryNews recommendedMentoryNews = new RecommendedMentoryNews(makeIdentifier("D"+timeline_type.charAt(1), timeline_target_srl.split("/")[1]), timeline_srl, timeline_member_srl, timeline_like, timeline_created);
+								recommendedMentoryNews.setTimeline_type(timeline_type);
+								newNewsList.add(recommendedMentoryNews);
 								this.request_Mentor_getMentoringArticle(timeline_target_srl.split("/")[1]);
 							}
 							break;
 						}
+						break;
+					case 'X':
+						notifyDataSetChanged();
 						break;
 					}
 				}
@@ -583,14 +619,25 @@ public class NewsfeedFragment extends NetworkFragment {
 				String mentoring_share = jsonObj.getString("mentoring_share");
 				
 				for(int i = 0; i < newNewsList.size(); i++) {
-					if( newNewsList.get(i).identifier != null && newNewsList.get(i).identifier.equals(makeIdentifier("M", mentoring_srl))) {
-						((MentoryNews)newNewsList.get(i)).setMentoryNews(mentoring_srl, mentoring_category_srl, mentoring_type, mentoring_subject, 
-								mentoring_text, mentoring_created, mentoring_updated, mentoring_mentor_srl, mentoring_like, mentoring_share); 
-
-						NewsfeedFragment.this.request_Mentor_getComments(mentoring_srl, 1, 100000);
-						NewsfeedFragment.this.request_Scrap_getScrapCount(mentoring_srl, "M");
-						notifyDataSetChanged();
-						break;
+					if( newNewsList.get(i).identifier != null ) {
+						if( newNewsList.get(i).identifier.equals(makeIdentifier("M", mentoring_srl))) {
+							((MentoryNews)newNewsList.get(i)).setMentoryNews(mentoring_srl, mentoring_category_srl, mentoring_type, mentoring_subject, 
+									mentoring_text, mentoring_created, mentoring_updated, mentoring_mentor_srl, mentoring_like, mentoring_share); 
+	
+							NewsfeedFragment.this.request_Mentor_getComments(mentoring_srl, 1, 100000);
+							NewsfeedFragment.this.request_Scrap_getScrapCount(mentoring_srl, "M");
+							notifyDataSetChanged();
+							break;
+						}
+						else if( newNewsList.get(i).identifier.equals(makeIdentifier("DM", mentoring_srl))) {
+							((MentoryNews)newNewsList.get(i)).setMentoryNews(mentoring_srl, mentoring_category_srl, mentoring_type, mentoring_subject, 
+									mentoring_text, mentoring_created, mentoring_updated, mentoring_mentor_srl, mentoring_like, mentoring_share); 
+	
+							NewsfeedFragment.this.request_Mentor_getComments(mentoring_srl, 1, 100000);
+							NewsfeedFragment.this.request_Scrap_getScrapCount(mentoring_srl, "M");
+							NewsfeedFragment.this.request_Member_getMember(newNewsList.get(i).timeline_member_srl);
+							break;
+						}
 					}
 				}
 				//notifyDataSetChanged();
@@ -644,6 +691,18 @@ public class NewsfeedFragment extends NetworkFragment {
 								}
 								else
 									photoNews.photo_member_picture_srl = member_picture;
+							}
+						}
+						else if(newNewsList.get(i).type == NEWSTYPE.RECOMMENDED_MENTORY) {
+							RecommendedMentoryNews recommendedMentoryNews = (RecommendedMentoryNews) newNewsList.get(i);
+							if(recommendedMentoryNews.timeline_member_srl.equals(member_srl)) {
+								if( member_type.charAt(0) == 'T' ) {
+									recommendedMentoryNews.setTimeline_member_name(member_name+" ¼±»ý´Ô");
+								}
+								else if( member_type.charAt(0) == 'M' ) {
+									recommendedMentoryNews.setTimeline_member_name(member_name+" ¿øÀå ¼±»ý´Ô");
+								}
+								//notifyDataSetChanged();
 							}
 						}
 					}

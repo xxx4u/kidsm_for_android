@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/modifyphoto_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/general_bg"
@@ -10,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal" >
 
         <RadioButton
@@ -18,9 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:checked="true"
             android:text="@string/gallery_seeallfriend"
-            android:textColor="#63C3B1"
             android:textSize="12sp" />
 
         <RadioButton
@@ -29,7 +33,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:checked="true"
             android:text="@string/gallery_seetaggedfriend"
+            android:textColor="#63C3B1"
             android:textSize="12sp" />
 
         <RadioButton
@@ -43,30 +49,75 @@
 
     </RadioGroup>
 
-    <ImageView
-	    android:id="@+id/modifyphoto_selected"
-	    android:layout_width="match_parent"
-	    android:layout_height="300dp"
-	    android:layout_marginLeft="15dp"
-	    android:layout_marginRight="15dp"
-	    android:layout_marginTop="15dp"
-	    android:background="#dddddd"
-	    android:scaleType="centerCrop"
-	    android:src="@drawable/ic_launcher" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="5dp" >
+	
+		<ImageView
+		    android:id="@+id/modifyphoto_selected"
+		    android:layout_width="match_parent"
+		    android:layout_height="300dp"
+		    android:layout_marginLeft="15dp"
+		    android:layout_marginRight="15dp"
+		    android:background="#dddddd"
+		    android:onClick="OnSelectImage"
+		    android:scaleType="centerCrop"
+		    android:src="@drawable/ic_launcher" />
+	
+		</RelativeLayout>
+	
+		<RelativeLayout
+		    android:id="@+id/modifyphoto_tagpage"
+		    android:layout_width="match_parent"
+		    android:layout_height="300dp"
+		    android:layout_marginLeft="15dp"
+		    android:layout_marginRight="15dp"
+		    android:layout_marginTop="5dp"
+		    android:background="@drawable/photo_edit_tag_list_bg" >
+	
+			<ListView
+			    android:id="@+id/modifyphoto_taglist"
+			    android:layout_width="match_parent"
+			    android:layout_height="240dp"
+			    android:layout_marginBottom="10dp"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginTop="10dp" >
+	
+			</ListView>
+	
+			<Button
+			    android:id="@+id/button1"
+			    android:layout_width="match_parent"
+			    android:layout_height="40dp"
+			    android:layout_alignParentBottom="true"
+			    android:layout_centerHorizontal="true"
+			    android:layout_margin="5dp"
+			    android:alpha="0.8"
+			    android:onClick="OnFinishTagging"
+			    android:text="@string/finish"
+			    android:textColor="@android:color/white"
+			    android:textSize="14sp" />
+	
+		</RelativeLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/modifyphoto_tagstatepage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="invisible" >
+        android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal" >
 
             <ImageView
@@ -80,24 +131,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="7dp"
                 android:gravity="center_vertical"
                 android:hint="@string/gallery_tagmessage"
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/modifyphoto_tagapplyall"
-            style="@style/KidsmCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
-            android:onClick="OnApplyAllClick"
-            android:text="@string/tag_all"
-            android:textSize="14sp" />
-
     </LinearLayout>
 
+    <Button
+        android:id="@+id/modifyphoto_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/photo_edit_delete_btnset"
+        android:onClick="OnDeletePhoto"
+        android:text="@string/delete_photo" />
+
+    <EditText
+        android:id="@+id/modifyphoto_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@android:color/white"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="사진과 관련된 말을 입력해주세요."
+        android:inputType="textMultiLine"
+        android:minLines="5"
+        android:padding="10dp"
+        android:textSize="12sp"
+        android:visibility="gone" >
+
+        <requestFocus />
+    </EditText>
+
 </LinearLayout>
+</ScrollView>

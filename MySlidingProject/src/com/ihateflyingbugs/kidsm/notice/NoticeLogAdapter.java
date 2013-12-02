@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ihateflyingbugs.kidsm.ImageLoader;
@@ -67,7 +68,7 @@ public class NoticeLogAdapter extends BaseAdapter {
 		// 최초 호출이면 항목 뷰를 생성한다. 
 		// 타입별로 뷰를 다르게 디자인할 수 있으며 높이가 달라도 상관없다.
 		if (convertView == null) {
-			switch(arSrc.get(position).type) {
+			switch(arSrc.get(position).getType()) {
 			case NORMAL:
 				convertView = mInflater.inflate(R.layout.notice_textonly, parent, false);
 				break;
@@ -76,20 +77,38 @@ public class NoticeLogAdapter extends BaseAdapter {
 				break;
 			}
 		}
-
+		if( arSrc.get(position).getMember_picture() != null && arSrc.get(position).getMember_picture().isEmpty() == false ) {
+			ImageView profilePicture = null;
+			switch(arSrc.get(position).getType()) {
+			case NORMAL:
+				profilePicture = (ImageView) convertView.findViewById(R.id.notice_profile_picture);
+				break;
+			case PHOTO:
+				profilePicture = (ImageView) convertView.findViewById(R.id.photonotice_profile_picture);
+				break;
+			}
+			
+			if( profilePicture != null ) {
+				if( arSrc.get(position).getMember_picture().startsWith("profile") )
+					imageLoader.DisplayCroppedImage(context.getString(R.string.default_profile_url)+arSrc.get(position).getMember_picture(), profilePicture);
+				else
+					imageLoader.DisplayCroppedImage(context.getString(R.string.profile_url)+arSrc.get(position).getMember_picture(), profilePicture);
+			}
+		}
+		
 		TextView txt;
-		switch(arSrc.get(position).type) {
+		switch(arSrc.get(position).getType()) {
 		case NORMAL:
 			txt = (TextView)convertView.findViewById(R.id.notice_message);
-			txt.setText(arSrc.get(position).message);
+			txt.setText(arSrc.get(position).getMessage());
 			txt = (TextView)convertView.findViewById(R.id.notice_timelog);
-			txt.setText(makeTimeLog(arSrc.get(position).ticker));
+			txt.setText(makeTimeLog(arSrc.get(position).getTicker()));
 			break;
 		case PHOTO:
 			txt = (TextView)convertView.findViewById(R.id.photonotice_message);
-			txt.setText(arSrc.get(position).message);
+			txt.setText(arSrc.get(position).getMessage());
 			txt = (TextView)convertView.findViewById(R.id.photonotice_timelog);
-			txt.setText(makeTimeLog(arSrc.get(position).ticker));
+			txt.setText(makeTimeLog(arSrc.get(position).getTicker()));
 			break;
 		}
 		

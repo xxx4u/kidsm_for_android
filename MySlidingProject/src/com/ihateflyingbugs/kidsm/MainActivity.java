@@ -103,6 +103,10 @@ public class MainActivity extends NetworkActivity {
 	private Uri profileImageCaptureUri;
 	Bitmap profilePhoto;
 	
+	int requestLogDataCounter;
+	
+	int modifyMemberPictureTarget;
+	
 	private LocalyticsSession localyticsSession;
 	
 	public static MainActivity getMainActivity() {
@@ -190,7 +194,8 @@ public class MainActivity extends NetworkActivity {
     	msgCount = Integer.parseInt(prefs.getString(""+maker.getProfile().member_srl+"_msgCount", "0"));
 		if(msgCount == 0)
 			return;
-		
+
+		requestLogDataCounter = msgCount;
 		for(int i = msgCount-1; i >= 0; i--) {
 			String title = prefs.getString(maker.getProfile().member_srl+"title"+i, "");
 			String msg = prefs.getString(maker.getProfile().member_srl+"msg"+i, "");
@@ -202,9 +207,11 @@ public class MainActivity extends NetworkActivity {
 				switch( type.charAt(0) ) {
 				case 'N':
 					noticeList.add(new NoticeLog(NOTICE_TYPE.NORMAL, title, msg, ticker, from_srl));
+					this.request_Member_getMember(from_srl);
 					break;
 				case 'P':
 					photoNoticeList.add(new NoticeLog(NOTICE_TYPE.PHOTO, title, msg, ticker, from_srl));
+					this.request_Member_getMember(from_srl);
 					break;
 				}
 			}
@@ -303,7 +310,14 @@ public class MainActivity extends NetworkActivity {
 				if(extras != null) {
 					profilePhoto = extras.getParcelable("data");
 					//((ImageView)findViewById(R.id.mainpicture)).setImageBitmap(ImageMaker.getCroppedBitmap(profilePhoto));
-					this.request_Member_modMemberPicture(maker.getProfile().member_srl, profilePhoto);
+					switch( modifyMemberPictureTarget ) {
+					case 0:
+						this.request_Member_modMemberPicture(maker.getProfile().member_srl, profilePhoto);
+						break;
+					default:
+						this.request_Member_modMemberPicture(maker.getProfile().getChildren(modifyMemberPictureTarget-1).student_member_srl, profilePhoto);
+						break;
+					}
 				}
 	
 				// 임시 파일 삭제
@@ -601,6 +615,14 @@ public class MainActivity extends NetworkActivity {
 	}
 	
 	public void OnSetProfileImage(View v) {
+		switch(v.getId()) {
+		case R.id.profile_picture:
+			this.modifyMemberPictureTarget = 0;
+			break;
+		case R.id.child_mainpicture:
+			this.modifyMemberPictureTarget = Integer.parseInt(v.getTag().toString())+1;
+			break;
+		}
 		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.profile_image_mode, android.R.layout.simple_list_item_1);
 		ListView listView = new ListView(this);
 		listView.setAdapter(arrayAdapter);
@@ -1050,82 +1072,118 @@ public class MainActivity extends NetworkActivity {
 					case 'M':
 						break;
 					}
-					switch(maker.getProfile().member_type.charAt(0)) {
-					case 'P':
-						switch(member_type.charAt(0)) {
+					if(requestLogDataCounter > 0) {
+						for(int i = 0; i < noticeList.size(); i++) {
+							if( noticeList.get(i).getMember_srl().equals(member_srl) ) {
+								noticeList.get(i).setMember_picture(member_picture);
+							}
+						}
+						for(int i = 0; i < photoNoticeList.size(); i++) {
+							if( photoNoticeList.get(i).getMember_srl().equals(member_srl) ) {
+								photoNoticeList.get(i).setMember_picture(member_picture);
+							}
+						}
+					}
+					else {
+						switch(maker.getProfile().member_type.charAt(0)) {
 						case 'P':
-							for(int i = 0; i < friendList.size(); i++) {
-								if( member_srl.equals(friendList.get(i).getName()) ) {
-									friendList.get(i).setChildname(member_name);
-									if(student_parent_srl.equals("0")) {
-										friendList.get(i).setName("부모미가입");
-										if( ++requestGetParentCounter == this.friendInClassList.size() + this.requestList.size() + this.recommendedFriendList.size()) {
-											new Thread(new Runnable() {
-											    @Override
-											    public void run() {    
-											        runOnUiThread(new Runnable(){
-											            @Override
-											             public void run() {
-											            	maker.changeFragment(7);
-															friend.setFriendList(friendList);
-											            }
-											        });
-											    }
-											}).start();
+							switch(member_type.charAt(0)) {
+							case 'P':
+								for(int i = 0; i < friendList.size(); i++) {
+									if( member_srl.equals(friendList.get(i).getName()) ) {
+										friendList.get(i).setChildname(member_name);
+										if(student_parent_srl.equals("0")) {
+											friendList.get(i).setName("부모미가입");
+											if( ++requestGetParentCounter == this.friendInClassList.size() + this.requestList.size() + this.recommendedFriendList.size()) {
+												new Thread(new Runnable() {
+												    @Override
+												    public void run() {    
+												        runOnUiThread(new Runnable(){
+												            @Override
+												             public void run() {
+												            	maker.changeFragment(7);
+																friend.setFriendList(friendList);
+												            }
+												        });
+												    }
+												}).start();
+											}
+										}
+										else {
+											friendList.get(i).setName(parent_srl);
+											this.request_Member_getParent(parent_srl);
 										}
 									}
-									else {
-										friendList.get(i).setName(parent_srl);
-										this.request_Member_getParent(parent_srl);
-									}
 								}
-							}
-							break;
-						case 'S':
-							for(int i = 0; i < friendList.size(); i++) {
-								if( member_srl.equals(friendList.get(i).getName()) ) {
-									friendList.get(i).setChildname(member_name);
-									if(student_parent_srl.equals("0")) {
-										friendList.get(i).setName("부모미가입");
-										if( ++requestGetParentCounter == this.friendInClassList.size() + this.requestList.size() + this.recommendedFriendList.size()) {
-											new Thread(new Runnable() {
-											    @Override
-											    public void run() {    
-											        runOnUiThread(new Runnable(){
-											            @Override
-											             public void run() {
-											            	maker.changeFragment(7);
-															friend.setFriendList(friendList);
-											            }
-											        });
-											    }
-											}).start();
+								break;
+							case 'S':
+								for(int i = 0; i < friendList.size(); i++) {
+									if( member_srl.equals(friendList.get(i).getName()) ) {
+										friendList.get(i).setChildname(member_name);
+										if(student_parent_srl.equals("0")) {
+											friendList.get(i).setName("부모미가입");
+											if( ++requestGetParentCounter == this.friendInClassList.size() + this.requestList.size() + this.recommendedFriendList.size()) {
+												new Thread(new Runnable() {
+												    @Override
+												    public void run() {    
+												        runOnUiThread(new Runnable(){
+												            @Override
+												             public void run() {
+												            	maker.changeFragment(7);
+																friend.setFriendList(friendList);
+												            }
+												        });
+												    }
+												}).start();
+											}
+										}
+										else {
+											friendList.get(i).setName(student_parent_srl);
+											this.request_Member_getParent(student_parent_srl);
 										}
 									}
-									else {
-										friendList.get(i).setName(student_parent_srl);
-										this.request_Member_getParent(student_parent_srl);
-									}
 								}
+								break;
+							case 'T':
+								break;
+							case 'M':
+								break;
 							}
-							break;
-						case 'T':
-							break;
-						case 'M':
+							
 							break;
 						}
-						
-						break;
 					}
 				}
 				else if(uri.equals("Member/modMemberPicture") ) {
+					String nativeData = jsonObj.getString("data");
+					jsonObj = new JSONObject(nativeData);
+					final String member_picture = jsonObj.getString("member_picture");
 					new Thread(new Runnable() {
 					    @Override
 					    public void run() {    
 					        runOnUiThread(new Runnable(){
 					            @Override
 					             public void run() {
-									((ImageView)findViewById(R.id.mainpicture)).setImageBitmap(ImageMaker.getCroppedBitmap(profilePhoto));
+					            	switch(modifyMemberPictureTarget) {
+					            	case 0:
+										((ImageView)findViewById(R.id.mainpicture)).setImageBitmap(ImageMaker.getCroppedBitmap(profilePhoto));
+					            		break;
+					            	default:
+					            		new Thread(new Runnable() {
+										    @Override
+										    public void run() {    
+										        runOnUiThread(new Runnable(){
+										            @Override
+										             public void run() {
+														SlidingMenuMaker.getProfile().getChildren(modifyMemberPictureTarget-1).student_picture = member_picture;
+														SlidingMenuMaker.getProfile().getChildren(modifyMemberPictureTarget-1).layout = null;
+														maker.menuChildrenAdapter.notifyDataSetChanged();
+										            }
+										        });
+										    }
+										}).start();
+										break;
+					            	}
 					            }
 					        });
 					    }

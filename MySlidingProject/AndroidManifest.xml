@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ihateflyingbugs.kidsm"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="106"
+    android:versionName="1.06d" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -76,7 +76,7 @@
         <activity android:name="com.ihateflyingbugs.kidsm.schedule.AddScheduleActivity" android:label="@string/addscheduleactivity" android:screenOrientation="portrait"></activity>
         <activity android:name="com.ihateflyingbugs.kidsm.mentory.SeeMentoryActivity" android:label="@string/seementoryeactivity" android:screenOrientation="portrait"></activity>
         <activity android:name="com.ihateflyingbugs.kidsm.uploadphoto.SimpleCamera" android:label="@string/simplecamera" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-        <activity android:name="com.ihateflyingbugs.kidsm.menu.AddChildActivity" android:label="@string/addchildactivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.ihateflyingbugs.kidsm.menu.AddComponentActivity" android:label="@string/addchildactivity" android:screenOrientation="portrait"></activity>
         <activity android:name="com.ihateflyingbugs.kidsm.menu.AddChildInfoTakerActivity" android:label="@string/addchildactivity" android:screenOrientation="portrait"></activity>
         <activity android:name="com.ihateflyingbugs.kidsm.DoctypeErrorActivity" android:label="@string/doctypeerroractivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar"></activity>
         <meta-data android:name="LOCALYTICS_APP_KEY" android:value="57a3da8eb614e04bc056f79-c3bce004-49e6-11e3-15c8-004a77f8b47f"/>

@@ -10,26 +10,26 @@ import android.os.Parcelable;
 import android.view.View;
 
 public class RegisterClassItem extends BaseItem implements Parcelable {
-	String class_srl;
-	ArrayList<RegisterChildItem> childList;
+	private String class_srl;
+	private ArrayList<RegisterChildItem> childList;
 	View layout;
 	
 	public RegisterClassItem(String class_srl, String name) {
-		this.class_srl = class_srl;
-		this.childList = new ArrayList<RegisterChildItem>();
+		this.setClass_srl(class_srl);
+		this.setChildList(new ArrayList<RegisterChildItem>());
 		this.name = name;
 	}
 	
 	public void addChild(RegisterChildItem item) {
-		childList.add(item);
+		getChildList().add(item);
 	}
 	
     // Parcelling part
     public RegisterClassItem(Parcel in){
-    	class_srl = in.readString();
+    	setClass_srl(in.readString());
     	name = in.readString();
-    	childList = new ArrayList<RegisterChildItem>();
-    	in.readTypedList(childList, RegisterChildItem.CREATOR);
+    	setChildList(new ArrayList<RegisterChildItem>());
+    	in.readTypedList(getChildList(), RegisterChildItem.CREATOR);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -49,8 +49,24 @@ public class RegisterClassItem extends BaseItem implements Parcelable {
 	}
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(class_srl);
+		dest.writeString(getClass_srl());
 		dest.writeString(name);
-		dest.writeTypedList(childList);	
+		dest.writeTypedList(getChildList());	
+	}
+
+	public String getClass_srl() {
+		return class_srl;
+	}
+
+	public void setClass_srl(String class_srl) {
+		this.class_srl = class_srl;
+	}
+
+	public ArrayList<RegisterChildItem> getChildList() {
+		return childList;
+	}
+
+	public void setChildList(ArrayList<RegisterChildItem> childList) {
+		this.childList = childList;
 	}
 }

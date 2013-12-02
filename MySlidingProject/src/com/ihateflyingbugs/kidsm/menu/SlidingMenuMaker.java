@@ -52,6 +52,8 @@ public class SlidingMenuMaker {
 	ArrayList<MenuDoButton> doListItem2;
 	View dolistlayout;
 	ImageLoader imageLoader;
+	public MenuChildrenAdapter menuChildrenAdapter;
+	public MenuClassAdapter menuClassAdapter;
 	
 	public static Profile getProfile() {
 		return profile;
@@ -154,7 +156,7 @@ public class SlidingMenuMaker {
 			txt.setText(profile.childrenList.get(0).getOrganizationName());
 			txt = (TextView)activity.findViewById(R.id.profile_class);
 			txt.setText(profile.childrenList.get(0).getClassName());
-			MenuChildrenAdapter menuChildrenAdapter = new MenuChildrenAdapter(activity, profile.childrenList);
+			menuChildrenAdapter = new MenuChildrenAdapter(activity, profile.childrenList);
 			ListView list3 = (ListView)activity.findViewById(R.id.profile_childlist);
 			list3.setAdapter(menuChildrenAdapter);
 			break;
@@ -169,7 +171,7 @@ public class SlidingMenuMaker {
 			txt.setText(profile.getMember_name());
 			txt = (TextView)activity.findViewById(R.id.profile_organization);
 			txt.setText(profile.org_name);
-			MenuClassAdapter menuClassAdapter = new MenuClassAdapter(activity, profile.classList);
+			menuClassAdapter = new MenuClassAdapter(activity, profile.classList);
 			ListView list4 = (ListView)activity.findViewById(R.id.profile_childlist);
 			list4.setAdapter(menuClassAdapter);
 			break;
@@ -188,6 +190,14 @@ public class SlidingMenuMaker {
 	
 	public void OnSeeChildren(View v) {
 		if( profileDrawer.isOpened() == false ) {
+			switch(profile.member_type.charAt(0)) {
+			case 'P':
+				menuChildrenAdapter.notifyDataSetChanged();
+				break;
+			case 'M':
+				menuClassAdapter.notifyDataSetChanged();
+				break;
+			}
 			((Button)v).setBackgroundResource(R.drawable.drawer_btnset2);
 			dolistlayout.setAlpha(0.2f);
 			profileDrawer.animateOpen();
@@ -286,6 +296,8 @@ public class SlidingMenuMaker {
 //			}
 //		})
 //		.
+		
+		
 		switch(profile.member_type.charAt(0)) {
 		case 'P':
 			((Button)activity.findViewById(R.id.profile_seechildren)).setText(R.string.profile_seechildren);
@@ -297,7 +309,7 @@ public class SlidingMenuMaker {
 		dolistlayout.setAlpha(1.0f);
 		profileDrawer.animateClose();
 		
-		Intent intent = new Intent(activity, AddChildActivity.class);
+		Intent intent = new Intent(activity, AddComponentActivity.class);
 		activity.startActivity(intent);
 	}
 }

@@ -85,6 +85,9 @@ public class NewsAdapter extends BaseAdapter {
 		case MENTORY:
 			res = R.layout.mentory_row;
 			break;
+		case RECOMMENDED_MENTORY:
+			res = R.layout.news_recommended_mentory;
+			break;
 		}
 		if (arSrc.get(position).layout == null) {
 			arSrc.get(position).layout = mInflater.inflate(res, parent, false);
@@ -302,6 +305,109 @@ public class NewsAdapter extends BaseAdapter {
 			}
 			else {
 				//Log.d("MentoryFragment", mentoryNews.getMentoring_category_srl());
+			}
+			break;
+		case RECOMMENDED_MENTORY:
+			RecommendedMentoryNews recommendedMentoryNews = (RecommendedMentoryNews) arSrc.get(position);
+			txt = (TextView)arSrc.get(position).layout.findViewById(R.id.mentory_timelog);
+			txt.setText(Utils.makeTimeLog(recommendedMentoryNews.getMentoring_created()));
+			txt = (TextView)recommendedMentoryNews.layout.findViewById(R.id.mentory_numoflike);
+			txt.setText(""+recommendedMentoryNews.likeMemberList.size());
+			txt = (TextView)recommendedMentoryNews.layout.findViewById(R.id.mentory_numofreply);
+			txt.setText(""+recommendedMentoryNews.commentList.size());
+			txt = (TextView)recommendedMentoryNews.layout.findViewById(R.id.mentory_numofscrap);
+			txt.setText(""+recommendedMentoryNews.scrapCount);
+			txt = (TextView)recommendedMentoryNews.layout.findViewById(R.id.tv_mentory_article_title);
+			txt.setText(recommendedMentoryNews.getMentoring_subject());
+			
+			recommendedMentoryNews.layout.findViewById(R.id.mentory_like).setTag(position);
+			recommendedMentoryNews.layout.findViewById(R.id.mentory_reply).setTag(position);
+			recommendedMentoryNews.layout.findViewById(R.id.mentory_scrap).setTag(position);
+			recommendedMentoryNews.layout.findViewById(R.id.imagebtn_mentory_picture).setTag(position);
+			
+			member_srl = "";
+			switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
+			case 'P':
+				member_srl = SlidingMenuMaker.getProfile().getCurrentChildren().student_member_srl;
+				break;
+			case 'T':
+			case 'M':
+				member_srl = SlidingMenuMaker.getProfile().member_srl;
+				break;
+			}
+			txt = (TextView)recommendedMentoryNews.layout.findViewById(R.id.mentory_liketext);
+			final CheckBox cblike3 = (CheckBox) recommendedMentoryNews.layout.findViewById(R.id.mentory_like_animation);
+			if(recommendedMentoryNews.likeMemberList.contains(member_srl)) {
+				txt.setText(R.string.news_likecancel);
+				new Handler().postDelayed(new Runnable() { 
+			        public void run() {
+						cblike3.setChecked(true);
+			        } 
+			    }, 100);
+			}
+			else {
+				txt.setText(R.string.news_like);
+				cblike3.setChecked(false);
+			}
+			
+			txt = (TextView)recommendedMentoryNews.layout.findViewById(R.id.mentory_scraptext);
+			final CheckBox cbscrap3 = (CheckBox) recommendedMentoryNews.layout.findViewById(R.id.mentory_scrap_animation);
+			if(recommendedMentoryNews.member_scrap_srl.isEmpty() == false) {
+				txt.setText(R.string.news_donescrap);
+				new Handler().postDelayed(new Runnable() { 
+			        public void run() {
+						cbscrap3.setChecked(true);
+			        } 
+			    }, 100);
+			}
+			else {
+				txt.setText(R.string.news_scrap);
+				cbscrap3.setChecked(false);
+			}
+			
+			if( recommendedMentoryNews.getMentoring_text() != null && recommendedMentoryNews.getMentoring_text().isEmpty() == false &&
+					recommendedMentoryNews.getMentoring_text().contains("<img src=") ) {
+				int startIndex = recommendedMentoryNews.getMentoring_text().indexOf("<img src=") + 10;
+				String image_url = recommendedMentoryNews.getMentoring_text().substring(startIndex).split("\"")[0];
+				imageLoader.DisplayImage(image_url, (ImageView)recommendedMentoryNews.layout.findViewById(R.id.imagebtn_mentory_picture));
+			}
+			/* !!!!!!!!!!!!!!!!!!!!!!! */ 
+			/* !!! 카테고리 상수들 향후 서버에서 받아온 값 기준으로 수정 필요!!!! */
+			/* !!!!!!!!!!!!!!!!!!!!!!! */
+			ImageView categoryIcon2 = (ImageView)recommendedMentoryNews.layout.findViewById(R.id.imgbtn_mentory_category);
+			TextView tvMentoryCategory2 = (TextView)recommendedMentoryNews.layout.findViewById(R.id.tv_mentory_category);
+
+			//Log.d("MentoryFragment", arSrc.get(pos).getMentoring_category_srl().substring(0,3));
+			if(recommendedMentoryNews.getMentoring_category_srl() != null && recommendedMentoryNews.getMentoring_category_srl().isEmpty() == false && 
+					recommendedMentoryNews.getMentoring_category_srl().length() > 3) {
+				if(recommendedMentoryNews.getMentoring_category_srl().substring(0,3).equals("100") || recommendedMentoryNews.getMentoring_category_srl().substring(0,3).equals("110") || recommendedMentoryNews.getMentoring_category_srl().substring(0,3).equals("111")) {
+					categoryIcon2.setBackground(recommendedMentoryNews.layout.getResources().getDrawable(R.drawable.mento_icon_edu));
+					tvMentoryCategory2.setText("교육멘토리");
+				}
+				else if(recommendedMentoryNews.getMentoring_category_srl().substring(0,3).equals("200")) {
+					categoryIcon2.setBackground(recommendedMentoryNews.layout.getResources().getDrawable(R.drawable.mento_icon_nur));
+					tvMentoryCategory2.setText("육아멘토리");
+				}
+				else if(recommendedMentoryNews.getMentoring_category_srl().substring(0,3).equals("300")) {
+					categoryIcon2.setBackground(recommendedMentoryNews.layout.getResources().getDrawable(R.drawable.mento_icon_nur));
+					tvMentoryCategory2.setText("운영멘토리");
+				}
+				else if(recommendedMentoryNews.getMentoring_category_srl().substring(0,3).equals("400")) {
+					categoryIcon2.setBackground(recommendedMentoryNews.layout.getResources().getDrawable(R.drawable.mento_icon_healing));
+					tvMentoryCategory2.setText("힐링멘토리");
+				}
+				else if(recommendedMentoryNews.getMentoring_category_srl().substring(0,3).equals("500")) {
+					categoryIcon2.setBackground(recommendedMentoryNews.layout.getResources().getDrawable(R.drawable.mento_icon_edu));
+					tvMentoryCategory2.setText("키즈엠소식");
+				}
+			}
+			else {
+				//Log.d("MentoryFragment", mentoryNews.getMentoring_category_srl());
+			}
+			
+			if(recommendedMentoryNews.getTimeline_member_name() != null && recommendedMentoryNews.getTimeline_member_name().isEmpty() == false ) {
+				txt = (TextView)arSrc.get(position).layout.findViewById(R.id.recommended_member);
+				txt.setText(recommendedMentoryNews.getTimeline_member_name());
 			}
 			break;
 		}

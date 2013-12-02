@@ -80,7 +80,8 @@ public class AlbumAdapter extends BaseAdapter {
             });
         }
 		
-        Button btn = (Button) photoList.get(position).layout.findViewById(R.id.gallery_photo_scrap);
+        CheckBox btn = (CheckBox) photoList.get(position).layout.findViewById(R.id.gallery_photo_scrap);
+        btn.setChecked(!photoList.get(position).member_scrap_srl.isEmpty());
         //deprecate
         btn.setTag(position);
         

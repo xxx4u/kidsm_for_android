@@ -162,7 +162,16 @@ public class UploadPhotoActivity extends NetworkActivity {
 	        //imageLoader.DisplayImage(photoList.get(0).filepath, image);
 	        BitmapFactory.Options opt = new BitmapFactory.Options();
 	        //imageLoader.getBitmap(photoList.get(0).filepath);
-        	image.setImageBitmap(readBitmap(Uri.parse(photoList.get(0).filepath)));
+	        try {
+	        	image.setImageBitmap(readBitmap(Uri.parse(photoList.get(0).filepath), 1));
+	        }
+	        catch (Exception e){
+	        	image.setImageBitmap(readBitmap(Uri.parse(photoList.get(0).filepath), 2));
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				String s = errors.toString();
+				System.out.println(s);
+	        }
 	        linear.setTag(photoList.get(0).filepath);
 	        viewFlipper.addView(linear);
         	break;
@@ -195,7 +204,7 @@ public class UploadPhotoActivity extends NetworkActivity {
 						}
 					});
 					photoList.add(photo);
-					Bitmap bm = readBitmap(Uri.parse(photoList.get(i).filepath));
+					Bitmap bm = readBitmap(Uri.parse(photoList.get(i).filepath), 1);
 			        image = (ImageView)linear.findViewById(R.id.uploadphoto_selected);
 			        image.setImageBitmap(bm);
 			        //bm.recycle();
@@ -203,7 +212,15 @@ public class UploadPhotoActivity extends NetworkActivity {
 			        viewFlipper.addView(linear);
 				}
 				
-			} catch(Exception e) {;}
+			}
+			catch(OutOfMemoryError e) {
+	        	image.setImageBitmap(readBitmap(Uri.parse(photoList.get(0).filepath), 2));
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				String s = errors.toString();
+				System.out.println(s);
+			}
+			catch(Exception e) {;}
         	break;
         }
         newAlbumList = new ArrayList<Album>();
@@ -533,14 +550,23 @@ public class UploadPhotoActivity extends NetworkActivity {
 //			startActivity(intent);
 			for(int i = 0; i < photoList.size(); i++) {
 				Bitmap bitmap;
-				if( photoMode == 0 ) {
-					BitmapFactory.Options opt = new BitmapFactory.Options();
-					opt.inSampleSize = 2;
-					//bitmap = BitmapFactory.decodeFile(photoList.get(i).filepath, opt);
-					bitmap = readBitmap(Uri.parse(photoList.get(i).filepath));
+				try {
+					if( photoMode == 0 ) {
+						BitmapFactory.Options opt = new BitmapFactory.Options();
+						opt.inSampleSize = 2;
+						//bitmap = BitmapFactory.decodeFile(photoList.get(i).filepath, opt);
+						bitmap = readBitmap(Uri.parse(photoList.get(i).filepath), 1);
+					}
+					else {
+						bitmap = readBitmap(Uri.parse(photoList.get(i).filepath), 1);
+					}
 				}
-				else {
-					bitmap = readBitmap(Uri.parse(photoList.get(i).filepath));
+				catch(OutOfMemoryError e) {
+					bitmap = readBitmap(Uri.parse(photoList.get(i).filepath), 2);
+					StringWriter errors = new StringWriter();
+					e.printStackTrace(new PrintWriter(errors));
+					String s = errors.toString();
+					System.out.println(s);
 				}
 				String member_srl = "";
 				switch(SlidingMenuMaker.getProfile().member_type.charAt(0)) {
@@ -670,10 +696,11 @@ public class UploadPhotoActivity extends NetworkActivity {
 			
 	}
 	
-	public Bitmap readBitmap(Uri selectedImage) { 
+	public Bitmap readBitmap(Uri selectedImage, int sampleSize) { 
 		Bitmap bm = null; 
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
-		//options.inSampleSize = 2; 
+		if( sampleSize != 1)
+			options.inSampleSize = sampleSize; 
 		AssetFileDescriptor fileDescriptor =null; 
 		try { 
 			fileDescriptor = this.getContentResolver().openAssetFileDescriptor(selectedImage,"r"); 

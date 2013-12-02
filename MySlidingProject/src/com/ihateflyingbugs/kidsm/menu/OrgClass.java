@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.View;
 
 import com.ihateflyingbugs.kidsm.BaseItem;
 
@@ -14,6 +15,7 @@ public class OrgClass extends BaseItem implements Parcelable {
 	private ArrayList<OrgClassTeacher> teacherList;
 	private int numOfStudent;
 	private int numOfStudentHavingParent;
+	View layout;
 	
 	public OrgClass(String class_srl, String class_org_srl, String class_name) {
 		this.setClass_srl(class_srl);
